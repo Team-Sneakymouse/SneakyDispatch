@@ -2,21 +2,23 @@ package net.sneakydispatch.emergency
 
 import org.bukkit.configuration.file.YamlConfiguration
 import java.io.File
+import net.sneakydispatch.SneakyDispatch
 
-class EmergencyManager {
-    fun main() {
+class EmergencyManager() {
+
+    init {
         try {
             val emergencyCategories = loadEmergencyCategories()
             emergencyCategories.forEach { category ->
-                println("Emergency Category: ${category.name}, Dispatch Cap: ${category.dispatchCap}")
+                SneakyDispatch.log("Emergency Category: ${category.name}, Dispatch Cap: ${category.dispatchCap}, Dispatch Par: ${category.dispatchPar}")
             }
         } catch (e: Exception) {
-            println("An error occurred: ${e.message}")
+            SneakyDispatch.log("An error occurred: ${e.message}")
         }
     }
 
-    private fun loadEmergencyCategories(): List<EmergencyCategory> {
-        val configFile = File("config.yml")
+    public fun loadEmergencyCategories(): List<EmergencyCategory> {
+        val configFile = SneakyDispatch.getConfigFile()
         if (!configFile.exists()) {
             throw IllegalStateException("config.yml not found")
         }
@@ -26,7 +28,18 @@ class EmergencyManager {
 
         return emergencySection.getKeys(false).map { categoryName ->
             val dispatchCap = emergencySection.getInt("$categoryName.dispatch-cap")
-            EmergencyCategory(categoryName, dispatchCap)
+            val dispatchPar = emergencySection.getInt("$categoryName.dispatch-par")
+            EmergencyCategory(categoryName, dispatchCap, dispatchPar)
         }
     }
 }
+
+data class EmergencyCategory(
+    val name: String,
+    val dispatchCap: Int,
+    val dispatchPar: Int
+)
+
+data class Emergency(
+    val category: EmergencyCategory
+)

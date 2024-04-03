@@ -1,11 +1,20 @@
+##The dispatch-cap represents the maximum amount of paladins that we want to see at a scene
+#This is visible to the players. Without proper permissions, it will be enforced.
+##The dispatch-par represents the minimal amount of paladins that we want to see at a scene
+#This is not visible to players. It is used behind the scenes to judge whether the paladins are spread too thin
 emergencies:
     crime:
         dispatch-cap: 2
+        dispatch-par: 2
     fire:
         dispatch-cap: 999
+        dispatch-par: 4
     attack:
         dispatch-cap: 999
+        dispatch-par: 4
     weather:
         dispatch-cap: 2
+        dispatch-par: 1
     pests:
         dispatch-cap: 2
+        dispatch-par: 1
