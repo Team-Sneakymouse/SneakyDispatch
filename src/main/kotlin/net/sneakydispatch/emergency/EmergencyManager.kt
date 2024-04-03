@@ -12,6 +12,7 @@ import net.sneakydispatch.SneakyDispatch
 import me.clip.placeholderapi.PlaceholderAPI
 import net.sneakydispatch.util.ChatUtility
 import org.bukkit.persistence.PersistentDataType;
+import java.util.UUID
 
 /**
  * Manages emergency categories and their configurations.
@@ -94,7 +95,7 @@ data class EmergencyCategory(
 )
 
 data class Emergency(
-    val uuid: String,
+    val uuid: String = UUID.randomUUID().toString(),
     val category: EmergencyCategory,
     var dispatched: Int = 0,
     val startTime: Long = System.currentTimeMillis(),

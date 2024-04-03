@@ -8,7 +8,6 @@ import net.sneakydispatch.emergency.EmergencyManager
 import net.sneakydispatch.emergency.EmergencyCategory
 import net.sneakydispatch.emergency.Emergency
 import net.sneakydispatch.SneakyDispatch
-import java.util.UUID
 
 class CommandReportEmergency : CommandBase("reportemergency") {
 
@@ -42,7 +41,7 @@ class CommandReportEmergency : CommandBase("reportemergency") {
             return true
         }
     
-        val emergency = Emergency(uuid = UUID.randomUUID().toString(), category = emergencyCategory, player = player, location = player.location)
+        val emergency = Emergency(category = emergencyCategory, player = player, location = player.location)
         SneakyDispatch.getDispatchManager().report(emergency)
         sender.sendMessage(ChatUtility.convertToComponent("&aYour emergency has been reported"))
     
