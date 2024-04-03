@@ -5,3 +5,9 @@ description: A Minecraft Paper plugin designed for dispatching Paladins on the L
 author: Team Sneakymouse
 website: https://rawb.tv
 api-version: 1.19
+
+dependencies:
+  server:
+    PlaceholderAPI:
+      load: BEFORE
+      required: false

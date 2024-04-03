@@ -5,7 +5,7 @@ import org.bukkit.entity.Player
 import org.bukkit.configuration.file.YamlConfiguration
 import java.io.File
 import net.sneakydispatch.SneakyDispatch
-import me.clip.placeholderapi.PlaceholderAPI;
+import me.clip.placeholderapi.PlaceholderAPI
 
 /**
  * Manages emergency categories and their configurations.
@@ -113,5 +113,5 @@ data class Emergency(
     fun report() {
 
     }
-    
+
 }
