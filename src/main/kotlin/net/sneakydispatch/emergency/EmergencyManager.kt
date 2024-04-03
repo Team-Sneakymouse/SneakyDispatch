@@ -4,44 +4,43 @@ import org.bukkit.configuration.file.YamlConfiguration
 import java.io.File
 import net.sneakydispatch.SneakyDispatch
 
-class EmergencyManager() {
+class EmergencyManager {
     
     private val emergencyCategories: MutableMap<String, EmergencyCategory> = mutableMapOf()
 
     init {
-        try {
-            loadEmergencyCategories()
-        } catch (e: Exception) {
-            SneakyDispatch.log("An error occurred: ${e.message}")
-            emergencyCategories.clear()
-        }
+        loadEmergencyCategories()
     }
 
-    public fun loadEmergencyCategories() {
-        val configFile = SneakyDispatch.getConfigFile()
-        if (!configFile.exists()) {
-            throw IllegalStateException("config.yml not found")
-        }
+    private fun loadEmergencyCategories() {
+        try {
+            val configFile = SneakyDispatch.getConfigFile()
+            if (!configFile.exists()) {
+                throw IllegalStateException("config.yml not found")
+            }
 
-        val config = YamlConfiguration.loadConfiguration(configFile)
-        val emergencySection = config.getConfigurationSection("emergencies") ?: return
+            val config = YamlConfiguration.loadConfiguration(configFile)
+            val emergencySection = config.getConfigurationSection("emergencies") ?: return
 
-        emergencyCategories.clear()
-        
-        emergencySection.getKeys(false).forEach { key ->
-            val name = emergencySection.getString("$key.name") ?: key
-            val description = emergencySection.getString("$key.description") ?: key
-            val dispatchCap = emergencySection.getInt("$key.dispatch-cap")
-            val dispatchPar = emergencySection.getInt("$key.dispatch-par")
-            val durationMillis = emergencySection.getInt("$key.duration-millis")
+            emergencyCategories.clear()
+            
+            emergencySection.getKeys(false).forEach { key ->
+                val name = emergencySection.getString("$key.name") ?: key
+                val description = emergencySection.getString("$key.description") ?: key
+                val dispatchCap = emergencySection.getInt("$key.dispatch-cap")
+                val dispatchPar = emergencySection.getInt("$key.dispatch-par")
+                val durationMillis = emergencySection.getInt("$key.duration-millis")
 
-            emergencyCategories[key] = EmergencyCategory(
-                name,
-                description,
-                if (dispatchCap > 0) dispatchCap else 1,
-                dispatchPar,
-                if (durationMillis > 0) durationMillis else 600000
-            )
+                emergencyCategories[key] = EmergencyCategory(
+                    name,
+                    description,
+                    if (dispatchCap > 0) dispatchCap else 1,
+                    dispatchPar,
+                    if (durationMillis > 0) durationMillis else 600000
+                )
+            }
+        } catch (e: Exception) {
+            SneakyDispatch.log("An error occurred while loading emergency categories: ${e.message}")
         }
     }
 
