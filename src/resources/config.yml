@@ -1,3 +1,10 @@
+##The amount of minutes between mechanical dispatches
+#The mechanical dispatch is checked every minutes
+#It only triggers if the amount of paladins who haven't been dispatched in 20 mins is more than the open slots in ongoing emergencies
+#(ignoring paladins who logged in less than 20 mins ago)
+#This cooldown is also triggered if an emergency expires without meeting its dispatch par, since this implies that they are spread too thin
+mechanical-dispatch-cooldown: 20
+
 ##The dispatch-cap represents the maximum amount of paladins that we want to see at a scene
 #This is visible to the players. Without proper permissions, it will be enforced.
 ##The dispatch-par represents the minimal amount of paladins that we want to see at a scene
