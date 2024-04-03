@@ -50,8 +50,7 @@ class CommandReportEmergency : CommandBase("reportemergency") {
     
 
     override fun tabComplete(sender: CommandSender, alias: String, args: Array<String>): List<String> {
-        var startIndex = 0;
-        if (sender !is Player) startIndex = 1;
+        var startIndex: Int = if (sender is Player) 0 else 1;
 
         return when {
             args.size - startIndex == 1 -> {
