@@ -1,8 +1,11 @@
 package net.sneakydispatch.emergency
 
+import org.bukkit.Location
+import org.bukkit.entity.Player
 import org.bukkit.configuration.file.YamlConfiguration
 import java.io.File
 import net.sneakydispatch.SneakyDispatch
+import me.clip.placeholderapi.PlaceholderAPI;
 
 /**
  * Manages emergency categories and their configurations.
@@ -74,7 +77,14 @@ data class EmergencyCategory(
 data class Emergency(
     val category: EmergencyCategory,
     var dispatched: Int = 0,
-    val startTime: Long = System.currentTimeMillis()
+    val startTime: Long = System.currentTimeMillis(),
+    val reportingPlayer: Player,
+    val reportingLocation: Location,
+    var description: String = if (SneakyDispatch.isPapiActive()) {
+        PlaceholderAPI.setPlaceholders(reportingPlayer, category.description).replace("none", "Dinky Dank")
+    } else {
+        category.description
+    }
 ) {
     fun incrementDispatched() {
         dispatched++
@@ -94,10 +104,6 @@ data class Emergency(
 
     fun getName(): String {
         return category.name
-    }
-
-    fun getDescription(): String {
-        return category.description
     }
 
     fun getDispatchCap(): Int {
