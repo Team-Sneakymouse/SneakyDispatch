@@ -109,9 +109,5 @@ data class Emergency(
     fun getDispatchCap(): Int {
         return category.dispatchCap
     }
-
-    fun report() {
-
-    }
-
+    
 }

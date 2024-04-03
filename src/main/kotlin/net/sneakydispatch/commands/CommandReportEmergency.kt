@@ -42,7 +42,7 @@ class CommandReportEmergency : CommandBase("reportemergency") {
         }
     
         val emergency = Emergency(category = emergencyCategory, reportingPlayer = player, reportingLocation = player.location)
-        emergency.report()
+        SneakyDispatch.getDispatchManager().report(emergency)
         sender.sendMessage(ChatUtility.convertToComponent("&aYour emergency has been reported"))
     
         return true
