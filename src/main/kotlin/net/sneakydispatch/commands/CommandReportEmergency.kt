@@ -21,7 +21,7 @@ class CommandReportEmergency : CommandBase("reportemergency") {
     }
 
     override fun execute(sender: CommandSender, commandLabel: String, args: Array<out String>): Boolean {
-        val player: Player? = if (sender is Player) sender else Bukkit.getPlayer(args[0])
+        val player: Player? = if (sender is Player) sender else if (args.isNotEmpty()) Bukkit.getPlayer(args[0]) else null
         val remainingArgs: Array<out String> = if (player != null) args else args.drop(1).toTypedArray()
 
         if (player == null) {

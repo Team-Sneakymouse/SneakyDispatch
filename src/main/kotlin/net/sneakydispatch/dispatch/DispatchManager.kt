@@ -27,6 +27,13 @@ class DispatchManager {
     }
 
     /**
+     * Get emergency value collection
+     */
+    fun getEmergencies(): MutableCollection<Emergency> {
+        return emergencies.values
+    }
+
+    /**
      * Clean up expired emergencies
      */
     fun cleanup() {

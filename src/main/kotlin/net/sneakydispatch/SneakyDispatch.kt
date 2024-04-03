@@ -4,7 +4,9 @@ import org.bukkit.permissions.Permission
 import org.bukkit.plugin.java.JavaPlugin
 import net.sneakydispatch.emergency.EmergencyManager
 import net.sneakydispatch.dispatch.DispatchManager
+import net.sneakydispatch.dispatch.EmergencyInventoryListener
 import net.sneakydispatch.commands.CommandReportEmergency
+import net.sneakydispatch.commands.CommandDispatch
 import java.io.File
 import org.bukkit.Bukkit
 
@@ -21,6 +23,9 @@ class SneakyDispatch : JavaPlugin() {
         dispatchManager = DispatchManager()
 
         getServer().getCommandMap().register(IDENTIFIER, CommandReportEmergency());
+        getServer().getCommandMap().register(IDENTIFIER, CommandDispatch());
+
+        getServer().getPluginManager().registerEvents(EmergencyInventoryListener(), this);
 
         server.pluginManager.addPermission(Permission("$IDENTIFIER.*"))
         server.pluginManager.addPermission(Permission("$IDENTIFIER.onduty"))

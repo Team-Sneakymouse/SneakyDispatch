@@ -48,7 +48,7 @@ class EmergencyManager {
             emergencySection.getKeys(false).forEach { key ->
                 val name = emergencySection.getString("$key.name") ?: key
                 val description = emergencySection.getString("$key.description") ?: key
-                val iconMaterialString = emergencySection.getString("$key.description") ?: ""
+                val iconMaterialString = emergencySection.getString("$key.icon-material") ?: ""
 
                 var iconMaterial = Material.matchMaterial(iconMaterialString)
                 if (iconMaterial == null) {
