@@ -17,7 +17,7 @@ class EmergencyManager() {
         }
     }
 
-    private fun loadEmergencyCategories() {
+    public fun loadEmergencyCategories() {
         val configFile = SneakyDispatch.getConfigFile()
         if (!configFile.exists()) {
             throw IllegalStateException("config.yml not found")
@@ -34,6 +34,7 @@ class EmergencyManager() {
             val dispatchCap = emergencySection.getInt("$key.dispatch-cap")
             val dispatchPar = emergencySection.getInt("$key.dispatch-par")
             val durationMillis = emergencySection.getInt("$key.duration-millis")
+
             emergencyCategories[key] = EmergencyCategory(
                 name,
                 description,
@@ -70,16 +71,20 @@ data class Emergency(
         return (System.currentTimeMillis() >= startTime + category.durationMillis)
     }
 
+    fun isCapFulfilled(): Boolean {
+        return (dispatched >= category.dispatchCap)
+    }
+    
+    fun isParFulfilled(): Boolean {
+        return (dispatched >= category.dispatchPar)
+    }
+
     fun getName(): String {
         return category.name
     }
 
     fun getDescription(): String {
         return category.description
-    }
-
-    fun getDispatchPar(): Int {
-        return category.dispatchCap
     }
 
     fun getDispatchCap(): Int {

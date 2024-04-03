@@ -38,6 +38,12 @@ class SneakyDispatch : JavaPlugin() {
         fun getConfigFile(): File {
             return File(getDataFolder(), "config.yml")
         }
+
+        fun getEmergencyManager(): EmergencyManager {
+            return instance.emergencyManager ?: EmergencyManager().also {
+                instance?.emergencyManager = it
+            }
+        }
     }
 
     override fun onLoad() {
