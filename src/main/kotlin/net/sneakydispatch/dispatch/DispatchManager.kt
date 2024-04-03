@@ -2,6 +2,10 @@ package net.sneakydispatch.dispatch
 
 import java.util.*
 import net.sneakydispatch.emergency.Emergency
+import net.sneakydispatch.util.PlayerUtility
+
+import org.bukkit.Bukkit
+import org.bukkit.entity.Player
 
 /**
  * Manages emergency situations and dispatching.
@@ -16,7 +20,9 @@ class DispatchManager {
         val emergencyId = UUID.randomUUID()
         emergencies[emergencyId] = emergency
 
-        // Alert paladins of a new emergency
+        for (player in PlayerUtility.getPaladins()) {
+            Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "cast forcecast " + player.getName() + " paladin-dispatch-emergency-reported " + emergency.getName().replace(" ", "_"));
+        }
     }
 
     /**

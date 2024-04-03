@@ -21,4 +21,5 @@ object PlayerUtility {
 
         return paladins
     }
+    
 }
