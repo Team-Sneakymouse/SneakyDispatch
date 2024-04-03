@@ -17,5 +17,7 @@ gradle-app.setting
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
 build.bat
+run.bat
 
 /.vscode/
+/run/

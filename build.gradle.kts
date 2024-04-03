@@ -1,6 +1,7 @@
 plugins {
-    id("java")
+    java
     id("io.papermc.paperweight.userdev") version "1.5.10"
+    id("xyz.jpenilla.run-paper") version "2.2.2"
 }
 
 repositories {
@@ -24,5 +25,11 @@ configure<JavaPluginConvention> {
         main {
             resources.srcDir(file("src/resources"))
         }
+    }
+}
+
+tasks {
+    runServer {
+        minecraftVersion("1.20.2")
     }
 }
