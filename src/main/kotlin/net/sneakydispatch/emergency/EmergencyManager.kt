@@ -4,14 +4,24 @@ import org.bukkit.configuration.file.YamlConfiguration
 import java.io.File
 import net.sneakydispatch.SneakyDispatch
 
+/**
+ * Manages emergency categories and their configurations.
+ */
 class EmergencyManager {
     
     private val emergencyCategories: MutableMap<String, EmergencyCategory> = mutableMapOf()
 
+    /**
+     * Loads emergency categories from the configuration file on initialization.
+     */
     init {
         loadEmergencyCategories()
     }
 
+    /**
+     * Loads emergency categories from the configuration file.
+     * If an error occurs during loading, it's logged and the categories are cleared.
+     */
     private fun loadEmergencyCategories() {
         try {
             val configFile = SneakyDispatch.getConfigFile()
@@ -44,6 +54,10 @@ class EmergencyManager {
         }
     }
 
+    /**
+     * Retrieves a read-only map of emergency categories.
+     * @return A map of emergency category keys to their corresponding EmergencyCategory objects.
+     */
     fun getEmergencyCategories(): Map<String, EmergencyCategory> {
         return emergencyCategories
     }    
@@ -87,6 +101,6 @@ data class Emergency(
     }
 
     fun getDispatchCap(): Int {
-        return category.dispatchPar
+        return category.dispatchCap
     }
 }
