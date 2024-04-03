@@ -41,13 +41,12 @@ class CommandReportEmergency : CommandBase("reportemergency") {
             return true
         }
     
-        val emergency = Emergency(category = emergencyCategory, reportingPlayer = player, reportingLocation = player.location)
+        val emergency = Emergency(category = emergencyCategory, player = player, location = player.location)
         SneakyDispatch.getDispatchManager().report(emergency)
         sender.sendMessage(ChatUtility.convertToComponent("&aYour emergency has been reported"))
     
         return true
     }
-    
 
     override fun tabComplete(sender: CommandSender, alias: String, args: Array<String>): List<String> {
         var startIndex: Int = if (sender is Player) 0 else 1;

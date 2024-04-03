@@ -1,6 +1,8 @@
 package net.sneakydispatch.dispatch
 
 import java.util.*
+
+import net.sneakydispatch.SneakyDispatch
 import net.sneakydispatch.emergency.Emergency
 import net.sneakydispatch.util.PlayerUtility
 
@@ -31,4 +33,24 @@ class DispatchManager {
     fun cleanup() {
         emergencies.entries.removeIf { it.value.isExpired() }
     }
+
+    /**
+     * Dispatch a paladin to an ongoing emergency
+     */
+    fun dispatch(emergency: Emergency, pl: Player) {
+        if (emergency.isCapFulfilled() && !pl.hasPermission("$SneakyDispatch.IDENTIFIER.onduty")) {
+            return
+        }
+
+        emergency.incrementDispatched()
+
+        for (player in PlayerUtility.getPaladins()) {
+            if (player.equals(pl)) {
+                Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "cast forcecast " + player.getName() + " paladin-dispatch-emergency-dispatchedSelf " + Math.floor(emergency.location.getX()) + " " + Math.floor(emergency.location.getY()) + " " + Math.floor(emergency.location.getZ()));
+            } else {
+                Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "cast forcecast " + player.getName() + " paladin-dispatch-emergency-dispatchedOther " + emergency.getName().replace(" ", "_") + " " + pl.getName() + " " + emergency.dispatched + " " + emergency.getDispatchCap());
+            }
+        }
+    }
+    
 }

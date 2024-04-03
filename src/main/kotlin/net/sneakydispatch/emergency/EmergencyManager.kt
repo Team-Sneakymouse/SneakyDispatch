@@ -78,20 +78,24 @@ data class Emergency(
     val category: EmergencyCategory,
     var dispatched: Int = 0,
     val startTime: Long = System.currentTimeMillis(),
-    val reportingPlayer: Player,
-    val reportingLocation: Location,
+    val player: Player,
+    val location: Location,
     var description: String = if (SneakyDispatch.isPapiActive()) {
-        PlaceholderAPI.setPlaceholders(reportingPlayer, category.description).replace("none", "Dinky Dank")
+        PlaceholderAPI.setPlaceholders(player, category.description).replace("none", "Dinky Dank")
     } else {
         category.description
     }
 ) {
+    fun isExpired(): Boolean {
+        return (System.currentTimeMillis() >= startTime + category.durationMillis)
+    }
+
     fun incrementDispatched() {
         dispatched++
     }
 
-    fun isExpired(): Boolean {
-        return (System.currentTimeMillis() >= startTime + category.durationMillis)
+    fun getDispatchCap(): Int {
+        return category.dispatchCap
     }
 
     fun isCapFulfilled(): Boolean {
@@ -104,10 +108,6 @@ data class Emergency(
 
     fun getName(): String {
         return category.name
-    }
-
-    fun getDispatchCap(): Int {
-        return category.dispatchCap
     }
     
 }
