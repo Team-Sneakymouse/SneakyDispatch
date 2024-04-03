@@ -4,6 +4,7 @@ import org.bukkit.permissions.Permission
 import org.bukkit.plugin.java.JavaPlugin
 import net.sneakydispatch.emergency.EmergencyManager
 import net.sneakydispatch.dispatch.DispatchManager
+import net.sneakydispatch.commands.CommandReportEmergency
 import java.io.File
 import org.bukkit.Bukkit
 
@@ -19,7 +20,11 @@ class SneakyDispatch : JavaPlugin() {
         emergencyManager = EmergencyManager()
         dispatchManager = DispatchManager()
 
+        getServer().getCommandMap().register(IDENTIFIER, CommandReportEmergency());
+
         server.pluginManager.addPermission(Permission("$IDENTIFIER.*"))
+        server.pluginManager.addPermission(Permission("$IDENTIFIER.onduty"))
+        server.pluginManager.addPermission(Permission("$IDENTIFIER.supervisor"))
         server.pluginManager.addPermission(Permission("$IDENTIFIER.command.*"))
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
