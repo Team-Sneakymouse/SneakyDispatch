@@ -2,40 +2,41 @@
 #This is visible to the players. Without proper permissions, it will be enforced.
 ##The dispatch-par represents the minimal amount of paladins that we want to see at a scene
 #This is not visible to players. It is used behind the scenes to judge whether the paladins are spread too thin
+##The descriptions support placeholder replacement. They use the reporting player for replacements, and are only parsed at the moment of reporting
 emergencies:
     misc:
         name: "Call for Help"
-        description: "A citizen is in need of aid!"
+        description: "A citizen is in need of aid in %dipp_district_name%!"
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 600000
     crime:
         name: "Crime"
-        description: "Lawbreakers are afoot! Stop them!"
+        description: "Lawbreakers are afoot in %dipp_district_name%! Stop them!"
         dispatch-cap: 2
         dispatch-par: 2
         duration-milis: 600000
     fire:
         name: "Fire Fighting"
-        description: "A fire has broken out!"
+        description: "A fire has broken out in %dipp_district_name%!"
         dispatch-cap: 999
         dispatch-par: 4
         duration-milis: 600000
     attack:
         name: "Monster Attack"
-        description: "Monsters are attacking! Suit up, Paladin!"
+        description: "Monsters are attacking %dipp_district_name%! Suit up, Paladin!"
         dispatch-cap: 999
         dispatch-par: 4
         duration-milis: 600000
     weather:
         name: "Weather Emergency"
-        description: "Unusual weather is terrorising the citizens!"
+        description: "Unusual weather is terrorising the citizens of %dipp_district_name%!"
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 600000
     pest:
         name: "Pest Extermination"
-        description: "An outbreak of animals is disrupting our way of life!"
+        description: "An outbreak of animals is disrupting our way of life in %dipp_district_name%!"
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 600000

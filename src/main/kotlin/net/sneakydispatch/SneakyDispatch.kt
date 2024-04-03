@@ -3,16 +3,19 @@ package net.sneakydispatch
 import org.bukkit.permissions.Permission
 import org.bukkit.plugin.java.JavaPlugin
 import net.sneakydispatch.emergency.EmergencyManager
+import net.sneakydispatch.dispatch.DispatchManager
 import java.io.File
 
 class SneakyDispatch : JavaPlugin() {
 
     lateinit var emergencyManager: EmergencyManager
+    lateinit var dispatchManager: DispatchManager
 
     override fun onEnable() {
         saveDefaultConfig()
 
         emergencyManager = EmergencyManager()
+        dispatchManager = DispatchManager()
 
         server.pluginManager.addPermission(Permission("$IDENTIFIER.*"))
         server.pluginManager.addPermission(Permission("$IDENTIFIER.command.*"))
