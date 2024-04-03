@@ -13,13 +13,13 @@ import org.bukkit.entity.Player
  * Manages emergency situations and dispatching.
  */
 class DispatchManager {
-    private val emergencies: MutableMap<UUID, Emergency> = mutableMapOf()
+    private val emergencies: MutableMap<String, Emergency> = mutableMapOf()
 
     /**
      * Adds a new emergency to the map with a random UUID key, and alerts available paladins
      */
     fun report(emergency: Emergency) {
-        val emergencyId = UUID.randomUUID()
+        val emergencyId = UUID.randomUUID().toString()
         emergencies[emergencyId] = emergency
 
         for (player in PlayerUtility.getPaladins()) {
@@ -37,7 +37,11 @@ class DispatchManager {
     /**
      * Dispatch a paladin to an ongoing emergency
      */
-    fun dispatch(emergency: Emergency, pl: Player) {
+    fun dispatch(uuid: String, pl: Player) {
+        val emergency = emergencies.get(uuid)
+
+        if (emergency == null) return
+
         if (emergency.isCapFulfilled() && !pl.hasPermission("$SneakyDispatch.IDENTIFIER.onduty")) {
             return
         }
@@ -52,5 +56,5 @@ class DispatchManager {
             }
         }
     }
-    
+
 }
