@@ -16,6 +16,7 @@ repositories {
 }
 
 dependencies {
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.0")
 	paperweight.paperDevBundle("1.20.4-R0.1-SNAPSHOT")
 	compileOnly("me.clip:placeholderapi:2.11.5")
 }
