@@ -1,0 +1,28 @@
+plugins {
+    id("java")
+    id("io.papermc.paperweight.userdev") version "1.5.10"
+}
+
+repositories {
+    maven {
+        url = uri("https://repo.extendedclip.com/content/repositories/placeholderapi/")
+    }
+    mavenCentral()
+}
+
+dependencies {
+    paperweight.paperDevBundle("1.20.4-R0.1-SNAPSHOT")
+    compileOnly("me.clip:placeholderapi:2.11.5")
+
+    implementation(fileTree("libs") {
+        include("*.jar")
+    })
+}
+
+configure<JavaPluginConvention> {
+    sourceSets {
+        main {
+            resources.srcDir(file("src/resources"))
+        }
+    }
+}

@@ -1,0 +1,7 @@
+name: SneakyDispatch
+version: 1.0.0
+main: net.sneakydispatch.SneakyDispatch
+description: A Minecraft Paper plugin designed for dispatching Paladins on the LoM2 server
+author: Team Sneakymouse
+website: https://rawb.tv
+api-version: 1.20
