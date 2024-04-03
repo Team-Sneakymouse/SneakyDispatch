@@ -7,36 +7,48 @@ emergencies:
     misc:
         name: "Call for Help"
         description: "A citizen is in need of aid in %dipp_district_name%!"
+        icon-material: "music_disc_cat"
+        icon-custom-model-data: 1
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 600000
     crime:
         name: "Crime"
         description: "Lawbreakers are afoot in %dipp_district_name%! Stop them!"
+        icon-material: "music_disc_cat"
+        icon-custom-model-data: 2
         dispatch-cap: 2
         dispatch-par: 2
         duration-milis: 600000
     fire:
         name: "Fire Fighting"
         description: "A fire has broken out in %dipp_district_name%!"
+        icon-material: "music_disc_cat"
+        icon-custom-model-data: 3
         dispatch-cap: 999
         dispatch-par: 4
         duration-milis: 600000
     attack:
         name: "Monster Attack"
         description: "Monsters are attacking %dipp_district_name%! Suit up, Paladin!"
+        icon-material: "music_disc_cat"
+        icon-custom-model-data: 4
         dispatch-cap: 999
         dispatch-par: 4
         duration-milis: 600000
     weather:
         name: "Weather Emergency"
         description: "Unusual weather is terrorising the citizens of %dipp_district_name%!"
+        icon-material: "music_disc_cat"
+        icon-custom-model-data: 5
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 600000
     pest:
         name: "Pest Extermination"
         description: "An outbreak of animals is disrupting our way of life in %dipp_district_name%!"
+        icon-material: "music_disc_cat"
+        icon-custom-model-data: 6
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 600000

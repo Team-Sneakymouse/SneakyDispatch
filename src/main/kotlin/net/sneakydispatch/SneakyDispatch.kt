@@ -67,6 +67,13 @@ class SneakyDispatch : JavaPlugin() {
         }
 
         /**
+         * The running instance
+         */
+        fun getInstance(): SneakyDispatch {
+            return instance
+        }
+
+        /**
          * Retrieves the emergency manager instance, creating a new one if necessary.
          */
         fun getEmergencyManager(): EmergencyManager {

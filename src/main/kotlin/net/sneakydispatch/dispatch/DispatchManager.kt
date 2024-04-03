@@ -19,8 +19,7 @@ class DispatchManager {
      * Adds a new emergency to the map with a random UUID key, and alerts available paladins
      */
     fun report(emergency: Emergency) {
-        val emergencyId = UUID.randomUUID().toString()
-        emergencies[emergencyId] = emergency
+        emergencies[emergency.uuid] = emergency
 
         for (player in PlayerUtility.getPaladins()) {
             Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "cast forcecast " + player.getName() + " paladin-dispatch-emergency-reported " + emergency.getName().replace(" ", "_"));
@@ -43,7 +42,7 @@ class DispatchManager {
         if (emergency == null) return
 
         if (emergency.isCapFulfilled() && !pl.hasPermission("$SneakyDispatch.IDENTIFIER.onduty"))return
-        
+
         emergency.incrementDispatched()
 
         for (player in PlayerUtility.getPaladins()) {
