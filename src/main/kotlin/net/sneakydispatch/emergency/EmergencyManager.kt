@@ -25,7 +25,7 @@ class EmergencyManager {
      * Loads emergency categories from the configuration file.
      * If an error occurs during loading, it's logged and the categories are cleared.
      */
-    private fun loadEmergencyCategories() {
+    public fun loadEmergencyCategories() {
         try {
             val configFile = SneakyDispatch.getConfigFile()
             if (!configFile.exists()) {
@@ -109,4 +109,9 @@ data class Emergency(
     fun getDispatchCap(): Int {
         return category.dispatchCap
     }
+
+    fun report() {
+
+    }
+    
 }

@@ -1,8 +1,13 @@
 package net.sneakydispatch.commands
 
+import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import net.sneakydispatch.util.ChatUtility
+import net.sneakydispatch.emergency.EmergencyManager
+import net.sneakydispatch.emergency.EmergencyCategory
+import net.sneakydispatch.emergency.Emergency
+import net.sneakydispatch.SneakyDispatch
 
 class CommandReportEmergency : CommandBase("reportemergency") {
 
@@ -16,21 +21,44 @@ class CommandReportEmergency : CommandBase("reportemergency") {
     }
 
     override fun execute(sender: CommandSender, commandLabel: String, args: Array<out String>): Boolean {
-        // Check if the sender is a player
-        if (sender !is Player) {
-            sender.sendMessage(ChatUtility.convertToComponent("&4Only players can use this command."))
+        val player: Player? = if (sender is Player) sender else Bukkit.getPlayer(args[0])
+        val remainingArgs: Array<out String> = if (player != null) args else args.drop(1).toTypedArray()
+
+        if (player == null) {
+            sender.sendMessage(ChatUtility.convertToComponent("&4${args[0]} is not a player name. When running this command from the console, the first arg must be the reporting player."))
             return true
         }
-
-        val player = sender
-
-        if (args.size < 1) {
-            player.sendMessage(ChatUtility.convertToComponent("&4Invalid Usage: $usageMessage"))
+    
+        if (remainingArgs.isEmpty()) {
+            sender.sendMessage(ChatUtility.convertToComponent("&4Invalid Usage: $usageMessage"))
             return true
         }
+    
+        val emergencyCategory: EmergencyCategory? = SneakyDispatch.getEmergencyManager().getEmergencyCategories().get(remainingArgs[0])
 
-        // Handle the rest of the command logic here
-        
+        if (emergencyCategory == null) {
+            sender.sendMessage(ChatUtility.convertToComponent("&4${remainingArgs[0]} is not a valid emergency category!"))
+            return true
+        }
+    
+        val emergency = Emergency(category = emergencyCategory, reportingPlayer = player, reportingLocation = player.location)
+        emergency.report()
+        sender.sendMessage(ChatUtility.convertToComponent("&aYour emergency has been reported"))
+    
         return true
     }
+    
+
+    override fun tabComplete(sender: CommandSender, alias: String, args: Array<String>): List<String> {
+        var startIndex = 0;
+        if (sender !is Player) startIndex = 1;
+
+        return when {
+            args.size - startIndex == 1 -> {
+                SneakyDispatch.getEmergencyManager().getEmergencyCategories().keys.toList()
+            }
+            else -> emptyList()
+        }
+    }    
+    
 }
