@@ -1,0 +1,11 @@
+emergencies:
+    crime:
+        dispatch-cap: 2
+    fire:
+        dispatch-cap: 999
+    attack:
+        dispatch-cap: 999
+    weather:
+        dispatch-cap: 2
+    pests:
+        dispatch-cap: 2
