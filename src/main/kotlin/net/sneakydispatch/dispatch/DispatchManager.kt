@@ -53,7 +53,7 @@ class DispatchManager {
         emergencies.entries.removeIf { it.value.isExpired() }
         for (emergency in emergencies.values) {
             if (!emergency.isParFulfilled()) {
-                lastMechanicalDispatchTime = System.currentTimeMillis()
+                nextMechanicalDispatchTime = SneakyDispatch.getInstance().getConfig().getInt("mechanical-dispatch-cooldown") * 60 * 1000L
                 break
             }
         }
