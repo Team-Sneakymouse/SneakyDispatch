@@ -164,7 +164,7 @@ data class Emergency(
         meta.displayName(ChatUtility.convertToComponent("&a${category.name}"))
         meta.lore(
                 listOf(
-                        ChatUtility.convertToComponent("&e${category.description}"),
+                        ChatUtility.convertToComponent("&e${description}"),
                         ChatUtility.convertToComponent(
                                 "${dispatchColorCode}Dispatched: [ ${dispatched} / ${category.dispatchCap} ]"
                         )
