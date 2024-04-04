@@ -13,7 +13,20 @@ import org.bukkit.entity.Player
  * Manages emergency situations and dispatching.
  */
 class DispatchManager {
+
     private val emergencies: MutableMap<String, Emergency> = mutableMapOf()
+    private var nextMechanicalDispatchTime: Long = SneakyDispatch.getInstance().getConfig().getInt("mechanical-dispatch-cooldown") * 60 * 1000L
+
+    init {
+        val scheduler = Bukkit.getScheduler()
+        scheduler.runTaskTimer(SneakyDispatch.getInstance(), Runnable {
+            if (System.currentTimeMillis() >= nextMechanicalDispatchTime ) {
+                if (PlayerUtility.getIdlePaladins() > getOpenDispatchSlots()) {
+                    createMechanicalDispatch()
+                }
+            }
+        }, 0L, 20 * 60L) // Run every minute
+    }
 
     /**
      * Adds a new emergency to the map and alerts available paladins.
@@ -22,7 +35,7 @@ class DispatchManager {
         emergencies[emergency.uuid] = emergency
 
         for (player in PlayerUtility.getPaladins()) {
-            Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "cast forcecast " + player.getName() + " paladin-dispatch-emergency-reported " + emergency.getName().replace(" ", "_"));
+            Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "cast forcecast " + player.getName() + " paladin-emergency-reported " + emergency.getName().replace(" ", "_"))
         }
     }
 
@@ -38,6 +51,12 @@ class DispatchManager {
      */
     fun cleanup() {
         emergencies.entries.removeIf { it.value.isExpired() }
+        for (emergency in emergencies.values) {
+            if (!emergency.isParFulfilled()) {
+                lastMechanicalDispatchTime = System.currentTimeMillis()
+                break
+            }
+        }
     }
 
     /**
@@ -54,9 +73,9 @@ class DispatchManager {
 
         for (player in PlayerUtility.getPaladins()) {
             if (player.equals(pl)) {
-                Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "cast forcecast " + player.getName() + " paladin-dispatch-emergency-dispatchedSelf " + Math.floor(emergency.location.getX()) + " " + Math.floor(emergency.location.getY()) + " " + Math.floor(emergency.location.getZ()));
+                Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "cast forcecast " + player.getName() + " paladin-dispatch-self " + Math.floor(emergency.location.getX()) + " " + Math.floor(emergency.location.getY()) + " " + Math.floor(emergency.location.getZ()))
             } else {
-                Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "cast forcecast " + player.getName() + " paladin-dispatch-emergency-dispatchedOther " + emergency.getName().replace(" ", "_") + " " + pl.getName() + " " + emergency.dispatched + " " + emergency.getDispatchCap());
+                Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "cast forcecast " + player.getName() + " paladin-dispatch-other " + emergency.getName().replace(" ", "_") + " " + pl.getName() + " " + emergency.dispatched + " " + emergency.getDispatchCap())
             }
         }
     }
@@ -74,6 +93,17 @@ class DispatchManager {
         }
 
         return openSlots
+    }
+
+    /**
+     * Create a mechanical dispatch by forcing a random player to cast a spell
+     */
+    fun createMechanicalDispatch() {
+        for (player in Bukkit.getOnlinePlayers()) {
+            Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "cast forcecast " + player.getName() + " paladin-emergency-random")
+            nextMechanicalDispatchTime = SneakyDispatch.getInstance().getConfig().getInt("mechanical-dispatch-cooldown") * 60 * 1000L
+            break
+        }
     }
 
 }

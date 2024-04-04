@@ -15,7 +15,7 @@ class SneakyDispatch : JavaPlugin() {
 
     lateinit var emergencyManager: EmergencyManager
     lateinit var dispatchManager: DispatchManager
-    var papiActive: Boolean = false;
+    var papiActive: Boolean = false
 
     override fun onEnable() {
         saveDefaultConfig()
@@ -23,11 +23,11 @@ class SneakyDispatch : JavaPlugin() {
         emergencyManager = EmergencyManager()
         dispatchManager = DispatchManager()
 
-        getServer().getCommandMap().register(IDENTIFIER, CommandReportEmergency());
-        getServer().getCommandMap().register(IDENTIFIER, CommandDispatch());
+        getServer().getCommandMap().register(IDENTIFIER, CommandReportEmergency())
+        getServer().getCommandMap().register(IDENTIFIER, CommandDispatch())
 
-        getServer().getPluginManager().registerEvents(EmergencyInventoryListener(), this);
-        getServer().getPluginManager().registerEvents(PlayerUtilityListener(), this);
+        getServer().getPluginManager().registerEvents(EmergencyInventoryListener(), this)
+        getServer().getPluginManager().registerEvents(PlayerUtilityListener(), this)
 
 
         server.pluginManager.addPermission(Permission("$IDENTIFIER.*"))
@@ -36,7 +36,7 @@ class SneakyDispatch : JavaPlugin() {
         server.pluginManager.addPermission(Permission("$IDENTIFIER.command.*"))
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-			papiActive = true;
+			papiActive = true
         }
     }
 

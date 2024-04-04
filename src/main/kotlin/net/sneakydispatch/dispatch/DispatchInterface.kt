@@ -9,7 +9,7 @@ import org.bukkit.event.inventory.InventoryInteractEvent
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemStack
-import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.persistence.PersistentDataType
 import org.bukkit.entity.Player
 
 import net.sneakydispatch.dispatch.DispatchManager
@@ -41,7 +41,7 @@ class EmergencyInventoryHolder() : InventoryHolder {
 
     fun clickedItem(clickedItem: ItemStack, player: Player) {
         val meta = clickedItem.itemMeta
-        val uuid = meta.getPersistentDataContainer().get(SneakyDispatch.getEmergencyManager().IDKEY, PersistentDataType.STRING);
+        val uuid = meta.getPersistentDataContainer().get(SneakyDispatch.getEmergencyManager().IDKEY, PersistentDataType.STRING)
 
         if (uuid == null || uuid.isEmpty()) return
 

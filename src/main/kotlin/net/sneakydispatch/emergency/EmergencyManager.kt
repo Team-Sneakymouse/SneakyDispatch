@@ -1,7 +1,7 @@
 package net.sneakydispatch.emergency
 
 import org.bukkit.Location
-import org.bukkit.NamespacedKey;
+import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.Material
@@ -11,7 +11,7 @@ import java.io.File
 import net.sneakydispatch.SneakyDispatch
 import me.clip.placeholderapi.PlaceholderAPI
 import net.sneakydispatch.util.ChatUtility
-import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.persistence.PersistentDataType
 import java.util.UUID
 
 /**
