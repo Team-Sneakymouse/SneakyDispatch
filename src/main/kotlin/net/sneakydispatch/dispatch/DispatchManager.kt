@@ -16,7 +16,7 @@ class DispatchManager {
     private val emergencies: MutableMap<String, Emergency> = mutableMapOf()
 
     /**
-     * Adds a new emergency to the map with a random UUID key, and alerts available paladins.
+     * Adds a new emergency to the map and alerts available paladins.
      */
     fun report(emergency: Emergency) {
         emergencies[emergency.uuid] = emergency
@@ -59,6 +59,21 @@ class DispatchManager {
                 Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "cast forcecast " + player.getName() + " paladin-dispatch-emergency-dispatchedOther " + emergency.getName().replace(" ", "_") + " " + pl.getName() + " " + emergency.dispatched + " " + emergency.getDispatchCap());
             }
         }
+    }
+
+    /**
+     * Get the amount of open slots in ongoing emergencies.
+     */
+    fun getOpenDispatchSlots(): Int {
+        cleanup()
+
+        var openSlots = 0
+
+        for (emergency in getEmergencies()) {
+            openSlots += (emergency.getDispatchCap() - emergency.dispatched).coerceAtLeast(0)
+        }
+
+        return openSlots
     }
 
 }
