@@ -51,13 +51,19 @@ class CommandReportEmergency : CommandBase("reportemergency") {
 
     override fun tabComplete(sender: CommandSender, alias: String, args: Array<String>): List<String> {
         var startIndex: Int = if (sender is Player) 0 else 1
-
+    
         return when {
+            args.size == 1 && sender !is Player -> {
+                Bukkit.getOnlinePlayers()
+                    .filter { !it.name.equals("CMI-Fake-Operator", ignoreCase = true) }
+                    .filter { it.name.startsWith(args[0], ignoreCase = true) }
+                    .map { it.name }
+            }
             args.size - startIndex == 1 -> {
                 SneakyDispatch.getEmergencyManager().getEmergencyCategories().keys.toList()
             }
             else -> emptyList()
         }
-    }    
+    }
     
 }

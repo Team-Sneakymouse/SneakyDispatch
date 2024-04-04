@@ -34,4 +34,17 @@ class CommandDispatch : CommandBase("dispatch") {
         return true
     }
 
+    override fun tabComplete(sender: CommandSender, alias: String, args: Array<String>): List<String> {
+        return when {
+            args.size == 1 && sender !is Player -> {
+                Bukkit.getOnlinePlayers()
+                    .filter { !it.name.equals("CMI-Fake-Operator", ignoreCase = true) }
+                    .filter { it.name.startsWith(args[0], ignoreCase = true) }
+                    .map { it.name }
+            }
+            else -> emptyList()
+        }
+    }
+      
+
 }
