@@ -100,4 +100,5 @@ class SneakyDispatch : JavaPlugin() {
     override fun onLoad() {
         instance = this
     }
+    
 }

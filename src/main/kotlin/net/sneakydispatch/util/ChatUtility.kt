@@ -36,4 +36,5 @@ object ChatUtility {
             .deserialize(convertedMessage)
             .decoration(TextDecoration.ITALIC, false)
     }
+    
 }

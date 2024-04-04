@@ -101,27 +101,11 @@ data class Emergency(
     val startTime: Long = System.currentTimeMillis(),
     @Transient val player: Player,
     val location: Location,
-    @Transient var description: String = if (SneakyDispatch.isPapiActive()) {
+    var description: String = if (SneakyDispatch.isPapiActive()) {
         PlaceholderAPI.setPlaceholders(player, category.description).replace("none", "Dinky Dank")
     } else {
         category.description
     },
-    val iconItem: ItemStack = run {
-        val item = ItemStack(category.iconMaterial)
-        val meta = item.itemMeta
-    
-        // Set custom model data, display name, and lore
-        meta.setCustomModelData(category.iconCustomModelData)
-        meta.displayName(ChatUtility.convertToComponent("&a${category.name}"))
-        meta.lore(listOf(ChatUtility.convertToComponent("&e${category.description}")))
-    
-        // Set persistent data
-        val persistentData = meta.persistentDataContainer
-        persistentData.set(SneakyDispatch.getEmergencyManager().IDKEY, PersistentDataType.STRING, uuid)
-    
-        item.itemMeta = meta
-        item
-    }
 ) {
     fun isExpired(): Boolean {
         return (System.currentTimeMillis() >= startTime + category.durationMillis)
@@ -145,6 +129,46 @@ data class Emergency(
 
     fun getName(): String {
         return category.name
+    }
+
+    fun getIconItem(): ItemStack {
+        var itemStack: ItemStack
+        var customModelData: Int
+        var dispatchColorCode: String
+
+        if (!isCapFulfilled()) {
+            itemStack = ItemStack(category.iconMaterial)
+            customModelData = category.iconCustomModelData
+            dispatchColorCode = "&b"
+        } else {
+            val iconMaterialString = SneakyDispatch.getInstance().getConfig().getString("cap-icon-material") ?: "red_wool"
+            var iconMaterial = Material.matchMaterial(iconMaterialString)
+            if (iconMaterial == null) {
+                SneakyDispatch.log("Invalid material '$iconMaterialString' specified for dispatch cap. Using default.")
+                iconMaterial = Material.RED_WOOL
+            }
+
+            itemStack = ItemStack(iconMaterial)
+            customModelData = SneakyDispatch.getInstance().getConfig().getInt("cap-icon-custom-model-data")
+            dispatchColorCode = "&4"
+        }
+
+        val meta = itemStack.itemMeta
+    
+        // Set custom model data, display name, and lore
+        meta.setCustomModelData(customModelData)
+        meta.displayName(ChatUtility.convertToComponent("&a${category.name}"))
+        meta.lore(listOf(
+            ChatUtility.convertToComponent("&e${category.description}"),
+            ChatUtility.convertToComponent("${dispatchColorCode}Dispatched: [ ${dispatched} / ${category.dispatchCap} ]")
+        ))
+    
+        // Set persistent data
+        val persistentData = meta.persistentDataContainer
+        persistentData.set(SneakyDispatch.getEmergencyManager().IDKEY, PersistentDataType.STRING, uuid)
+    
+        itemStack.itemMeta = meta
+        return itemStack
     }
 
 }

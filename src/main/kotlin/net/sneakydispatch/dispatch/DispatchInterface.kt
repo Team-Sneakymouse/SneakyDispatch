@@ -30,7 +30,7 @@ class EmergencyInventoryHolder() : InventoryHolder {
         inventory = Bukkit.createInventory(this, size, ChatUtility.convertToComponent("&eDispatch"))
 
         for (emergency in emergencies) {
-            val iconItem = emergency.iconItem
+            val iconItem = emergency.getIconItem()
             if (inventory.firstEmpty() != -1) {
                 inventory.addItem(iconItem)
             } else {
@@ -84,4 +84,5 @@ class EmergencyInventoryListener : Listener {
             event.isCancelled = true
         }
     }
+    
 }

@@ -5,6 +5,10 @@
 #This cooldown is also triggered if an emergency expires without meeting its dispatch par, since this implies that they are spread too thin
 mechanical-dispatch-cooldown: 20
 
+##The icon that is shown in the dispatch menu when an emergency has reached its cap
+cap-icon-material: "red_wool"
+cap-icon-custom-model-data: 0
+
 ##The dispatch-cap represents the maximum amount of paladins that we want to see at a scene
 #This is visible to the players. Without proper permissions, it will be enforced.
 ##The dispatch-par represents the minimal amount of paladins that we want to see at a scene
