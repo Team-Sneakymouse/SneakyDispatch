@@ -1,15 +1,15 @@
 package net.sneakydispatch
 
+import org.bukkit.Bukkit
 import org.bukkit.permissions.Permission
 import org.bukkit.plugin.java.JavaPlugin
-import net.sneakydispatch.emergency.EmergencyManager
+import java.io.File
+import net.sneakydispatch.commands.CommandDispatch
+import net.sneakydispatch.commands.CommandReportEmergency
 import net.sneakydispatch.dispatch.DispatchManager
 import net.sneakydispatch.dispatch.EmergencyInventoryListener
-import net.sneakydispatch.commands.CommandReportEmergency
-import net.sneakydispatch.commands.CommandDispatch
+import net.sneakydispatch.emergency.EmergencyManager
 import net.sneakydispatch.util.PlayerUtilityListener
-import java.io.File
-import org.bukkit.Bukkit
 
 class SneakyDispatch : JavaPlugin() {
 
@@ -28,7 +28,6 @@ class SneakyDispatch : JavaPlugin() {
 
         getServer().getPluginManager().registerEvents(EmergencyInventoryListener(), this)
         getServer().getPluginManager().registerEvents(PlayerUtilityListener(), this)
-
 
         server.pluginManager.addPermission(Permission("$IDENTIFIER.*"))
         server.pluginManager.addPermission(Permission("$IDENTIFIER.onduty"))

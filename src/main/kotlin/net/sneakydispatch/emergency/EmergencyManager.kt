@@ -1,17 +1,16 @@
 package net.sneakydispatch.emergency
 
+import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.Location
+import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
-import org.bukkit.configuration.file.YamlConfiguration
-import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
-import java.io.File
-import net.sneakydispatch.SneakyDispatch
-import me.clip.placeholderapi.PlaceholderAPI
-import net.sneakydispatch.util.ChatUtility
 import org.bukkit.persistence.PersistentDataType
+import me.clip.placeholderapi.PlaceholderAPI
+import net.sneakydispatch.SneakyDispatch
+import net.sneakydispatch.util.ChatUtility
 import java.util.UUID
 
 /**

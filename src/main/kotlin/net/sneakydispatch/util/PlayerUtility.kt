@@ -5,8 +5,8 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
-import net.sneakydispatch.SneakyDispatch
 import java.util.concurrent.TimeUnit
+import net.sneakydispatch.SneakyDispatch
 
 object PlayerUtility {
 

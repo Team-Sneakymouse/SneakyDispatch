@@ -3,11 +3,12 @@ package net.sneakydispatch.commands
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import net.sneakydispatch.util.ChatUtility
-import net.sneakydispatch.emergency.EmergencyManager
-import net.sneakydispatch.emergency.EmergencyCategory
-import net.sneakydispatch.emergency.Emergency
+
 import net.sneakydispatch.SneakyDispatch
+import net.sneakydispatch.emergency.Emergency
+import net.sneakydispatch.emergency.EmergencyCategory
+import net.sneakydispatch.emergency.EmergencyManager
+import net.sneakydispatch.util.ChatUtility
 
 class CommandReportEmergency : CommandBase("reportemergency") {
 
