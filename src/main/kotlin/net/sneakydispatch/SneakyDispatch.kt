@@ -1,8 +1,5 @@
 package net.sneakydispatch
 
-import org.bukkit.Bukkit
-import org.bukkit.permissions.Permission
-import org.bukkit.plugin.java.JavaPlugin
 import java.io.File
 import net.sneakydispatch.commands.CommandDispatch
 import net.sneakydispatch.commands.CommandReportEmergency
@@ -10,6 +7,9 @@ import net.sneakydispatch.dispatch.DispatchManager
 import net.sneakydispatch.dispatch.EmergencyInventoryListener
 import net.sneakydispatch.emergency.EmergencyManager
 import net.sneakydispatch.util.PlayerUtilityListener
+import org.bukkit.Bukkit
+import org.bukkit.permissions.Permission
+import org.bukkit.plugin.java.JavaPlugin
 
 class SneakyDispatch : JavaPlugin() {
 
@@ -35,7 +35,7 @@ class SneakyDispatch : JavaPlugin() {
         server.pluginManager.addPermission(Permission("$IDENTIFIER.command.*"))
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-			papiActive = true
+            papiActive = true
             Placeholders().register()
         }
     }
@@ -47,9 +47,7 @@ class SneakyDispatch : JavaPlugin() {
         private lateinit var instance: SneakyDispatch
             private set
 
-        /**
-         * Logs a message using the plugin logger.
-         */
+        /** Logs a message using the plugin logger. */
         fun log(msg: String) {
             instance?.logger?.info(msg) ?: System.err.println("SneakyDispatch instance is null")
         }
@@ -62,48 +60,35 @@ class SneakyDispatch : JavaPlugin() {
             return instance?.dataFolder ?: throw IllegalStateException("Data folder is null")
         }
 
-        /**
-         * Retrieves the configuration file.
-         */
+        /** Retrieves the configuration file. */
         fun getConfigFile(): File {
             return File(getDataFolder(), "config.yml")
         }
 
-        /**
-         * Whether placeholderAPI is running.
-         */
+        /** Whether placeholderAPI is running. */
         fun isPapiActive(): Boolean {
             return instance?.papiActive ?: false
         }
 
-        /**
-         * The running instance.
-         */
+        /** The running instance. */
         fun getInstance(): SneakyDispatch {
             return instance
         }
 
-        /**
-         * Retrieves the emergency manager instance, creating a new one if necessary.
-         */
+        /** Retrieves the emergency manager instance, creating a new one if necessary. */
         fun getEmergencyManager(): EmergencyManager {
-            return instance?.emergencyManager ?: EmergencyManager().also {
-                instance?.emergencyManager = it
-            }
+            return instance?.emergencyManager
+                    ?: EmergencyManager().also { instance?.emergencyManager = it }
         }
 
-        /**
-         * Retrieves the dispatch manager instance, creating a new one if necessary.
-         */
+        /** Retrieves the dispatch manager instance, creating a new one if necessary. */
         fun getDispatchManager(): DispatchManager {
-            return instance?.dispatchManager ?: DispatchManager().also {
-                instance?.dispatchManager = it
-            }
+            return instance?.dispatchManager
+                    ?: DispatchManager().also { instance?.dispatchManager = it }
         }
     }
 
     override fun onLoad() {
         instance = this
     }
-    
 }

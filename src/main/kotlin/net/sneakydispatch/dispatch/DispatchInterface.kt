@@ -1,6 +1,9 @@
 package net.sneakydispatch.dispatch
 
+import net.sneakydispatch.SneakyDispatch
+import net.sneakydispatch.util.ChatUtility
 import org.bukkit.Bukkit
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.ClickType
@@ -10,11 +13,6 @@ import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
-import org.bukkit.entity.Player
-
-import net.sneakydispatch.dispatch.DispatchManager
-import net.sneakydispatch.SneakyDispatch
-import net.sneakydispatch.util.ChatUtility
 
 class EmergencyInventoryHolder() : InventoryHolder {
     private lateinit var inventory: Inventory
@@ -41,7 +39,9 @@ class EmergencyInventoryHolder() : InventoryHolder {
 
     fun clickedItem(clickedItem: ItemStack, player: Player) {
         val meta = clickedItem.itemMeta
-        val uuid = meta.getPersistentDataContainer().get(SneakyDispatch.getEmergencyManager().IDKEY, PersistentDataType.STRING)
+        val uuid =
+                meta.getPersistentDataContainer()
+                        .get(SneakyDispatch.getEmergencyManager().IDKEY, PersistentDataType.STRING)
 
         if (uuid == null || uuid.isEmpty()) return
 
@@ -49,7 +49,6 @@ class EmergencyInventoryHolder() : InventoryHolder {
 
         SneakyDispatch.getDispatchManager().dispatch(uuid, player)
     }
-
 }
 
 class EmergencyInventoryListener : Listener {
@@ -84,5 +83,4 @@ class EmergencyInventoryListener : Listener {
             event.isCancelled = true
         }
     }
-    
 }

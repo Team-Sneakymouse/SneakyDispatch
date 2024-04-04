@@ -1,9 +1,9 @@
 package net.sneakydispatch
 
-import org.bukkit.entity.Player
-import org.jetbrains.annotations.NotNull
 import me.clip.placeholderapi.expansion.PlaceholderExpansion
 import net.sneakydispatch.util.PlayerUtility
+import org.bukkit.entity.Player
+import org.jetbrains.annotations.NotNull
 
 class Placeholders : PlaceholderExpansion() {
 
