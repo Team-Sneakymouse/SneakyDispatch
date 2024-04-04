@@ -37,11 +37,14 @@ class SneakyDispatch : JavaPlugin() {
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
 			papiActive = true
+            Placeholders().register()
         }
     }
 
     companion object {
         const val IDENTIFIER = "sneakydispatch"
+        const val AUTHORS = "Team Sneakymouse"
+        const val VERSION = "1.0.0"
         private lateinit var instance: SneakyDispatch
             private set
 
