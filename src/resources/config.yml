@@ -1,9 +1,9 @@
 ##The amount of minutes between mechanical dispatches
-#The mechanical dispatch is checked every minutes
-#It only triggers if the amount of paladins who haven't been dispatched in {paladin-idle-timer} mins is more than the open slots in ongoing emergencies
-#(ignoring paladins who logged in less than {paladin-idle-timer} mins ago)
+#The mechanical dispatch is checked every minute
+#It only triggers if the amount of paladins who haven't been dispatched in {paladin-idle-time} mins is more than the open slots in ongoing emergencies
+#(ignoring paladins who logged in less than {paladin-idle-time} mins ago)
 #This cooldown is also triggered if an emergency expires without meeting its dispatch par, since this implies that they are spread too thin
-paladin-idle-timer: 20
+paladin-idle-time: 20
 mechanical-dispatch-cooldown: 20
 
 ##The icon that is shown in the dispatch menu when an emergency has reached its cap
@@ -23,6 +23,14 @@ emergencies:
         icon-custom-model-data: 1
         dispatch-cap: 2
         dispatch-par: 1
+        duration-milis: 600000
+    backup:
+        name: "Call for Backup"
+        description: "A Paladin is in need of backup in %dipp_district_name%!"
+        icon-material: "music_disc_cat"
+        icon-custom-model-data: 1
+        dispatch-cap: 999
+        dispatch-par: 0
         duration-milis: 600000
     crime:
         name: "Crime"
@@ -48,16 +56,16 @@ emergencies:
         dispatch-cap: 999
         dispatch-par: 4
         duration-milis: 600000
-    weather:
-        name: "Weather Emergency"
-        description: "Unusual weather is terrorising the citizens of %dipp_district_name%!"
+    hazard:
+        name: "Hazardous Situation"
+        description: "A hazardous situation is terrorising the citizens of %dipp_district_name%!"
         icon-material: "music_disc_cat"
         icon-custom-model-data: 5
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 600000
-    pest:
-        name: "Pest Extermination"
+    wildlife:
+        name: "Wildlife Control"
         description: "An outbreak of animals is disrupting our way of life in %dipp_district_name%!"
         icon-material: "music_disc_cat"
         icon-custom-model-data: 6
