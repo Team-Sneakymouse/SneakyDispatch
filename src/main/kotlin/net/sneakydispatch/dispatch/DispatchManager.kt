@@ -12,9 +12,10 @@ class DispatchManager {
 
     private val emergencies: MutableMap<String, Emergency> = mutableMapOf()
     private var nextMechanicalDispatchTime: Long =
-            SneakyDispatch.getInstance().getConfig().getInt("mechanical-dispatch-cooldown") *
-                    60 *
-                    1000L
+            System.currentTimeMillis() +
+                    SneakyDispatch.getInstance()
+                            .getConfig()
+                            .getInt("mechanical-dispatch-cooldown") * 60 * 1000L
 
     init {
         val scheduler = Bukkit.getScheduler()
@@ -59,9 +60,10 @@ class DispatchManager {
         for (emergency in emergencies.values) {
             if (!emergency.isParFulfilled()) {
                 nextMechanicalDispatchTime =
-                        SneakyDispatch.getInstance()
-                                .getConfig()
-                                .getInt("mechanical-dispatch-cooldown") * 60 * 1000L
+                        System.currentTimeMillis() +
+                                SneakyDispatch.getInstance()
+                                        .getConfig()
+                                        .getInt("mechanical-dispatch-cooldown") * 60 * 1000L
                 break
             }
         }
@@ -136,9 +138,10 @@ class DispatchManager {
                                     " paladin-mechanicaldispatch-main"
                     )
             nextMechanicalDispatchTime =
-                    SneakyDispatch.getInstance()
-                            .getConfig()
-                            .getInt("mechanical-dispatch-cooldown") * 60 * 1000L
+                    System.currentTimeMillis() +
+                            SneakyDispatch.getInstance()
+                                    .getConfig()
+                                    .getInt("mechanical-dispatch-cooldown") * 60 * 1000L
             break
         }
     }
