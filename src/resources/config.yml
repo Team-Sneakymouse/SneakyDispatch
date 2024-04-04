@@ -1,8 +1,9 @@
 ##The amount of minutes between mechanical dispatches
 #The mechanical dispatch is checked every minutes
-#It only triggers if the amount of paladins who haven't been dispatched in 20 mins is more than the open slots in ongoing emergencies
-#(ignoring paladins who logged in less than 20 mins ago)
+#It only triggers if the amount of paladins who haven't been dispatched in {paladin-idle-timer} mins is more than the open slots in ongoing emergencies
+#(ignoring paladins who logged in less than {paladin-idle-timer} mins ago)
 #This cooldown is also triggered if an emergency expires without meeting its dispatch par, since this implies that they are spread too thin
+paladin-idle-timer: 20
 mechanical-dispatch-cooldown: 20
 
 ##The icon that is shown in the dispatch menu when an emergency has reached its cap

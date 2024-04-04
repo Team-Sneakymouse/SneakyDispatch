@@ -16,7 +16,7 @@ class DispatchManager {
     private val emergencies: MutableMap<String, Emergency> = mutableMapOf()
 
     /**
-     * Adds a new emergency to the map with a random UUID key, and alerts available paladins
+     * Adds a new emergency to the map with a random UUID key, and alerts available paladins.
      */
     fun report(emergency: Emergency) {
         emergencies[emergency.uuid] = emergency
@@ -27,21 +27,21 @@ class DispatchManager {
     }
 
     /**
-     * Get emergency value collection
+     * Get emergency value collection.
      */
     fun getEmergencies(): MutableCollection<Emergency> {
         return emergencies.values
     }
 
     /**
-     * Clean up expired emergencies
+     * Clean up expired emergencies.
      */
     fun cleanup() {
         emergencies.entries.removeIf { it.value.isExpired() }
     }
 
     /**
-     * Dispatch a paladin to an ongoing emergency
+     * Dispatch a paladin to an ongoing emergency.
      */
     fun dispatch(uuid: String, pl: Player) {
         val emergency = emergencies.get(uuid)

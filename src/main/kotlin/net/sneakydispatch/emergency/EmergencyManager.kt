@@ -155,7 +155,7 @@ data class Emergency(
 
         val meta = itemStack.itemMeta
     
-        // Set custom model data, display name, and lore
+        // Set custom model data, display name, and lore.
         meta.setCustomModelData(customModelData)
         meta.displayName(ChatUtility.convertToComponent("&a${category.name}"))
         meta.lore(listOf(
@@ -163,7 +163,7 @@ data class Emergency(
             ChatUtility.convertToComponent("${dispatchColorCode}Dispatched: [ ${dispatched} / ${category.dispatchCap} ]")
         ))
     
-        // Set persistent data
+        // Set persistent data.
         val persistentData = meta.persistentDataContainer
         persistentData.set(SneakyDispatch.getEmergencyManager().IDKEY, PersistentDataType.STRING, uuid)
     

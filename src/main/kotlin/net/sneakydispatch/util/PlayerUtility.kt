@@ -2,24 +2,56 @@ package net.sneakydispatch.util
 
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerJoinEvent
 import net.sneakydispatch.SneakyDispatch
+import java.util.concurrent.TimeUnit
 
 object PlayerUtility {
+
+    private val dispatchTimeMap: MutableMap<String, Long> = mutableMapOf()
 
     /**
      * Returns a list of on-duty paladins.
      */
     fun getPaladins(): List<Player> {
-        val paladins: MutableList<Player> = mutableListOf()
+        return Bukkit.getOnlinePlayers().filter {
+            it.hasPermission("${SneakyDispatch.IDENTIFIER}.onduty")
+        }
+    }
 
-        for (player in Bukkit.getOnlinePlayers()) {
-            if (player.hasPermission("$SneakyDispatch.IDENTIFIER.onduty")) {
-                paladins.add(player)
+    /**
+     * Returns the amount of paladins who are currently idle.
+     */
+    fun getIdlePaladins(): Int {
+        val idle: MutableList<Player> = mutableListOf()
+        val currentTime = System.currentTimeMillis()
+
+        for (player in getPaladins()) {
+            val lastDispatchTime = dispatchTimeMap[player.uniqueId.toString()] ?: 0
+            if (TimeUnit.MILLISECONDS.toMinutes(currentTime - lastDispatchTime) >= SneakyDispatch.getInstance().getConfig().getInt("paladin-idle-time")) {
+                idle.add(player)
             }
         }
 
-        return paladins
+        return idle.size
+    }
+
+    /**
+     * Sets the dispatch time for a player.
+     */
+    fun setDispatchTime(player: Player) {
+        dispatchTimeMap[player.uniqueId.toString()] = System.currentTimeMillis()
+    }
+
+}
+
+class PlayerUtilityListener : Listener {
+
+    @EventHandler
+    fun onPlayerJoin(event: PlayerJoinEvent) {
+        PlayerUtility.setDispatchTime(event.getPlayer())
     }
     
 }

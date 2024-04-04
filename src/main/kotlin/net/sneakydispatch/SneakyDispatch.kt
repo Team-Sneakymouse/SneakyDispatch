@@ -7,6 +7,7 @@ import net.sneakydispatch.dispatch.DispatchManager
 import net.sneakydispatch.dispatch.EmergencyInventoryListener
 import net.sneakydispatch.commands.CommandReportEmergency
 import net.sneakydispatch.commands.CommandDispatch
+import net.sneakydispatch.util.PlayerUtilityListener
 import java.io.File
 import org.bukkit.Bukkit
 
@@ -26,6 +27,8 @@ class SneakyDispatch : JavaPlugin() {
         getServer().getCommandMap().register(IDENTIFIER, CommandDispatch());
 
         getServer().getPluginManager().registerEvents(EmergencyInventoryListener(), this);
+        getServer().getPluginManager().registerEvents(PlayerUtilityListener(), this);
+
 
         server.pluginManager.addPermission(Permission("$IDENTIFIER.*"))
         server.pluginManager.addPermission(Permission("$IDENTIFIER.onduty"))
@@ -65,14 +68,14 @@ class SneakyDispatch : JavaPlugin() {
         }
 
         /**
-         * Whether placeholderAPI is running
+         * Whether placeholderAPI is running.
          */
         fun isPapiActive(): Boolean {
             return instance?.papiActive ?: false
         }
 
         /**
-         * The running instance
+         * The running instance.
          */
         fun getInstance(): SneakyDispatch {
             return instance

@@ -12,7 +12,11 @@ import net.sneakydispatch.util.ChatUtility
 class CommandDispatch : CommandBase("dispatch") {
 
     init {
-        this.description = "Opens the emergency inventory."
+        this.usageMessage = buildString {
+            append("/")
+            append(this@CommandDispatch.name)
+        }
+        this.description = "Opens the dispatch interface."
     }
 
     override fun execute(sender: CommandSender, commandLabel: String, args: Array<out String>): Boolean {
