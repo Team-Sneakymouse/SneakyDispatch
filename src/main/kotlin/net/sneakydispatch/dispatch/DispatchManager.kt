@@ -100,7 +100,7 @@ class DispatchManager {
      */
     fun createMechanicalDispatch() {
         for (player in Bukkit.getOnlinePlayers()) {
-            Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "cast forcecast " + player.getName() + " paladin-emergency-random")
+            Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "cast forcecast " + player.getName() + " paladin-mechanicaldispatch-main")
             nextMechanicalDispatchTime = SneakyDispatch.getInstance().getConfig().getInt("mechanical-dispatch-cooldown") * 60 * 1000L
             break
         }
