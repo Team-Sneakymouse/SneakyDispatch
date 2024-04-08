@@ -105,6 +105,7 @@ data class Emergency(
                 } else {
                     category.description
                 },
+        var delayed: Boolean = false
 ) {
     fun isExpired(): Boolean {
         return (System.currentTimeMillis() >= startTime + category.durationMillis)

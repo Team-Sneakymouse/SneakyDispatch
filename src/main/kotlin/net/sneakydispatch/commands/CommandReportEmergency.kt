@@ -14,7 +14,7 @@ class CommandReportEmergency : CommandBase("reportemergency") {
         this.usageMessage = buildString {
             append("/")
             append(this@CommandReportEmergency.name)
-            append(" [emergencyCategory]")
+            append(" [emergencyCategory] (delayMilis)")
         }
         this.description = "Report an emergency to the GPO dispatch system."
     }
@@ -56,10 +56,48 @@ class CommandReportEmergency : CommandBase("reportemergency") {
             return true
         }
 
-        val emergency =
-                Emergency(category = emergencyCategory, player = player, location = player.location)
-        SneakyDispatch.getDispatchManager().report(emergency)
-        sender.sendMessage(ChatUtility.convertToComponent("&aYour emergency has been reported"))
+        if (remainingArgs.size > 1) {
+            val delay: Long =
+                    remainingArgs[1].toLongOrNull()
+                            ?: run {
+                                sender.sendMessage(
+                                        ChatUtility.convertToComponent(
+                                                "&4Invalid delay value. Please provide a valid number."
+                                        )
+                                )
+                                return false
+                            }
+
+            val emergency =
+                    Emergency(
+                            category = emergencyCategory,
+                            player = player,
+                            location = player.location,
+                            delayed = true
+                    )
+
+            Bukkit.getScheduler()
+                    .runTaskLater(
+                            SneakyDispatch.getInstance(),
+                            Runnable { SneakyDispatch.getDispatchManager().report(emergency) },
+                            delay
+                    )
+
+            sender.sendMessage(
+                    ChatUtility.convertToComponent(
+                            "&aYour emergency will be reported after a delay of $delay milliseconds."
+                    )
+            )
+        } else {
+            val emergency =
+                    Emergency(
+                            category = emergencyCategory,
+                            player = player,
+                            location = player.location
+                    )
+            SneakyDispatch.getDispatchManager().report(emergency)
+            sender.sendMessage(ChatUtility.convertToComponent("&aYour emergency has been reported"))
+        }
 
         return true
     }
