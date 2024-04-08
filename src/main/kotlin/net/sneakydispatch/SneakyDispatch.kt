@@ -31,7 +31,6 @@ class SneakyDispatch : JavaPlugin() {
 
         server.pluginManager.addPermission(Permission("$IDENTIFIER.*"))
         server.pluginManager.addPermission(Permission("$IDENTIFIER.onduty"))
-        server.pluginManager.addPermission(Permission("$IDENTIFIER.supervisor"))
         server.pluginManager.addPermission(Permission("$IDENTIFIER.command.*"))
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {

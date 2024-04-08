@@ -75,10 +75,6 @@ class DispatchManager {
 
         if (emergency == null) return
 
-        if (emergency.isCapFulfilled() && !pl.hasPermission("$SneakyDispatch.IDENTIFIER.supervisor")
-        )
-                return
-
         emergency.incrementDispatched()
 
         for (player in PlayerUtility.getPaladins()) {
