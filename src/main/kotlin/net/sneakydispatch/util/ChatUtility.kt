@@ -36,4 +36,27 @@ object ChatUtility {
                 .deserialize(convertedMessage)
                 .decoration(TextDecoration.ITALIC, false)
     }
+
+    fun splitIntoLines(text: String, maxLineLength: Int): List<String> {
+        val words = text.split("\\s+".toRegex())
+        val lines = mutableListOf<String>()
+        var currentLine = StringBuilder()
+
+        for (word in words) {
+            if (currentLine.isEmpty()) {
+                currentLine.append(word)
+            } else if (currentLine.length + word.length + 1 <= maxLineLength) {
+                currentLine.append(" ").append(word)
+            } else {
+                lines.add(currentLine.toString())
+                currentLine = StringBuilder(word)
+            }
+        }
+
+        if (currentLine.isNotEmpty()) {
+            lines.add(currentLine.toString())
+        }
+
+        return lines
+    }
 }

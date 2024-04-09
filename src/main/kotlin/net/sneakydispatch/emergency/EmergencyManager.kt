@@ -203,14 +203,21 @@ data class Emergency(val category: EmergencyCategory, @Transient val player: Pla
                         "&a${if (delay > 0) "Local Report: " else ""}${category.name}"
                 )
         )
-        meta.lore(
-                listOf(
-                        ChatUtility.convertToComponent("&e${description}"),
-                        ChatUtility.convertToComponent(
-                                "${dispatchColorCode}Dispatched: [ ${dispatched} / ${category.dispatchCap} ]"
-                        )
-                )
-        )
+
+        val lore = mutableListOf<String>()
+
+        // Split the description into lines of a maximum length
+        val descriptionLines = ChatUtility.splitIntoLines(description, 30)
+
+        // Add each line of the description to the lore
+        for (line in descriptionLines) {
+            lore.add("&e$line")
+        }
+
+        // Add the dispatched information to the lore
+        lore.add("${dispatchColorCode}Dispatched: [ $dispatched / ${category.dispatchCap} ]")
+
+        meta.lore(lore.map { ChatUtility.convertToComponent(it) })
 
         // Set persistent data.
         val persistentData = meta.persistentDataContainer
