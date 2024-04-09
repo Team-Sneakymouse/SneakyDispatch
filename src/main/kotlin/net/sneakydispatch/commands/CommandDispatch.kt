@@ -31,7 +31,7 @@ class CommandDispatch : CommandBase("dispatch") {
                             "&4${args[0]} is not a player name. When running this command from the console, the first arg must be the reporting player."
                     )
             )
-            return true
+            return false
         }
 
         val holder = EmergencyInventoryHolder()

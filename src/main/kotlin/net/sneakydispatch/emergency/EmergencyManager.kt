@@ -92,21 +92,26 @@ data class EmergencyCategory(
 )
 
 data class Emergency(
-        val uuid: String = UUID.randomUUID().toString(),
         val category: EmergencyCategory,
-        var dispatched: Int = 0,
-        val startTime: Long = System.currentTimeMillis(),
-        @Transient val player: Player,
-        val location: Location,
-        var description: String =
-                if (SneakyDispatch.isPapiActive()) {
-                    PlaceholderAPI.setPlaceholders(player, category.description)
-                            .replace("none", "Dinky Dank")
-                } else {
-                    category.description
-                },
-        var delayed: Boolean = false
+        @Transient val player: Player
 ) {
+    val uuid: String = UUID.randomUUID().toString()
+    val location: Location = player.location
+    var description: String =
+            if (SneakyDispatch.isPapiActive()) {
+                PlaceholderAPI.setPlaceholders(player, category.description)
+                        .replace("none", "Dinky Dank")
+            } else {
+                category.description
+            }
+    var delay: Long = 0
+        set(value) {
+            startTime -= delay - value
+            field = value
+        }
+    var startTime: Long = System.currentTimeMillis() + delay
+    var dispatched: Int = 0
+
     fun isExpired(): Boolean {
         return (System.currentTimeMillis() >= startTime + category.durationMillis)
     }
