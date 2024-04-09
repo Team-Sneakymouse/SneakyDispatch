@@ -6,6 +6,10 @@
 paladin-idle-time: 20
 mechanical-dispatch-cooldown: 20
 
+##If you are within n blocks of an ongoing emergency, your report will do nothing
+#this also controls the placeholder %sneakydispatch_nearby_emergency%
+emergency-radius: 50
+
 ##The icon that is shown in the dispatch menu when an emergency has reached its cap
 cap-icon-material: "red_wool"
 cap-icon-custom-model-data: 0

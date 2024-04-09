@@ -1,5 +1,6 @@
 package net.sneakydispatch
 
+import kotlin.math.pow
 import me.clip.placeholderapi.expansion.PlaceholderExpansion
 import net.sneakydispatch.util.PlayerUtility
 import org.bukkit.entity.Player
@@ -29,6 +30,24 @@ class Placeholders : PlaceholderExpansion() {
         return when (placeholder) {
             "paladins_on_duty" -> PlayerUtility.getPaladins().size.toString()
             "paladins_idle" -> PlayerUtility.getIdlePaladins().toString()
+            "nearby_emergency" -> {
+                val emergencies = SneakyDispatch.getDispatchManager().getEmergencies()
+                val maxDistSq =
+                        SneakyDispatch.getInstance()
+                                .getConfig()
+                                .getInt("emergency-radius")
+                                .toDouble()
+                                .pow(2)
+                                .toInt()
+
+                val playerLocation = player.location
+                for (emergency in emergencies) {
+                    if (emergency.location.distanceSquared(playerLocation) <= maxDistSq) {
+                        return emergency.getName()
+                    }
+                }
+                "none"
+            }
             else -> null
         }
     }

@@ -1,6 +1,7 @@
 package net.sneakydispatch.dispatch
 
 import java.util.*
+import kotlin.math.pow
 import net.sneakydispatch.SneakyDispatch
 import net.sneakydispatch.emergency.Emergency
 import net.sneakydispatch.util.PlayerUtility
@@ -35,6 +36,17 @@ class DispatchManager {
 
     /** Adds a new emergency to the map and alerts available paladins. */
     fun report(emergency: Emergency) {
+        val maxDistSq =
+                SneakyDispatch.getInstance()
+                        .getConfig()
+                        .getInt("emergency-radius")
+                        .toDouble()
+                        .pow(2)
+                        .toInt()
+        for (emergency_ in emergencies.values) {
+            if (emergency.location.distanceSquared(emergency_.location) <= maxDistSq) return
+        }
+
         emergencies[emergency.uuid] = emergency
 
         for (player in PlayerUtility.getPaladins()) {
