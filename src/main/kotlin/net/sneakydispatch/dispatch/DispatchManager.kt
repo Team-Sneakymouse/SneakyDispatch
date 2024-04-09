@@ -59,10 +59,10 @@ class DispatchManager {
                                     player.getName() +
                                     " paladin-emergency-reported " +
                                     emergency.getName().replace(" ", "$") +
-									" " +
-									emergency.category.iconMaterial +
-									" " +
-									emergency.category.iconCustomModelData
+                                    " " +
+                                    emergency.category.iconMaterial +
+                                    " " +
+                                    emergency.category.iconCustomModelData
                     )
         }
     }
@@ -124,9 +124,9 @@ class DispatchManager {
                                         " " +
                                         emergency.getDispatchCap() +
                                         " " +
-										emergency.category.iconMaterial +
+                                        emergency.category.iconMaterial +
                                         " " +
-										emergency.category.iconCustomModelData
+                                        emergency.category.iconCustomModelData
                         )
             }
         }
