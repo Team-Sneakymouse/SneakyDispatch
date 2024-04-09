@@ -105,6 +105,40 @@ data class Emergency(val category: EmergencyCategory, @Transient val player: Pla
         set(value) {
             startTime -= delay - value
             field = value
+
+            if (value > 0) {
+                var desc_ = category.description
+
+                val config = SneakyDispatch.getInstance().getConfig()
+                val replacements =
+                        config.getConfigurationSection("delayed-tooltip-text-replacements")
+                if (replacements != null) {
+                    for (key in replacements.getKeys(false)) {
+                        SneakyDispatch.log(key)
+                        val replacementList = replacements.getStringList(key)
+                        if (replacementList.isNotEmpty()) {
+                            val replacement = replacementList.random()
+                            desc_ = desc_.replace(key, replacement)
+                        }
+                    }
+                }
+
+                if (SneakyDispatch.isPapiActive()) {
+                    description =
+                            PlaceholderAPI.setPlaceholders(player, desc_)
+                                    .replace("none", "Dinky Dank")
+                } else {
+                    description = desc_
+                }
+            } else {
+                if (SneakyDispatch.isPapiActive()) {
+                    description =
+                            PlaceholderAPI.setPlaceholders(player, category.description)
+                                    .replace("none", "Dinky Dank")
+                } else {
+                    description = category.description
+                }
+            }
         }
     var startTime: Long = System.currentTimeMillis() + delay
     var dispatched: Int = 0

@@ -14,6 +14,43 @@ emergency-radius: 50
 cap-icon-material: "red_wool"
 cap-icon-custom-model-data: 0
 
+##These are text replacements that occur on the emergency description if the emergency has been reported with a delay (that is to say, a scripted report rather than a manual one)
+#These are applied BEFORE placeholder replacement
+#These must be supplied as a string list, and one of the replacements will be chosen at random
+delayed-tooltip-text-replacements:
+  people:
+    - locals
+  person:
+    - local
+  citizen:
+    - local
+  "%sneakycharacters_character_name%":
+    - a local fisherman
+    - a local farmer
+    - a local miner
+    - a local store clerk
+    - a local dwarf
+    - a local baker
+    - a local sorcerer
+    - a local blacksmith
+    - a local lumberjack
+    - a local ranger
+    - a local scoundrel
+    - a local beggar
+    - a local artisan
+    - a local brewer
+    - a local chef
+    - a local cobbler
+    - a local dancer
+    - a local gardener
+    - a local musician
+    - a local painter
+    - a local poet
+    - a local sculptor
+    - a local storyteller
+    - a local tailor
+    - a local weaver
+
 ##The dispatch-cap represents the maximum amount of paladins that we want to see at a scene
 #This is visible to the players. Without proper permissions, it will be enforced.
 ##The dispatch-par represents the minimal amount of paladins that we want to see at a scene
@@ -22,7 +59,7 @@ cap-icon-custom-model-data: 0
 emergencies:
     misc:
         name: "Call for Help"
-        description: "A citizen is in need of aid in %dipp_district_name%!"
+        description: "%sneakycharacters_character_name% is in need of aid in %dipp_district_name%!"
         icon-material: "music_disc_cat"
         icon-custom-model-data: 1
         dispatch-cap: 2
@@ -30,7 +67,7 @@ emergencies:
         duration-milis: 600000
     backup:
         name: "Call for Backup"
-        description: "A Paladin is in need of backup in %dipp_district_name%!"
+        description: "%sneakycharacters_character_name% has called for backup in %dipp_district_name%!"
         icon-material: "music_disc_cat"
         icon-custom-model-data: 1
         dispatch-cap: 999
@@ -46,7 +83,7 @@ emergencies:
         duration-milis: 600000
     fire:
         name: "Fire Fighting"
-        description: "A fire has broken out in %dipp_district_name%!"
+        description: "%sneakycharacters_character_name% has reported a fire breaking out in %dipp_district_name%!"
         icon-material: "music_disc_cat"
         icon-custom-model-data: 3
         dispatch-cap: 999
@@ -54,7 +91,7 @@ emergencies:
         duration-milis: 600000
     attack:
         name: "Monster Attack"
-        description: "Monsters are attacking %dipp_district_name%! Suit up, Paladin!"
+        description: "%sneakycharacters_character_name% has reported a Monster Attack in %dipp_district_name%! Suit up, Paladin!"
         icon-material: "music_disc_cat"
         icon-custom-model-data: 4
         dispatch-cap: 999
@@ -62,7 +99,7 @@ emergencies:
         duration-milis: 600000
     hazard:
         name: "Hazardous Situation"
-        description: "A hazardous situation is terrorising the citizens of %dipp_district_name%!"
+        description: "%sneakycharacters_character_name% has reported a hazardous situation in %dipp_district_name%! Protect the people!"
         icon-material: "music_disc_cat"
         icon-custom-model-data: 5
         dispatch-cap: 2
@@ -70,7 +107,7 @@ emergencies:
         duration-milis: 600000
     wildlife:
         name: "Wildlife Control"
-        description: "An outbreak of animals is disrupting our way of life in %dipp_district_name%!"
+        description: "%sneakycharacters_character_name% has reported that wild animals are disturbing our way of life in %dipp_district_name%!"
         icon-material: "music_disc_cat"
         icon-custom-model-data: 6
         dispatch-cap: 2
