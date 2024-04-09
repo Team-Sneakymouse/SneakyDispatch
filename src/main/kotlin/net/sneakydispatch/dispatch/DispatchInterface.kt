@@ -24,14 +24,44 @@ class EmergencyInventoryHolder() : InventoryHolder {
     fun populateInventory() {
         SneakyDispatch.getDispatchManager().cleanup()
         val emergencies = SneakyDispatch.getDispatchManager().getEmergencies()
-        val size = (((emergencies.size + 8) / 9) * 9).coerceAtLeast(9).coerceAtMost(54)
+
+        // Count delayed emergencies
+        val delayedEmergenciesCount = emergencies.count { it.delay > 0 }
+
+        // Immediate emergencies take up the first 3 rows, calculate additional rows needed for
+        // delayed ones
+        val immediateRowCount = if (delayedEmergenciesCount > 0) 3 else ((emergencies.size - 1) / 9 + 1)
+        val delayedRows =
+                (delayedEmergenciesCount / 9) + if (delayedEmergenciesCount % 9 > 0) 1 else 0
+
+        // Total rows = immediate rows + rows needed for delayed emergencies
+        val totalRows = immediateRowCount + delayedRows
+
+        // Ensure inventory size is within Minecraft constraints
+        val size = (totalRows * 9).coerceAtLeast(9).coerceAtMost(54)
         inventory = Bukkit.createInventory(this, size, ChatUtility.convertToComponent("&eDispatch"))
+
+        var immediateIndex = 0 // Index for immediate emergencies
+        var delayedIndex = immediateRowCount * 9 // Index for delayed emergencies
 
         for (emergency in emergencies) {
             val iconItem = emergency.getIconItem()
-            if (inventory.firstEmpty() != -1) {
-                inventory.addItem(iconItem)
+
+            // Determine where to place the emergency based on delay
+            if (emergency.delay > 0) {
+                // Check if there's room for more delayed emergencies
+                if (delayedIndex < inventory.size) {
+                    inventory.setItem(delayedIndex++, iconItem)
+                }
             } else {
+                // Place immediate emergencies in the first available slot within the first 3 rows
+                if (immediateIndex < immediateRowCount * 9) {
+                    inventory.setItem(immediateIndex++, iconItem)
+                }
+            }
+
+            // Stop if inventory is full
+            if (immediateIndex >= immediateRowCount * 9 && delayedIndex >= inventory.size) {
                 break
             }
         }
