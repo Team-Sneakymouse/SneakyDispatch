@@ -30,7 +30,8 @@ class EmergencyInventoryHolder() : InventoryHolder {
 
         // Immediate emergencies take up the first 3 rows, calculate additional rows needed for
         // delayed ones
-        val immediateRowCount = if (delayedEmergenciesCount > 0) 3 else ((emergencies.size - 1) / 9 + 1)
+        val immediateRowCount =
+                if (delayedEmergenciesCount > 0) 3 else ((emergencies.size - 1) / 9 + 1)
         val delayedRows =
                 (delayedEmergenciesCount / 9) + if (delayedEmergenciesCount % 9 > 0) 1 else 0
 
