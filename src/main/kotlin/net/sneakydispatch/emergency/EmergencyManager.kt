@@ -91,7 +91,7 @@ data class EmergencyCategory(
         val durationMillis: Int
 )
 
-data class Emergency(val category: EmergencyCategory, @Transient val player: Player) {
+data class Emergency(val category: EmergencyCategory, val player: Player) {
     val uuid: String = UUID.randomUUID().toString()
     val location: Location = player.location
     var description: String =
@@ -114,7 +114,6 @@ data class Emergency(val category: EmergencyCategory, @Transient val player: Pla
                         config.getConfigurationSection("delayed-tooltip-text-replacements")
                 if (replacements != null) {
                     for (key in replacements.getKeys(false)) {
-                        SneakyDispatch.log(key)
                         val replacementList = replacements.getStringList(key)
                         if (replacementList.isNotEmpty()) {
                             val replacement = replacementList.random()
