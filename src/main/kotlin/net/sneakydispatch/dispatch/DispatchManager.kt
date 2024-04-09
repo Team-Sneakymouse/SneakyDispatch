@@ -17,17 +17,18 @@ class DispatchManager {
                     SneakyDispatch.getInstance()
                             .getConfig()
                             .getInt("mechanical-dispatch-cooldown") * 60 * 1000L
-	var dispatchFrozenUntil: Long = 0
+    var dispatchFrozenUntil: Long = 0
 
     init {
         val scheduler = Bukkit.getScheduler()
         scheduler.runTaskTimer(
                 SneakyDispatch.getInstance(),
                 Runnable {
-                    if (System.currentTimeMillis() >= nextMechanicalDispatchTime) {
-                        if (PlayerUtility.getIdlePaladins() > getOpenDispatchSlots()) {
-                            createMechanicalDispatch()
-                        }
+                    if (System.currentTimeMillis() >= nextMechanicalDispatchTime &&
+                                    System.currentTimeMillis() >= dispatchFrozenUntil &&
+                                    PlayerUtility.getIdlePaladins() > getOpenDispatchSlots()
+                    ) {
+                        createMechanicalDispatch()
                     }
                 },
                 0L,
