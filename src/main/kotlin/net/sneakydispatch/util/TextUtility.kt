@@ -40,16 +40,36 @@ object TextUtility {
     fun splitIntoLines(text: String, maxLineLength: Int): List<String> {
         val words = text.split("\\s+".toRegex())
         val lines = mutableListOf<String>()
-        var currentLine = StringBuilder()
 
+        // Calculate total symbol length of the text
+        val totalSymbolLength = text.length
+
+        // Calculate minimal amount of lines needed to fit the text
+        val minLinesNeeded =
+                (totalSymbolLength / maxLineLength) +
+                        if (totalSymbolLength % maxLineLength != 0) 1 else 0
+
+        // Calculate average symbol length per line
+        val averageSymbolLengthPerLine = totalSymbolLength / minLinesNeeded
+
+        // Distribute words evenly among lines
+        var currentLine = StringBuilder()
+        var currentSymbolLength = 0
+        var remainingLines = minLinesNeeded
         for (word in words) {
             if (currentLine.isEmpty()) {
                 currentLine.append(word)
-            } else if (currentLine.length + word.length + 1 <= maxLineLength) {
+                currentSymbolLength += word.length
+            } else if (currentSymbolLength + word.length + 1 <= averageSymbolLengthPerLine ||
+                            remainingLines == 1
+            ) {
                 currentLine.append(" ").append(word)
+                currentSymbolLength += word.length + 1
             } else {
                 lines.add(currentLine.toString())
                 currentLine = StringBuilder(word)
+                currentSymbolLength = word.length
+                remainingLines--
             }
         }
 
