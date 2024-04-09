@@ -58,7 +58,9 @@ class DispatchManager {
                             "cast forcecast " +
                                     player.getName() +
                                     " paladin-emergency-reported " +
-                                    emergency.getName().replace(" ", "$")
+                                    emergency.getName().replace(" ", "$") +
+									emergency.category.iconMaterial +
+									emergency.category.iconCustomModelData
                     )
         }
     }
@@ -118,7 +120,9 @@ class DispatchManager {
                                         " " +
                                         emergency.dispatched +
                                         " " +
-                                        emergency.getDispatchCap()
+                                        emergency.getDispatchCap() +
+										emergency.category.iconMaterial +
+										emergency.category.iconCustomModelData
                         )
             }
         }
