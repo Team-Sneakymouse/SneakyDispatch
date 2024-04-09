@@ -59,7 +59,9 @@ class DispatchManager {
                                     player.getName() +
                                     " paladin-emergency-reported " +
                                     emergency.getName().replace(" ", "$") +
+									" " +
 									emergency.category.iconMaterial +
+									" " +
 									emergency.category.iconCustomModelData
                     )
         }
@@ -121,7 +123,9 @@ class DispatchManager {
                                         emergency.dispatched +
                                         " " +
                                         emergency.getDispatchCap() +
+                                        " " +
 										emergency.category.iconMaterial +
+                                        " " +
 										emergency.category.iconCustomModelData
                         )
             }
