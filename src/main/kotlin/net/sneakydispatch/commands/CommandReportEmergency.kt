@@ -3,7 +3,7 @@ package net.sneakydispatch.commands
 import net.sneakydispatch.SneakyDispatch
 import net.sneakydispatch.emergency.Emergency
 import net.sneakydispatch.emergency.EmergencyCategory
-import net.sneakydispatch.util.ChatUtility
+import net.sneakydispatch.util.TextUtility
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -26,7 +26,7 @@ class CommandReportEmergency : CommandBase("reportemergency") {
     ): Boolean {
         if (System.currentTimeMillis() < SneakyDispatch.getDispatchManager().dispatchFrozenUntil) {
             sender.sendMessage(
-                    ChatUtility.convertToComponent("&4The dispatch system is currently frozen.")
+                    TextUtility.convertToComponent("&4The dispatch system is currently frozen.")
             )
             return false
         }
@@ -39,7 +39,7 @@ class CommandReportEmergency : CommandBase("reportemergency") {
 
         if (player == null) {
             sender.sendMessage(
-                    ChatUtility.convertToComponent(
+                    TextUtility.convertToComponent(
                             "&4${args[0]} is not a player name. When running this command from the console, the first arg must be the reporting player."
                     )
             )
@@ -47,7 +47,7 @@ class CommandReportEmergency : CommandBase("reportemergency") {
         }
 
         if (remainingArgs.isEmpty()) {
-            sender.sendMessage(ChatUtility.convertToComponent("&4Invalid Usage: $usageMessage"))
+            sender.sendMessage(TextUtility.convertToComponent("&4Invalid Usage: $usageMessage"))
             return false
         }
 
@@ -56,7 +56,7 @@ class CommandReportEmergency : CommandBase("reportemergency") {
 
         if (emergencyCategory == null) {
             sender.sendMessage(
-                    ChatUtility.convertToComponent(
+                    TextUtility.convertToComponent(
                             "&4${remainingArgs[0]} is not a valid emergency category!"
                     )
             )
@@ -70,7 +70,7 @@ class CommandReportEmergency : CommandBase("reportemergency") {
                     remainingArgs[1].toLongOrNull()
                             ?: run {
                                 sender.sendMessage(
-                                        ChatUtility.convertToComponent(
+                                        TextUtility.convertToComponent(
                                                 "&4Invalid delay value. Please provide a valid number."
                                         )
                                 )
@@ -87,13 +87,13 @@ class CommandReportEmergency : CommandBase("reportemergency") {
                     )
 
             sender.sendMessage(
-                    ChatUtility.convertToComponent(
+                    TextUtility.convertToComponent(
                             "&aYour emergency will be reported after a delay of $delay milliseconds."
                     )
             )
         } else {
             SneakyDispatch.getDispatchManager().report(emergency)
-            sender.sendMessage(ChatUtility.convertToComponent("&aYour emergency has been reported"))
+            sender.sendMessage(TextUtility.convertToComponent("&aYour emergency has been reported"))
         }
 
         return true

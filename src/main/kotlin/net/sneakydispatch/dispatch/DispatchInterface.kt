@@ -1,7 +1,7 @@
 package net.sneakydispatch.dispatch
 
 import net.sneakydispatch.SneakyDispatch
-import net.sneakydispatch.util.ChatUtility
+import net.sneakydispatch.util.TextUtility
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -40,7 +40,7 @@ class EmergencyInventoryHolder() : InventoryHolder {
 
         // Ensure inventory size is within Minecraft constraints
         val size = (totalRows * 9).coerceAtLeast(9).coerceAtMost(54)
-        inventory = Bukkit.createInventory(this, size, ChatUtility.convertToComponent("&eDispatch"))
+        inventory = Bukkit.createInventory(this, size, TextUtility.convertToComponent("&eDispatch"))
 
         var immediateIndex = 0 // Index for immediate emergencies
         var delayedIndex = immediateRowCount * 9 // Index for delayed emergencies

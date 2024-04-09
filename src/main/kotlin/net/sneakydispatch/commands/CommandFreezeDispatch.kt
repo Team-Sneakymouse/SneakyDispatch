@@ -1,7 +1,7 @@
 package net.sneakydispatch.commands
 
 import net.sneakydispatch.SneakyDispatch
-import net.sneakydispatch.util.ChatUtility
+import net.sneakydispatch.util.TextUtility
 import org.bukkit.command.CommandSender
 
 class CommandFreezeDispatch : CommandBase("freezedispatch") {
@@ -22,7 +22,7 @@ class CommandFreezeDispatch : CommandBase("freezedispatch") {
             args: Array<out String>
     ): Boolean {
         if (args.isEmpty()) {
-            sender.sendMessage(ChatUtility.convertToComponent("&4Invalid Usage: $usageMessage"))
+            sender.sendMessage(TextUtility.convertToComponent("&4Invalid Usage: $usageMessage"))
             return false
         }
 
@@ -30,7 +30,7 @@ class CommandFreezeDispatch : CommandBase("freezedispatch") {
                 args[0].toLongOrNull()
                         ?: run {
                             sender.sendMessage(
-                                    ChatUtility.convertToComponent(
+                                    TextUtility.convertToComponent(
                                             "&4Invalid minutes value. Please provide a valid number."
                                     )
                             )
@@ -39,7 +39,7 @@ class CommandFreezeDispatch : CommandBase("freezedispatch") {
 
         if (freezeTime < 0) {
             sender.sendMessage(
-                    ChatUtility.convertToComponent(
+                    TextUtility.convertToComponent(
                             "&4Invalid minutes value. Please provide a positive number."
                     )
             )
@@ -50,7 +50,7 @@ class CommandFreezeDispatch : CommandBase("freezedispatch") {
                 System.currentTimeMillis() + freezeTime * 60000
 
         sender.sendMessage(
-                ChatUtility.convertToComponent("&aDispatch system frozen for $freezeTime minutes.")
+                TextUtility.convertToComponent("&aDispatch system frozen for $freezeTime minutes.")
         )
 
         return true

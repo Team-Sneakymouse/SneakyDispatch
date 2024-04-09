@@ -3,7 +3,7 @@ package net.sneakydispatch.emergency
 import java.util.UUID
 import me.clip.placeholderapi.PlaceholderAPI
 import net.sneakydispatch.SneakyDispatch
-import net.sneakydispatch.util.ChatUtility
+import net.sneakydispatch.util.TextUtility
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
@@ -199,7 +199,7 @@ data class Emergency(val category: EmergencyCategory, @Transient val player: Pla
         // Set custom model data, display name, and lore.
         meta.setCustomModelData(customModelData)
         meta.displayName(
-                ChatUtility.convertToComponent(
+                TextUtility.convertToComponent(
                         "&a${if (delay > 0) "Local Report: " else ""}${category.name}"
                 )
         )
@@ -207,7 +207,7 @@ data class Emergency(val category: EmergencyCategory, @Transient val player: Pla
         val lore = mutableListOf<String>()
 
         // Split the description into lines of a maximum length
-        val descriptionLines = ChatUtility.splitIntoLines(description, 30)
+        val descriptionLines = TextUtility.splitIntoLines(description, 30)
 
         // Add each line of the description to the lore
         for (line in descriptionLines) {
@@ -217,7 +217,7 @@ data class Emergency(val category: EmergencyCategory, @Transient val player: Pla
         // Add the dispatched information to the lore
         lore.add("${dispatchColorCode}Dispatched: [ $dispatched / ${category.dispatchCap} ]")
 
-        meta.lore(lore.map { ChatUtility.convertToComponent(it) })
+        meta.lore(lore.map { TextUtility.convertToComponent(it) })
 
         // Set persistent data.
         val persistentData = meta.persistentDataContainer

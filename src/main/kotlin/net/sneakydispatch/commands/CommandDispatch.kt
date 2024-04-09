@@ -1,7 +1,7 @@
 package net.sneakydispatch.commands
 
 import net.sneakydispatch.dispatch.EmergencyInventoryHolder
-import net.sneakydispatch.util.ChatUtility
+import net.sneakydispatch.util.TextUtility
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -27,7 +27,7 @@ class CommandDispatch : CommandBase("dispatch") {
 
         if (player == null) {
             sender.sendMessage(
-                    ChatUtility.convertToComponent(
+                    TextUtility.convertToComponent(
                             "&4${args[0]} is not a player name. When running this command from the console, the first arg must be the reporting player."
                     )
             )

@@ -4,7 +4,7 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextDecoration
 import net.kyori.adventure.text.minimessage.MiniMessage
 
-object ChatUtility {
+object TextUtility {
 
     fun convertToComponent(message: String): Component {
         var convertedMessage =
