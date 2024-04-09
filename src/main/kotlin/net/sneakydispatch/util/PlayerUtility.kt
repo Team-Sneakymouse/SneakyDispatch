@@ -27,7 +27,8 @@ object PlayerUtility {
         for (player in getPaladins()) {
             val lastDispatchTime = dispatchTimeMap[player.uniqueId.toString()] ?: 0
             if (TimeUnit.MILLISECONDS.toMinutes(currentTime - lastDispatchTime) >=
-                            SneakyDispatch.getInstance().getConfig().getInt("paladin-idle-time")
+                            SneakyDispatch.getInstance().getConfig().getInt("paladin-idle-time") &&
+                            !player.hasPermission("${SneakyDispatch.IDENTIFIER}.neveridle")
             ) {
                 idle.add(player)
             }

@@ -2,8 +2,8 @@ package net.sneakydispatch
 
 import java.io.File
 import net.sneakydispatch.commands.CommandDispatch
-import net.sneakydispatch.commands.CommandReportEmergency
 import net.sneakydispatch.commands.CommandFreezeDispatch
+import net.sneakydispatch.commands.CommandReportEmergency
 import net.sneakydispatch.dispatch.DispatchManager
 import net.sneakydispatch.dispatch.EmergencyInventoryListener
 import net.sneakydispatch.emergency.EmergencyManager
@@ -33,6 +33,7 @@ class SneakyDispatch : JavaPlugin() {
 
         server.pluginManager.addPermission(Permission("$IDENTIFIER.*"))
         server.pluginManager.addPermission(Permission("$IDENTIFIER.onduty"))
+        server.pluginManager.addPermission(Permission("$IDENTIFIER.neveridle"))
         server.pluginManager.addPermission(Permission("$IDENTIFIER.command.*"))
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
