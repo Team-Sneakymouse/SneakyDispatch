@@ -91,10 +91,7 @@ data class EmergencyCategory(
         val durationMillis: Int
 )
 
-data class Emergency(
-        val category: EmergencyCategory,
-        @Transient val player: Player
-) {
+data class Emergency(val category: EmergencyCategory, @Transient val player: Player) {
     val uuid: String = UUID.randomUUID().toString()
     val location: Location = player.location
     var description: String =
@@ -167,7 +164,11 @@ data class Emergency(
 
         // Set custom model data, display name, and lore.
         meta.setCustomModelData(customModelData)
-        meta.displayName(ChatUtility.convertToComponent("&a${category.name}"))
+        meta.displayName(
+                ChatUtility.convertToComponent(
+                        "&a${if (delay > 0) "Local Report: " else ""}${category.name}"
+                )
+        )
         meta.lore(
                 listOf(
                         ChatUtility.convertToComponent("&e${description}"),
