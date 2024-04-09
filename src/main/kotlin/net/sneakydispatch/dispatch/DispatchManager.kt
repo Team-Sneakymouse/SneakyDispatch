@@ -58,7 +58,7 @@ class DispatchManager {
                             "cast forcecast " +
                                     player.getName() +
                                     " paladin-emergency-reported " +
-                                    emergency.getName().replace(" ", "_")
+                                    emergency.getName().replace(" ", "$")
                     )
         }
     }
@@ -112,7 +112,7 @@ class DispatchManager {
                                 "cast forcecast " +
                                         player.getName() +
                                         " paladin-dispatch-other " +
-                                        emergency.getName().replace(" ", "_") +
+                                        emergency.getName().replace(" ", "$") +
                                         " " +
                                         pl.getName() +
                                         " " +
