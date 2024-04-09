@@ -48,6 +48,17 @@ class Placeholders : PlaceholderExpansion() {
                 }
                 "none"
             }
+            "dispatch_frozen_milis" -> {
+                try {
+                    (SneakyDispatch.getDispatchManager().dispatchFrozenUntil -
+                                    System.currentTimeMillis())
+                            .coerceAtLeast(0)
+                            .toString()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    "error"
+                }
+            }
             else -> null
         }
     }

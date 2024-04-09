@@ -24,6 +24,13 @@ class CommandReportEmergency : CommandBase("reportemergency") {
             commandLabel: String,
             args: Array<out String>
     ): Boolean {
+        if (System.currentTimeMillis() < SneakyDispatch.getDispatchManager().dispatchFrozenUntil) {
+            sender.sendMessage(
+                    ChatUtility.convertToComponent("&4The dispatch system is currently frozen.")
+            )
+            return false
+        }
+
         val player: Player? =
                 if (sender is Player) sender
                 else if (args.isNotEmpty()) Bukkit.getPlayer(args[0]) else null

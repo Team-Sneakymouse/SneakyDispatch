@@ -3,6 +3,7 @@ package net.sneakydispatch
 import java.io.File
 import net.sneakydispatch.commands.CommandDispatch
 import net.sneakydispatch.commands.CommandReportEmergency
+import net.sneakydispatch.commands.CommandFreezeDispatch
 import net.sneakydispatch.dispatch.DispatchManager
 import net.sneakydispatch.dispatch.EmergencyInventoryListener
 import net.sneakydispatch.emergency.EmergencyManager
@@ -25,6 +26,7 @@ class SneakyDispatch : JavaPlugin() {
 
         getServer().getCommandMap().register(IDENTIFIER, CommandReportEmergency())
         getServer().getCommandMap().register(IDENTIFIER, CommandDispatch())
+        getServer().getCommandMap().register(IDENTIFIER, CommandFreezeDispatch())
 
         getServer().getPluginManager().registerEvents(EmergencyInventoryListener(), this)
         getServer().getPluginManager().registerEvents(PlayerUtilityListener(), this)

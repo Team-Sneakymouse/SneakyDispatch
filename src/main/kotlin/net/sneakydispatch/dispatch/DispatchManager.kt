@@ -17,6 +17,7 @@ class DispatchManager {
                     SneakyDispatch.getInstance()
                             .getConfig()
                             .getInt("mechanical-dispatch-cooldown") * 60 * 1000L
+	var dispatchFrozenUntil: Long = 0
 
     init {
         val scheduler = Bukkit.getScheduler()
