@@ -35,7 +35,7 @@ class CommandReportEmergency : CommandBase("reportemergency") {
                 if (sender is Player) sender
                 else if (args.isNotEmpty()) Bukkit.getPlayer(args[0]) else null
         val remainingArgs: Array<out String> =
-                if (player != null) args else args.drop(1).toTypedArray()
+                if (sender is Player) args else args.drop(1).toTypedArray()
 
         if (player == null) {
             sender.sendMessage(
