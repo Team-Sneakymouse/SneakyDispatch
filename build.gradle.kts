@@ -1,7 +1,6 @@
 plugins {
 	java
 	id("org.jetbrains.kotlin.jvm") version "2.0.0-Beta5"
-	id("io.papermc.paperweight.userdev") version "1.5.10"
 	id("xyz.jpenilla.run-paper") version "2.2.2"
 }
 
@@ -13,11 +12,12 @@ repositories {
 		url = uri("https://repo.extendedclip.com/content/repositories/placeholderapi/")
 	}
 	mavenCentral()
+	maven("https://repo.papermc.io/repository/maven-public/")
 }
 
 dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.0")
-	paperweight.paperDevBundle("1.20.4-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
 	compileOnly("me.clip:placeholderapi:2.11.5")
 }
 
