@@ -54,7 +54,7 @@ class EmergencyManager {
                 val iconCustomModelData = emergencySection.getInt("$key.icon-custom-model-data")
                 val dispatchCap = emergencySection.getInt("$key.dispatch-cap")
                 val dispatchPar = emergencySection.getInt("$key.dispatch-par")
-                val durationMillis = emergencySection.getInt("$key.duration-millis")
+                val durationMillis = emergencySection.getInt("$key.duration-milis")
 
                 emergencyCategories[key] =
                         EmergencyCategory(
