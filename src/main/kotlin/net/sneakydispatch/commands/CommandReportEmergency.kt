@@ -78,6 +78,8 @@ class CommandReportEmergency : CommandBase("reportemergency") {
                             }
 
             emergency.delay = delay
+            SneakyDispatch.getDispatchManager().lastMechanicalDispatchTime =
+                    System.currentTimeMillis()
 
             Bukkit.getScheduler()
                     .runTaskLater(

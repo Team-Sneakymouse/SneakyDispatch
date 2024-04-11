@@ -12,11 +12,7 @@ import org.bukkit.entity.Player
 class DispatchManager {
 
     private val emergencies: MutableMap<String, Emergency> = mutableMapOf()
-    private var nextMechanicalDispatchTime: Long =
-            System.currentTimeMillis() +
-                    SneakyDispatch.getInstance()
-                            .getConfig()
-                            .getInt("mechanical-dispatch-cooldown") * 60 * 1000L
+    var lastMechanicalDispatchTime: Long = System.currentTimeMillis()
     var dispatchFrozenUntil: Long = 0
 
     init {
@@ -24,7 +20,13 @@ class DispatchManager {
         scheduler.runTaskTimer(
                 SneakyDispatch.getInstance(),
                 Runnable {
-                    if (System.currentTimeMillis() >= nextMechanicalDispatchTime &&
+                    if (System.currentTimeMillis() >=
+                                    lastMechanicalDispatchTime +
+                                            SneakyDispatch.getInstance()
+                                                    .getConfig()
+                                                    .getInt("mechanical-dispatch-cooldown") *
+                                                    60 *
+                                                    1000L &&
                                     System.currentTimeMillis() >= dispatchFrozenUntil &&
                                     PlayerUtility.getIdlePaladins() > getOpenDispatchSlots()
                     ) {
@@ -33,7 +35,7 @@ class DispatchManager {
                 },
                 0L,
                 20 * 60L
-        ) // Run every minute
+        )
     }
 
     /** Adds a new emergency to the map and alerts available paladins. */
@@ -77,7 +79,7 @@ class DispatchManager {
         emergencies.entries.removeIf { it.value.isExpired() }
         for (emergency in emergencies.values) {
             if (!emergency.isParFulfilled()) {
-                nextMechanicalDispatchTime =
+                lastMechanicalDispatchTime =
                         System.currentTimeMillis() +
                                 SneakyDispatch.getInstance()
                                         .getConfig()
@@ -155,11 +157,6 @@ class DispatchManager {
                                     player.getName() +
                                     " paladin-mechanicaldispatch-main"
                     )
-            nextMechanicalDispatchTime =
-                    System.currentTimeMillis() +
-                            SneakyDispatch.getInstance()
-                                    .getConfig()
-                                    .getInt("mechanical-dispatch-cooldown") * 60 * 1000L
             break
         }
     }
