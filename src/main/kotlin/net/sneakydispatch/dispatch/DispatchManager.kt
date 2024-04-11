@@ -58,7 +58,7 @@ class DispatchManager {
                             "cast forcecast " +
                                     player.getName() +
                                     " paladin-emergency-reported " +
-                                    emergency.getName().replace(" ", "$") +
+                                    emergency.getName().replace(" ", "\u00A0") +
                                     " " +
                                     emergency.category.iconMaterial +
                                     " " +
@@ -116,7 +116,7 @@ class DispatchManager {
                                 "cast forcecast " +
                                         player.getName() +
                                         " paladin-dispatch-other " +
-                                        emergency.getName().replace(" ", "$") +
+                                        emergency.getName().replace(" ", "\u00A0") +
                                         " " +
                                         pl.getName() +
                                         " " +
