@@ -31,6 +31,7 @@ class Placeholders : PlaceholderExpansion() {
             "paladins_on_duty" -> PlayerUtility.getPaladins().size.toString()
             "paladins_idle" -> PlayerUtility.getIdlePaladins().toString()
             "nearby_emergency" -> {
+                SneakyDispatch.getDispatchManager().cleanup()
                 val emergencies = SneakyDispatch.getDispatchManager().getEmergencies()
                 val maxDistSq =
                         SneakyDispatch.getInstance()

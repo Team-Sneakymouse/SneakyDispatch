@@ -40,6 +40,7 @@ class DispatchManager {
 
     /** Adds a new emergency to the map and alerts available paladins. */
     fun report(emergency: Emergency) {
+        cleanup()
         val maxDistSq =
                 SneakyDispatch.getInstance()
                         .getConfig()
