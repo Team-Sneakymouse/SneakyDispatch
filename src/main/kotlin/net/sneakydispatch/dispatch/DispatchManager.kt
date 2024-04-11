@@ -76,15 +76,15 @@ class DispatchManager {
 
     /** Clean up expired emergencies. */
     fun cleanup() {
-        emergencies.entries.removeIf { it.value.isExpired() }
-        for (emergency in emergencies.values) {
-            if (!emergency.isParFulfilled()) {
-                lastMechanicalDispatchTime =
-                        System.currentTimeMillis() +
-                                SneakyDispatch.getInstance()
-                                        .getConfig()
-                                        .getInt("mechanical-dispatch-cooldown") * 60 * 1000L
-                break
+        val iterator = emergencies.entries.iterator()
+
+        while (iterator.hasNext()) {
+            val entry = iterator.next()
+            if (entry.value.isExpired()) {
+                if (!entry.value.isParFulfilled()) {
+                    lastMechanicalDispatchTime = System.currentTimeMillis()
+                }
+                iterator.remove()
             }
         }
     }
