@@ -8,36 +8,57 @@ import org.bukkit.entity.Player
 import kotlin.math.floor
 import kotlin.math.pow
 
-/** Manages emergency situations and dispatching. */
+/**
+ * Manages emergency situations and dispatching players (paladins) to address emergencies.
+ * This class is responsible for handling the reporting of emergencies, dispatching players,
+ * and cleaning up expired emergencies.
+ */
 class DispatchManager {
 
+    /** A map of ongoing emergencies, keyed by their UUID. */
     private val emergencies: MutableMap<String, Emergency> = mutableMapOf()
+
+    /** The timestamp of the last mechanical dispatch (in milliseconds). */
     var lastMechanicalDispatchTime: Long = System.currentTimeMillis()
+
+    /** The timestamp until which dispatching is frozen (in milliseconds). */
     var dispatchFrozenUntil: Long = 0
 
+    /**
+     * Initializes the DispatchManager and sets up a repeating task to trigger mechanical dispatches
+     * if certain conditions are met (cooldown, dispatch freeze, and idle paladins).
+     */
     init {
         val scheduler = Bukkit.getScheduler()
         scheduler.runTaskTimer(
             SneakyDispatch.getInstance(), Runnable {
-                if (System.currentTimeMillis() >= lastMechanicalDispatchTime + SneakyDispatch.getInstance().getConfig()
-                        .getInt("mechanical-dispatch-cooldown") * 60 * 1000L && System.currentTimeMillis() >= dispatchFrozenUntil && PlayerUtility.getIdlePaladins() > getOpenDispatchSlots()
-                ) {
+                val currentTime = System.currentTimeMillis()
+                val mechanicalCooldown =
+                    SneakyDispatch.getInstance().getConfig().getInt("mechanical-dispatch-cooldown") * 60 * 1000L
+                if (currentTime >= lastMechanicalDispatchTime + mechanicalCooldown && currentTime >= dispatchFrozenUntil && PlayerUtility.getIdlePaladins() > getOpenDispatchSlots()) {
                     createMechanicalDispatch()
                 }
             }, 0L, 20 * 60L
         )
     }
 
-    /** Adds a new emergency to the map and alerts available paladins. */
+    /**
+     * Reports a new emergency, adding it to the emergencies map and notifying all available paladins.
+     *
+     * @param emergency The emergency to report.
+     */
     fun report(emergency: Emergency) {
         cleanup()
         val maxDistSq = SneakyDispatch.getInstance().getConfig().getInt("emergency-radius").toDouble().pow(2).toInt()
+
+        // Prevent reporting emergencies that are too close to each other.
         for (em in emergencies.values) {
             if (emergency.location.distanceSquared(em.location) <= maxDistSq) return
         }
 
         emergencies[emergency.uuid] = emergency
 
+        // Notify paladins about the reported emergency via commands.
         for (player in PlayerUtility.getPaladins()) {
             Bukkit.getServer().dispatchCommand(
                 Bukkit.getServer().consoleSender, "cast forcecast ${player.name} paladin-emergency-reported ${
@@ -47,12 +68,20 @@ class DispatchManager {
         }
     }
 
-    /** Get emergency value collection. */
+    /**
+     * Retrieves a collection of ongoing emergencies.
+     *
+     * @return A mutable collection of [Emergency] objects representing ongoing emergencies.
+     */
     fun getEmergencies(): MutableCollection<Emergency> {
         return emergencies.values
     }
 
-    /** Clean up expired emergencies. */
+    /**
+     * Cleans up expired emergencies, removing them from the map. If an emergency expires
+     * and its dispatch par (recommended responders) has not been fulfilled, a mechanical dispatch
+     * cooldown is triggered.
+     */
     fun cleanup() {
         val iterator = emergencies.entries.iterator()
 
@@ -67,14 +96,22 @@ class DispatchManager {
         }
     }
 
-    /** Dispatch a paladin to an ongoing emergency. */
+    /**
+     * Dispatches a paladin (player) to an ongoing emergency. The player being dispatched will receive
+     * a self-dispatch command, while other paladins will receive a notification about the dispatch.
+     *
+     * @param uuid The UUID of the emergency.
+     * @param pl The player (paladin) to dispatch.
+     */
     fun dispatch(uuid: String, pl: Player) {
         val emergency = emergencies[uuid] ?: return
 
         emergency.incrementDispatched()
 
+        // Send commands to all paladins to inform them of the dispatch.
         for (player in PlayerUtility.getPaladins()) {
             if (player == pl) {
+                // Dispatch the player to the emergency location.
                 Bukkit.getServer().dispatchCommand(
                     Bukkit.getServer().consoleSender,
                     "cast forcecast ${player.name} paladin-dispatch-self ${floor(emergency.location.x)} ${
@@ -82,6 +119,7 @@ class DispatchManager {
                     } ${floor(emergency.location.z)}"
                 )
             } else {
+                // Notify other paladins about the dispatch.
                 Bukkit.getServer().dispatchCommand(
                     Bukkit.getServer().consoleSender, "cast forcecast ${player.name} paladin-dispatch-other ${
                         emergency.getName().replace(" ", "\u00A0")
@@ -91,7 +129,11 @@ class DispatchManager {
         }
     }
 
-    /** Get the amount of open slots in ongoing emergencies. */
+    /**
+     * Calculates the number of open dispatch slots across all ongoing emergencies.
+     *
+     * @return The total number of open dispatch slots.
+     */
     private fun getOpenDispatchSlots(): Int {
         cleanup()
 
@@ -104,9 +146,13 @@ class DispatchManager {
         return openSlots
     }
 
-    /** Create a mechanical dispatch by forcing a random player to cast a spell */
+    /**
+     * Creates a mechanical dispatch by forcing a random online player to cast a spell related
+     * to emergency dispatching. This is called when certain conditions are met (cooldown, frozen dispatch).
+     */
     private fun createMechanicalDispatch() {
         for (player in Bukkit.getOnlinePlayers()) {
+            // Force a random player to perform the mechanical dispatch.
             Bukkit.getServer().dispatchCommand(
                 Bukkit.getServer().consoleSender, "cast forcecast ${player.name} paladin-mechanicaldispatch-main"
             )
