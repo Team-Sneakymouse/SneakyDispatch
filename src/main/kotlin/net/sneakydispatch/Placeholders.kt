@@ -1,10 +1,10 @@
 package net.sneakydispatch
 
-import kotlin.math.pow
 import me.clip.placeholderapi.expansion.PlaceholderExpansion
 import net.sneakydispatch.util.PlayerUtility
 import org.bukkit.entity.Player
 import org.jetbrains.annotations.NotNull
+import kotlin.math.pow
 
 class Placeholders : PlaceholderExpansion() {
 
@@ -34,12 +34,7 @@ class Placeholders : PlaceholderExpansion() {
                 SneakyDispatch.getDispatchManager().cleanup()
                 val emergencies = SneakyDispatch.getDispatchManager().getEmergencies()
                 val maxDistSq =
-                        SneakyDispatch.getInstance()
-                                .getConfig()
-                                .getInt("emergency-radius")
-                                .toDouble()
-                                .pow(2)
-                                .toInt()
+                    SneakyDispatch.getInstance().getConfig().getInt("emergency-radius").toDouble().pow(2).toInt()
 
                 val playerLocation = player.location
                 for (emergency in emergencies) {
@@ -49,17 +44,18 @@ class Placeholders : PlaceholderExpansion() {
                 }
                 "none"
             }
+
             "dispatch_frozen_milis" -> {
                 try {
-                    (SneakyDispatch.getDispatchManager().dispatchFrozenUntil -
-                                    System.currentTimeMillis())
-                            .coerceAtLeast(0)
-                            .toString()
+                    (SneakyDispatch.getDispatchManager().dispatchFrozenUntil - System.currentTimeMillis()).coerceAtLeast(
+                            0
+                        ).toString()
                 } catch (e: Exception) {
                     e.printStackTrace()
                     "error"
                 }
             }
+
             else -> null
         }
     }

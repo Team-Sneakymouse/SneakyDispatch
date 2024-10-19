@@ -1,6 +1,5 @@
 package net.sneakydispatch
 
-import java.io.File
 import net.sneakydispatch.commands.CommandDispatch
 import net.sneakydispatch.commands.CommandFreezeDispatch
 import net.sneakydispatch.commands.CommandReportEmergency
@@ -11,6 +10,7 @@ import net.sneakydispatch.util.PlayerUtilityListener
 import org.bukkit.Bukkit
 import org.bukkit.permissions.Permission
 import org.bukkit.plugin.java.JavaPlugin
+import java.io.File
 
 class SneakyDispatch : JavaPlugin() {
 
@@ -24,12 +24,12 @@ class SneakyDispatch : JavaPlugin() {
         emergencyManager = EmergencyManager()
         dispatchManager = DispatchManager()
 
-        getServer().getCommandMap().register(IDENTIFIER, CommandReportEmergency())
-        getServer().getCommandMap().register(IDENTIFIER, CommandDispatch())
-        getServer().getCommandMap().register(IDENTIFIER, CommandFreezeDispatch())
+        server.commandMap.register(IDENTIFIER, CommandReportEmergency())
+        server.commandMap.register(IDENTIFIER, CommandDispatch())
+        server.commandMap.register(IDENTIFIER, CommandFreezeDispatch())
 
-        getServer().getPluginManager().registerEvents(EmergencyInventoryListener(), this)
-        getServer().getPluginManager().registerEvents(PlayerUtilityListener(), this)
+        server.pluginManager.registerEvents(EmergencyInventoryListener(), this)
+        server.pluginManager.registerEvents(PlayerUtilityListener(), this)
 
         server.pluginManager.addPermission(Permission("$IDENTIFIER.*"))
         server.pluginManager.addPermission(Permission("$IDENTIFIER.onduty"))
@@ -47,19 +47,18 @@ class SneakyDispatch : JavaPlugin() {
         const val AUTHORS = "Team Sneakymouse"
         const val VERSION = "1.0.0"
         private lateinit var instance: SneakyDispatch
-            private set
 
         /** Logs a message using the plugin logger. */
         fun log(msg: String) {
-            instance?.logger?.info(msg) ?: System.err.println("SneakyDispatch instance is null")
+            instance.logger.info(msg)
         }
 
         /**
          * Retrieves the plugin data folder.
          * @throws IllegalStateException if the data folder is null.
          */
-        fun getDataFolder(): File {
-            return instance?.dataFolder ?: throw IllegalStateException("Data folder is null")
+        private fun getDataFolder(): File {
+            return instance.dataFolder
         }
 
         /** Retrieves the configuration file. */
@@ -69,7 +68,7 @@ class SneakyDispatch : JavaPlugin() {
 
         /** Whether placeholderAPI is running. */
         fun isPapiActive(): Boolean {
-            return instance?.papiActive ?: false
+            return instance.papiActive
         }
 
         /** The running instance. */
@@ -79,14 +78,12 @@ class SneakyDispatch : JavaPlugin() {
 
         /** Retrieves the emergency manager instance, creating a new one if necessary. */
         fun getEmergencyManager(): EmergencyManager {
-            return instance?.emergencyManager
-                    ?: EmergencyManager().also { instance?.emergencyManager = it }
+            return instance.emergencyManager
         }
 
         /** Retrieves the dispatch manager instance, creating a new one if necessary. */
         fun getDispatchManager(): DispatchManager {
-            return instance?.dispatchManager
-                    ?: DispatchManager().also { instance?.dispatchManager = it }
+            return instance.dispatchManager
         }
     }
 

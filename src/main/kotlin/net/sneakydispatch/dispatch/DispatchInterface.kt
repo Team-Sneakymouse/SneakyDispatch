@@ -14,7 +14,7 @@ import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 
-class EmergencyInventoryHolder() : InventoryHolder {
+class EmergencyInventoryHolder : InventoryHolder {
     private lateinit var inventory: Inventory
 
     override fun getInventory(): Inventory {
@@ -30,10 +30,8 @@ class EmergencyInventoryHolder() : InventoryHolder {
 
         // Immediate emergencies take up the first 3 rows, calculate additional rows needed for
         // delayed ones
-        val immediateRowCount =
-                if (delayedEmergenciesCount > 0) 3 else ((emergencies.size - 1) / 9 + 1)
-        val delayedRows =
-                (delayedEmergenciesCount / 9) + if (delayedEmergenciesCount % 9 > 0) 1 else 0
+        val immediateRowCount = if (delayedEmergenciesCount > 0) 3 else ((emergencies.size - 1) / 9 + 1)
+        val delayedRows = (delayedEmergenciesCount / 9) + if (delayedEmergenciesCount % 9 > 0) 1 else 0
 
         // Total rows = immediate rows + rows needed for delayed emergencies
         val totalRows = immediateRowCount + delayedRows
@@ -71,10 +69,9 @@ class EmergencyInventoryHolder() : InventoryHolder {
     fun clickedItem(clickedItem: ItemStack, player: Player) {
         val meta = clickedItem.itemMeta
         val uuid =
-                meta.getPersistentDataContainer()
-                        .get(SneakyDispatch.getEmergencyManager().IDKEY, PersistentDataType.STRING)
+            meta.persistentDataContainer.get(SneakyDispatch.getEmergencyManager().IDKEY, PersistentDataType.STRING)
 
-        if (uuid == null || uuid.isEmpty()) return
+        if (uuid.isNullOrEmpty()) return
 
         player.closeInventory()
 
@@ -103,6 +100,7 @@ class EmergencyInventoryListener : Listener {
                 val player = event.whoClicked as? Player ?: return
                 holder.clickedItem(clickedItem, player)
             }
+
             else -> {}
         }
     }

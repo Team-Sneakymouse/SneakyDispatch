@@ -14,34 +14,30 @@ class CommandReportEmergency : CommandBase("reportemergency") {
         this.usageMessage = buildString {
             append("/")
             append(this@CommandReportEmergency.name)
-            append(" [emergencyCategory] (delayMilis)")
+            append(" [emergencyCategory] (delayMillis)")
         }
         this.description = "Report an emergency to the GPO dispatch system."
     }
 
     override fun execute(
-            sender: CommandSender,
-            commandLabel: String,
-            args: Array<out String>
+        sender: CommandSender, commandLabel: String, args: Array<out String>
     ): Boolean {
         if (System.currentTimeMillis() < SneakyDispatch.getDispatchManager().dispatchFrozenUntil) {
             sender.sendMessage(
-                    TextUtility.convertToComponent("&4The dispatch system is currently frozen.")
+                TextUtility.convertToComponent("&4The dispatch system is currently frozen.")
             )
             return false
         }
 
-        val player: Player? =
-                if (sender is Player) sender
-                else if (args.isNotEmpty()) Bukkit.getPlayer(args[0]) else null
-        val remainingArgs: Array<out String> =
-                if (sender is Player) args else args.drop(1).toTypedArray()
+        val player: Player? = if (sender is Player) sender
+        else if (args.isNotEmpty()) Bukkit.getPlayer(args[0]) else null
+        val remainingArgs: Array<out String> = if (sender is Player) args else args.drop(1).toTypedArray()
 
         if (player == null) {
             sender.sendMessage(
-                    TextUtility.convertToComponent(
-                            "&4${args[0]} is not a player name. When running this command from the console, the first arg must be the reporting player."
-                    )
+                TextUtility.convertToComponent(
+                    "&4${args[0]} is not a player name. When running this command from the console, the first arg must be the reporting player."
+                )
             )
             return false
         }
@@ -52,13 +48,13 @@ class CommandReportEmergency : CommandBase("reportemergency") {
         }
 
         val emergencyCategory: EmergencyCategory? =
-                SneakyDispatch.getEmergencyManager().getEmergencyCategories().get(remainingArgs[0])
+            SneakyDispatch.getEmergencyManager().getEmergencyCategories()[remainingArgs[0]]
 
         if (emergencyCategory == null) {
             sender.sendMessage(
-                    TextUtility.convertToComponent(
-                            "&4${remainingArgs[0]} is not a valid emergency category!"
-                    )
+                TextUtility.convertToComponent(
+                    "&4${remainingArgs[0]} is not a valid emergency category!"
+                )
             )
             return false
         }
@@ -66,58 +62,52 @@ class CommandReportEmergency : CommandBase("reportemergency") {
         val emergency = Emergency(category = emergencyCategory, player = player)
 
         if (remainingArgs.size > 1) {
-            val delay: Long =
-                    remainingArgs[1].toLongOrNull()
-                            ?: run {
-                                sender.sendMessage(
-                                        TextUtility.convertToComponent(
-                                                "&4Invalid delay value. Please provide a valid number."
-                                        )
-                                )
-                                return false
-                            }
+            val delay: Long = remainingArgs[1].toLongOrNull() ?: run {
+                sender.sendMessage(
+                    TextUtility.convertToComponent(
+                        "&4Invalid delay value. Please provide a valid number."
+                    )
+                )
+                return false
+            }
 
             emergency.delay = delay
-            SneakyDispatch.getDispatchManager().lastMechanicalDispatchTime =
-                    System.currentTimeMillis()
+            SneakyDispatch.getDispatchManager().lastMechanicalDispatchTime = System.currentTimeMillis()
 
-            Bukkit.getScheduler()
-                    .runTaskLater(
-                            SneakyDispatch.getInstance(),
-                            Runnable { SneakyDispatch.getDispatchManager().report(emergency) },
-                            delay / 50
-                    )
+            Bukkit.getScheduler().runTaskLater(
+                    SneakyDispatch.getInstance(),
+                    Runnable { SneakyDispatch.getDispatchManager().report(emergency) },
+                    delay / 50
+                )
 
             sender.sendMessage(
-                    TextUtility.convertToComponent(
-                            "&aYour emergency will be reported after a delay of $delay milliseconds."
-                    )
+                TextUtility.convertToComponent(
+                    "&eYour emergency will be reported after a delay of $delay milliseconds."
+                )
             )
         } else {
             SneakyDispatch.getDispatchManager().report(emergency)
-            sender.sendMessage(TextUtility.convertToComponent("&aYour emergency has been reported"))
+            sender.sendMessage(TextUtility.convertToComponent("&eYour emergency has been reported"))
         }
 
         return true
     }
 
     override fun tabComplete(
-            sender: CommandSender,
-            alias: String,
-            args: Array<String>
+        sender: CommandSender, alias: String, args: Array<String>
     ): List<String> {
-        var startIndex: Int = if (sender is Player) 0 else 1
+        val startIndex: Int = if (sender is Player) 0 else 1
 
         return when {
             args.size == 1 && sender !is Player -> {
-                Bukkit.getOnlinePlayers()
-                        .filter { !it.name.equals("CMI-Fake-Operator", ignoreCase = true) }
-                        .filter { it.name.startsWith(args[0], ignoreCase = true) }
-                        .map { it.name }
+                Bukkit.getOnlinePlayers().filter { !it.name.equals("CMI-Fake-Operator", ignoreCase = true) }
+                    .filter { it.name.startsWith(args[0], ignoreCase = true) }.map { it.name }
             }
+
             args.size - startIndex == 1 -> {
                 SneakyDispatch.getEmergencyManager().getEmergencyCategories().keys.toList()
             }
+
             else -> emptyList()
         }
     }

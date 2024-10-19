@@ -8,4 +8,5 @@ abstract class CommandBase(name: String) : Command(name) {
     init {
         this.permission = "${SneakyDispatch.IDENTIFIER}.command.$name"
     }
+
 }

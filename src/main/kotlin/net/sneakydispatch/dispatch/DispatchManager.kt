@@ -1,12 +1,12 @@
 package net.sneakydispatch.dispatch
 
-import java.util.*
-import kotlin.math.pow
 import net.sneakydispatch.SneakyDispatch
 import net.sneakydispatch.emergency.Emergency
 import net.sneakydispatch.util.PlayerUtility
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import kotlin.math.floor
+import kotlin.math.pow
 
 /** Manages emergency situations and dispatching. */
 class DispatchManager {
@@ -18,55 +18,32 @@ class DispatchManager {
     init {
         val scheduler = Bukkit.getScheduler()
         scheduler.runTaskTimer(
-                SneakyDispatch.getInstance(),
-                Runnable {
-                    if (System.currentTimeMillis() >=
-                                    lastMechanicalDispatchTime +
-                                            SneakyDispatch.getInstance()
-                                                    .getConfig()
-                                                    .getInt("mechanical-dispatch-cooldown") *
-                                                    60 *
-                                                    1000L &&
-                                    System.currentTimeMillis() >= dispatchFrozenUntil &&
-                                    PlayerUtility.getIdlePaladins() > getOpenDispatchSlots()
-                    ) {
-                        createMechanicalDispatch()
-                    }
-                },
-                0L,
-                20 * 60L
+            SneakyDispatch.getInstance(), Runnable {
+                if (System.currentTimeMillis() >= lastMechanicalDispatchTime + SneakyDispatch.getInstance().getConfig()
+                        .getInt("mechanical-dispatch-cooldown") * 60 * 1000L && System.currentTimeMillis() >= dispatchFrozenUntil && PlayerUtility.getIdlePaladins() > getOpenDispatchSlots()
+                ) {
+                    createMechanicalDispatch()
+                }
+            }, 0L, 20 * 60L
         )
     }
 
     /** Adds a new emergency to the map and alerts available paladins. */
     fun report(emergency: Emergency) {
         cleanup()
-        val maxDistSq =
-                SneakyDispatch.getInstance()
-                        .getConfig()
-                        .getInt("emergency-radius")
-                        .toDouble()
-                        .pow(2)
-                        .toInt()
-        for (emergency_ in emergencies.values) {
-            if (emergency.location.distanceSquared(emergency_.location) <= maxDistSq) return
+        val maxDistSq = SneakyDispatch.getInstance().getConfig().getInt("emergency-radius").toDouble().pow(2).toInt()
+        for (em in emergencies.values) {
+            if (emergency.location.distanceSquared(em.location) <= maxDistSq) return
         }
 
         emergencies[emergency.uuid] = emergency
 
         for (player in PlayerUtility.getPaladins()) {
-            Bukkit.getServer()
-                    .dispatchCommand(
-                            Bukkit.getServer().getConsoleSender(),
-                            "cast forcecast " +
-                                    player.getName() +
-                                    " paladin-emergency-reported " +
-                                    emergency.getName().replace(" ", "\u00A0") +
-                                    " " +
-                                    emergency.category.iconMaterial +
-                                    " " +
-                                    emergency.category.iconCustomModelData
-                    )
+            Bukkit.getServer().dispatchCommand(
+                Bukkit.getServer().consoleSender, "cast forcecast ${player.name} paladin-emergency-reported ${
+                    emergency.getName().replace(" ", "\u00A0")
+                } ${emergency.category.iconMaterial} ${emergency.category.iconCustomModelData}"
+            )
         }
     }
 
@@ -92,51 +69,30 @@ class DispatchManager {
 
     /** Dispatch a paladin to an ongoing emergency. */
     fun dispatch(uuid: String, pl: Player) {
-        val emergency = emergencies.get(uuid)
-
-        if (emergency == null) return
+        val emergency = emergencies[uuid] ?: return
 
         emergency.incrementDispatched()
 
         for (player in PlayerUtility.getPaladins()) {
-            if (player.equals(pl)) {
-                Bukkit.getServer()
-                        .dispatchCommand(
-                                Bukkit.getServer().getConsoleSender(),
-                                "cast forcecast " +
-                                        player.getName() +
-                                        " paladin-dispatch-self " +
-                                        Math.floor(emergency.location.getX()) +
-                                        " " +
-                                        Math.floor(emergency.location.getY()) +
-                                        " " +
-                                        Math.floor(emergency.location.getZ())
-                        )
+            if (player == pl) {
+                Bukkit.getServer().dispatchCommand(
+                    Bukkit.getServer().consoleSender,
+                    "cast forcecast ${player.name} paladin-dispatch-self ${floor(emergency.location.x)} ${
+                        floor(emergency.location.y)
+                    } ${floor(emergency.location.z)}"
+                )
             } else {
-                Bukkit.getServer()
-                        .dispatchCommand(
-                                Bukkit.getServer().getConsoleSender(),
-                                "cast forcecast " +
-                                        player.getName() +
-                                        " paladin-dispatch-other " +
-                                        emergency.getName().replace(" ", "\u00A0") +
-                                        " " +
-                                        pl.getName() +
-                                        " " +
-                                        emergency.dispatched +
-                                        " " +
-                                        emergency.getDispatchCap() +
-                                        " " +
-                                        emergency.category.iconMaterial +
-                                        " " +
-                                        emergency.category.iconCustomModelData
-                        )
+                Bukkit.getServer().dispatchCommand(
+                    Bukkit.getServer().consoleSender, "cast forcecast ${player.name} paladin-dispatch-other ${
+                        emergency.getName().replace(" ", "\u00A0")
+                    } ${pl.name} ${emergency.dispatched} ${emergency.getDispatchCap()} ${emergency.category.iconMaterial} ${emergency.category.iconCustomModelData}"
+                )
             }
         }
     }
 
     /** Get the amount of open slots in ongoing emergencies. */
-    fun getOpenDispatchSlots(): Int {
+    private fun getOpenDispatchSlots(): Int {
         cleanup()
 
         var openSlots = 0
@@ -149,15 +105,11 @@ class DispatchManager {
     }
 
     /** Create a mechanical dispatch by forcing a random player to cast a spell */
-    fun createMechanicalDispatch() {
+    private fun createMechanicalDispatch() {
         for (player in Bukkit.getOnlinePlayers()) {
-            Bukkit.getServer()
-                    .dispatchCommand(
-                            Bukkit.getServer().getConsoleSender(),
-                            "cast forcecast " +
-                                    player.getName() +
-                                    " paladin-mechanicaldispatch-main"
-                    )
+            Bukkit.getServer().dispatchCommand(
+                Bukkit.getServer().consoleSender, "cast forcecast ${player.name} paladin-mechanicaldispatch-main"
+            )
             break
         }
     }
