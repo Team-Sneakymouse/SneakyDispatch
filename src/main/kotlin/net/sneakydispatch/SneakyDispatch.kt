@@ -1,12 +1,11 @@
 package net.sneakydispatch
 
-import net.sneakydispatch.commands.CommandDispatch
-import net.sneakydispatch.commands.CommandFreezeDispatch
-import net.sneakydispatch.commands.CommandReportEmergency
+import net.sneakydispatch.commands.*
 import net.sneakydispatch.dispatch.DispatchManager
 import net.sneakydispatch.dispatch.EmergencyInventoryListener
+import net.sneakydispatch.dispatch.UnitManager
+import net.sneakydispatch.dispatch.UnitManagerListener
 import net.sneakydispatch.emergency.EmergencyManager
-import net.sneakydispatch.util.PlayerUtilityListener
 import org.bukkit.Bukkit
 import org.bukkit.permissions.Permission
 import org.bukkit.plugin.java.JavaPlugin
@@ -24,6 +23,9 @@ class SneakyDispatch : JavaPlugin() {
     /** Manages the dispatch system and related tasks. */
     lateinit var dispatchManager: DispatchManager
 
+    /** Manages units of paladins. */
+    lateinit var unitManager: UnitManager
+
     /** Flag indicating if PlaceholderAPI (PAPI) is active. */
     var papiActive: Boolean = false
 
@@ -38,19 +40,22 @@ class SneakyDispatch : JavaPlugin() {
         // Initialize the managers.
         emergencyManager = EmergencyManager()
         dispatchManager = DispatchManager()
+        unitManager = UnitManager()
 
         // Register commands.
         server.commandMap.register(IDENTIFIER, CommandReportEmergency())
         server.commandMap.register(IDENTIFIER, CommandDispatch())
         server.commandMap.register(IDENTIFIER, CommandFreezeDispatch())
+        server.commandMap.register(IDENTIFIER, CommandOnDuty())
+        server.commandMap.register(IDENTIFIER, CommandOffDuty())
+        server.commandMap.register(IDENTIFIER, CommandSquire())
 
         // Register event listeners.
         server.pluginManager.registerEvents(EmergencyInventoryListener(), this)
-        server.pluginManager.registerEvents(PlayerUtilityListener(), this)
+        server.pluginManager.registerEvents(UnitManagerListener(), this)
 
         // Add permissions for the plugin.
         server.pluginManager.addPermission(Permission("$IDENTIFIER.*"))
-        server.pluginManager.addPermission(Permission("$IDENTIFIER.onduty"))
         server.pluginManager.addPermission(Permission("$IDENTIFIER.neveridle"))
         server.pluginManager.addPermission(Permission("$IDENTIFIER.command.*"))
 
@@ -137,6 +142,14 @@ class SneakyDispatch : JavaPlugin() {
          */
         fun getDispatchManager(): DispatchManager {
             return instance.dispatchManager
+        }
+
+        /**
+         * Retrieves the unit manager instance.
+         * @return The [UnitManager] instance.
+         */
+        fun getUnitManager(): UnitManager {
+            return instance.unitManager
         }
     }
 }

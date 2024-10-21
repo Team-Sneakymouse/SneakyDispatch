@@ -1,7 +1,6 @@
 package net.sneakydispatch
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion
-import net.sneakydispatch.util.PlayerUtility
 import org.bukkit.entity.Player
 import org.jetbrains.annotations.NotNull
 import kotlin.math.pow
@@ -55,12 +54,12 @@ class Placeholders : PlaceholderExpansion() {
         return when (placeholder) {
             "paladins_on_duty" -> {
                 // Retrieves the number of paladins on duty from PlayerUtility.
-                PlayerUtility.getPaladins().size.toString()
+                SneakyDispatch.getUnitManager().getPaladins().size.toString()
             }
 
             "paladins_idle" -> {
                 // Retrieves the number of idle paladins from PlayerUtility.
-                PlayerUtility.getIdlePaladins().toString()
+                SneakyDispatch.getUnitManager().getIdlePaladins().toString()
             }
 
             "nearby_emergency" -> {
@@ -86,8 +85,8 @@ class Placeholders : PlaceholderExpansion() {
                 // Returns the time remaining for which the dispatch system is frozen, in milliseconds.
                 try {
                     (SneakyDispatch.getDispatchManager().dispatchFrozenUntil - System.currentTimeMillis()).coerceAtLeast(
-                            0
-                        ).toString()
+                        0
+                    ).toString()
                 } catch (e: Exception) {
                     // Logs any exceptions and returns "error".
                     e.printStackTrace()

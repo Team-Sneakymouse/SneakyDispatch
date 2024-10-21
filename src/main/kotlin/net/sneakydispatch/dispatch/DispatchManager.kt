@@ -2,7 +2,6 @@ package net.sneakydispatch.dispatch
 
 import net.sneakydispatch.SneakyDispatch
 import net.sneakydispatch.emergency.Emergency
-import net.sneakydispatch.util.PlayerUtility
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import kotlin.math.floor
@@ -35,7 +34,9 @@ class DispatchManager {
                 val currentTime = System.currentTimeMillis()
                 val mechanicalCooldown =
                     SneakyDispatch.getInstance().getConfig().getInt("mechanical-dispatch-cooldown") * 60 * 1000L
-                if (currentTime >= lastMechanicalDispatchTime + mechanicalCooldown && currentTime >= dispatchFrozenUntil && PlayerUtility.getIdlePaladins() > getOpenDispatchSlots()) {
+                if (currentTime >= lastMechanicalDispatchTime + mechanicalCooldown && currentTime >= dispatchFrozenUntil && SneakyDispatch.getUnitManager()
+                        .getIdlePaladins() > getOpenDispatchSlots()
+                ) {
                     createMechanicalDispatch()
                 }
             }, 0L, 20 * 60L
@@ -59,7 +60,7 @@ class DispatchManager {
         emergencies[emergency.uuid] = emergency
 
         // Notify paladins about the reported emergency via commands.
-        for (player in PlayerUtility.getPaladins()) {
+        for (player in SneakyDispatch.getUnitManager().getPaladins()) {
             Bukkit.getServer().dispatchCommand(
                 Bukkit.getServer().consoleSender, "cast forcecast ${player.name} paladin-emergency-reported ${
                     emergency.getName().replace(" ", "\u00A0")
@@ -109,7 +110,7 @@ class DispatchManager {
         emergency.incrementDispatched()
 
         // Send commands to all paladins to inform them of the dispatch.
-        for (player in PlayerUtility.getPaladins()) {
+        for (player in SneakyDispatch.getUnitManager().getPaladins()) {
             if (player == pl) {
                 // Dispatch the player to the emergency location.
                 Bukkit.getServer().dispatchCommand(
