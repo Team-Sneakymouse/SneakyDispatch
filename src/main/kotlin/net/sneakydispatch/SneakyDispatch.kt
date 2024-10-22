@@ -10,6 +10,7 @@ import org.bukkit.Bukkit
 import org.bukkit.permissions.Permission
 import org.bukkit.plugin.java.JavaPlugin
 import java.io.File
+import kotlin.random.Random
 
 /**
  * Main class for the SneakyDispatch plugin.
@@ -29,6 +30,10 @@ class SneakyDispatch : JavaPlugin() {
     /** Flag indicating if PlaceholderAPI (PAPI) is active. */
     var papiActive: Boolean = false
 
+    // Upper and lower bound for the encounter cooldown randomizer
+    private var encounterCooldownLowerBoundMillis = 0L
+    private var encounterCooldownUpperBoundMillis = 0L
+
     /**
      * Called when the plugin is enabled. Initializes managers, registers commands,
      * and sets up event listeners and permissions.
@@ -36,6 +41,15 @@ class SneakyDispatch : JavaPlugin() {
     override fun onEnable() {
         // Save the default configuration file if it doesn't exist.
         saveDefaultConfig()
+
+        // Parse the configs that need to be parsed on enable
+        // Encounter cooldown randomizer range
+        val encounterCooldownString = config.getString("encounter-cooldown") ?: "15-30"
+        val cooldownParts = encounterCooldownString.split("-").mapNotNull { it.toIntOrNull() }
+
+        encounterCooldownLowerBoundMillis = (cooldownParts.getOrNull(0) ?: 15) * 60000L
+        encounterCooldownUpperBoundMillis =
+            (cooldownParts.getOrNull(1)?.times(60000L)) ?: encounterCooldownLowerBoundMillis
 
         // Initialize the managers.
         emergencyManager = EmergencyManager()
@@ -150,6 +164,17 @@ class SneakyDispatch : JavaPlugin() {
          */
         fun getUnitManager(): UnitManager {
             return instance.unitManager
+        }
+
+        /**
+         * Generates a random amount of milliseconds between the lower and upper bound of the encounter-cooldown config.
+         * @return The generated millisecond value
+         */
+        fun getEncounterCooldown(): Double {
+            return Random.nextDouble(
+                instance.encounterCooldownLowerBoundMillis.toDouble(),
+                instance.encounterCooldownUpperBoundMillis.toDouble()
+            )
         }
     }
 }

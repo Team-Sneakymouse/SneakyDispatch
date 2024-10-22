@@ -33,7 +33,7 @@ class DispatchManager {
             SneakyDispatch.getInstance(), Runnable {
                 val currentTime = System.currentTimeMillis()
                 val encounterCooldown =
-                    SneakyDispatch.getInstance().getConfig().getInt("encounter-cooldown", 20) * 60 * 1000L
+                    SneakyDispatch.getInstance().config.getInt("encounter-cooldown", 20) * 60 * 1000L
                 if (currentTime >= lastEncounterTime + encounterCooldown && currentTime >= dispatchFrozenUntil && SneakyDispatch.getUnitManager()
                         .getIdlePaladins() > getOpenDispatchSlots()
                 ) {
@@ -50,7 +50,7 @@ class DispatchManager {
      */
     fun report(emergency: Emergency) {
         cleanup()
-        val maxDistSq = SneakyDispatch.getInstance().getConfig().getInt("emergency-radius", 50).toDouble().pow(2).toInt()
+        val maxDistSq = SneakyDispatch.getInstance().config.getInt("emergency-radius", 50).toDouble().pow(2).toInt()
 
         // Prevent reporting emergencies that are too close to each other.
         for (em in emergencies.values) {

@@ -137,7 +137,7 @@ data class Emergency(val category: EmergencyCategory, val player: Player) {
             if (value > 0) {
                 var desc = category.description
 
-                val config = SneakyDispatch.getInstance().getConfig()
+                val config = SneakyDispatch.getInstance().config
                 val replacements = config.getConfigurationSection("delayed-tooltip-text-replacements")
                 if (replacements != null) {
                     for (key in replacements.getKeys(false)) {
@@ -215,7 +215,7 @@ data class Emergency(val category: EmergencyCategory, val player: Player) {
             dispatchColorCode = "&b"
         } else {
             val iconMaterialString =
-                SneakyDispatch.getInstance().getConfig().getString("cap-icon-material") ?: "red_wool"
+                SneakyDispatch.getInstance().config.getString("cap-icon-material") ?: "red_wool"
             var iconMaterial = Material.matchMaterial(iconMaterialString)
             if (iconMaterial == null) {
                 SneakyDispatch.log(
@@ -225,7 +225,7 @@ data class Emergency(val category: EmergencyCategory, val player: Player) {
             }
 
             itemStack = ItemStack(iconMaterial)
-            customModelData = SneakyDispatch.getInstance().getConfig().getInt("cap-icon-custom-model-data")
+            customModelData = SneakyDispatch.getInstance().config.getInt("cap-icon-custom-model-data")
             dispatchColorCode = "&4"
         }
 

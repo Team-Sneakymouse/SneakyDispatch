@@ -43,7 +43,7 @@ class UnitManager {
 
     /** Returns the number of paladins who are currently idle. */
     fun getIdlePaladins(): Int {
-        val idleTimeLimit = SneakyDispatch.getInstance().getConfig().getInt("paladin-idle-time", 20).toLong()
+        val idleTimeLimit = SneakyDispatch.getInstance().config.getInt("paladin-idle-time", 20).toLong()
 
         return units.sumOf {
             val (count, time) = it.getIdleTime()
@@ -83,7 +83,7 @@ data class Unit(var players: MutableList<Player>) {
             players.remove(player)
 
             // Check the configured unit disband size
-            val disbandSize = SneakyDispatch.getInstance().getConfig().getInt("unit-disband-size", 1)
+            val disbandSize = SneakyDispatch.getInstance().config.getInt("unit-disband-size", 1)
 
             // If the remaining players are fewer than the disband size, alert all remaining members and disband the unit
             if (players.size <= disbandSize) {
