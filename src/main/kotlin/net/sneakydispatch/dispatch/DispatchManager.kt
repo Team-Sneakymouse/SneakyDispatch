@@ -17,14 +17,14 @@ class DispatchManager {
     /** A map of ongoing emergencies, keyed by their UUID. */
     private val emergencies: MutableMap<String, Emergency> = mutableMapOf()
 
-    /** The timestamp of the last mechanical dispatch (in milliseconds). */
-    var lastMechanicalDispatchTime: Long = System.currentTimeMillis()
+    /** The timestamp of the last encounter (in milliseconds). */
+    var lastEncounterTime: Long = System.currentTimeMillis()
 
     /** The timestamp until which dispatching is frozen (in milliseconds). */
     var dispatchFrozenUntil: Long = 0
 
     /**
-     * Initializes the DispatchManager and sets up a repeating task to trigger mechanical dispatches
+     * Initializes the DispatchManager and sets up a repeating task to trigger encounters
      * if certain conditions are met (cooldown, dispatch freeze, and idle paladins).
      */
     init {
@@ -32,12 +32,12 @@ class DispatchManager {
         scheduler.runTaskTimer(
             SneakyDispatch.getInstance(), Runnable {
                 val currentTime = System.currentTimeMillis()
-                val mechanicalCooldown =
-                    SneakyDispatch.getInstance().getConfig().getInt("mechanical-dispatch-cooldown", 20) * 60 * 1000L
-                if (currentTime >= lastMechanicalDispatchTime + mechanicalCooldown && currentTime >= dispatchFrozenUntil && SneakyDispatch.getUnitManager()
+                val encounterCooldown =
+                    SneakyDispatch.getInstance().getConfig().getInt("encounter-cooldown", 20) * 60 * 1000L
+                if (currentTime >= lastEncounterTime + encounterCooldown && currentTime >= dispatchFrozenUntil && SneakyDispatch.getUnitManager()
                         .getIdlePaladins() > getOpenDispatchSlots()
                 ) {
-                    createMechanicalDispatch()
+                    createEncounter()
                 }
             }, 0L, 20 * 60L
         )
@@ -80,7 +80,7 @@ class DispatchManager {
 
     /**
      * Cleans up expired emergencies, removing them from the map. If an emergency expires
-     * and its dispatch par (recommended responders) has not been fulfilled, a mechanical dispatch
+     * and its dispatch par (recommended responders) has not been fulfilled, an encounter
      * cooldown is triggered.
      */
     fun cleanup() {
@@ -90,7 +90,7 @@ class DispatchManager {
             val entry = iterator.next()
             if (entry.value.isExpired()) {
                 if (!entry.value.isParFulfilled()) {
-                    lastMechanicalDispatchTime = System.currentTimeMillis()
+                    lastEncounterTime = System.currentTimeMillis()
                 }
                 iterator.remove()
             }
@@ -148,14 +148,14 @@ class DispatchManager {
     }
 
     /**
-     * Creates a mechanical dispatch by forcing a random online player to cast a spell related
+     * Creates an encounter by forcing a random online player to cast a spell related
      * to emergency dispatching. This is called when certain conditions are met (cooldown, frozen dispatch).
      */
-    private fun createMechanicalDispatch() {
+    private fun createEncounter() {
         for (player in Bukkit.getOnlinePlayers()) {
-            // Force a random player to perform the mechanical dispatch.
+            // Force a random player to perform the encounter
             Bukkit.getServer().dispatchCommand(
-                Bukkit.getServer().consoleSender, "cast forcecast ${player.name} paladin-mechanicaldispatch-main"
+                Bukkit.getServer().consoleSender, "cast forcecast ${player.name} paladin-encounter-main"
             )
             break
         }
