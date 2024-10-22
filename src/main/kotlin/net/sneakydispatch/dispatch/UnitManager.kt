@@ -115,7 +115,7 @@ data class Unit(var players: MutableList<Player>) {
      * - The player must not have the 'neveridle' permission.
      * - If PlaceholderAPI and SneakyCharacterManager are active, the player must have the 'paladin' tag.
      *
-     * @return A Pair containing the number of players considered and the minimum idle time of all players in this unit,
+     * @return A Pair containing the number of players considered and the maximum idle time of all players in this unit,
      *         or `Double.MAX_VALUE` if no valid idle times are available.
      */
     fun getIdleTime(): Pair<Int, Double> {
