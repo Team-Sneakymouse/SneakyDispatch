@@ -67,11 +67,7 @@ class CommandSquire : CommandBase("squire") {
             return false
         }
 
-        currentUnit.players.add(targetPlayer)
-        currentUnit.players.forEach { player: Player ->
-            player.sendMessage(TextUtility.convertToComponent("&3Player '${sender.name}' has added '${targetPlayer.name}' to the unit!"))
-        }
-        sender.sendMessage(TextUtility.convertToComponent("&aYou have successfully added '${targetPlayer.name}' to your unit."))
+        currentUnit.addPlayer(targetPlayer)
 
         return true
     }

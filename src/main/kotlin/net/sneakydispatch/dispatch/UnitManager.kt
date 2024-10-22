@@ -104,7 +104,11 @@ data class Unit(var players: MutableList<Player>) {
      * @param player The player to be added.
      */
     fun addPlayer(player: Player) {
+        players.forEach { pl: Player ->
+            pl.sendMessage(TextUtility.convertToComponent("&3Another Paladin has joined your unit."))
+        }
         players.add(player)
+        player.sendMessage(TextUtility.convertToComponent("&3You are now on duty!"))
     }
 
     /**
