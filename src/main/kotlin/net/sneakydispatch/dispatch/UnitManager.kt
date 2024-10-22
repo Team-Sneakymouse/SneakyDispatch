@@ -82,7 +82,7 @@ data class Unit(var players: MutableList<Player>) {
             players.remove(player)
 
             // Check the configured unit disband size
-            val disbandSize = SneakyDispatch.getInstance().getConfig().getInt("unit-disband-size")
+            val disbandSize = SneakyDispatch.getInstance().getConfig().getInt("unit-disband-size", 1)
 
             // If the remaining players are fewer than the disband size, alert all remaining members and disband the unit
             if (players.size <= disbandSize) {
