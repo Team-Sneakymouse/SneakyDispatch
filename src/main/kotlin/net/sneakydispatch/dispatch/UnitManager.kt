@@ -1,5 +1,6 @@
 package net.sneakydispatch.dispatch
 
+import me.clip.placeholderapi.PlaceholderAPI
 import net.sneakydispatch.SneakyDispatch
 import net.sneakydispatch.util.TextUtility
 import org.bukkit.entity.Player
@@ -107,17 +108,34 @@ data class Unit(var players: MutableList<Player>) {
     }
 
     /**
-     * Returns the lowest idle time among the players in the unit.
+     * Returns the highest idle time among the players in the unit.
      *
-     * @return The minimum idle time of all players in this unit, or `Double.MAX_VALUE` if no idle times are available.
+     * The method filters players based on the following conditions:
+     * - The player must be online.
+     * - The player must not have the 'neveridle' permission.
+     * - If PlaceholderAPI and SneakyCharacterManager are active, the player must have the 'paladin' tag.
+     *
+     * @return A Pair containing the number of players considered and the minimum idle time of all players in this unit,
+     *         or `Double.MAX_VALUE` if no valid idle times are available.
      */
     fun getIdleTime(): Pair<Int, Double> {
-        if (players.any { it.hasPermission("${SneakyDispatch.IDENTIFIER}.neveridle") }) {
+        val isPapiActive = SneakyDispatch.isPapiActive()
+
+        // Filter out ineligible players and return if no valid players remain
+        if (players.any { player ->
+                !player.isOnline || player.hasPermission("${SneakyDispatch.IDENTIFIER}.neveridle") || (isPapiActive && PlaceholderAPI.setPlaceholders(
+                    player, "%sneakycharacters_character_hastag_paladin%"
+                ) == "false")
+            }) {
             return Pair(0, Double.MAX_VALUE)
         }
 
-        return Pair(players.size, System.currentTimeMillis() - (players.minOfOrNull { player ->
+        // Find the maximum idle time among the valid players
+        val minDispatchTime = players.minOfOrNull { player ->
             SneakyDispatch.getUnitManager().getDispatchTime(player)
-        }?.toDouble() ?: Double.MIN_VALUE))
+        }?.toDouble() ?: Double.MIN_VALUE
+
+        // Return the player count and the idle time difference
+        return Pair(players.size, System.currentTimeMillis() - minDispatchTime)
     }
 }
