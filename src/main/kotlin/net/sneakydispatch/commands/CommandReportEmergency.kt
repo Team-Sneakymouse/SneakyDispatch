@@ -85,7 +85,7 @@ class CommandReportEmergency : CommandBase("reportemergency") {
 
             // Set the delay for the emergency and schedule its reporting.
             emergency.delay = delay
-            SneakyDispatch.getDispatchManager().lastEncounterTime = System.currentTimeMillis()
+            SneakyDispatch.getDispatchManager().nextEncounterTime = System.currentTimeMillis() + SneakyDispatch.getEncounterCooldown()
 
             // Schedule the emergency to be reported after the delay.
             Bukkit.getScheduler().runTaskLater(

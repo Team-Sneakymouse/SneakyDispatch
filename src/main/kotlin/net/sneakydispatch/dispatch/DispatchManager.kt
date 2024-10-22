@@ -18,7 +18,7 @@ class DispatchManager {
     private val emergencies: MutableMap<String, Emergency> = mutableMapOf()
 
     /** The timestamp of the last encounter (in milliseconds). */
-    var lastEncounterTime: Long = System.currentTimeMillis()
+    private var nextEncounterTime: Long = System.currentTimeMillis() + SneakyDispatch.getEncounterCooldown()
 
     /** The timestamp until which dispatching is frozen (in milliseconds). */
     var dispatchFrozenUntil: Long = 0
@@ -32,9 +32,7 @@ class DispatchManager {
         scheduler.runTaskTimer(
             SneakyDispatch.getInstance(), Runnable {
                 val currentTime = System.currentTimeMillis()
-                val encounterCooldown =
-                    SneakyDispatch.getInstance().config.getInt("encounter-cooldown", 20) * 60 * 1000L
-                if (currentTime >= lastEncounterTime + encounterCooldown && currentTime >= dispatchFrozenUntil && SneakyDispatch.getUnitManager()
+                if (currentTime >= nextEncounterTime && currentTime >= dispatchFrozenUntil && SneakyDispatch.getUnitManager()
                         .getIdlePaladins() > getOpenDispatchSlots()
                 ) {
                     createEncounter()
@@ -90,7 +88,7 @@ class DispatchManager {
             val entry = iterator.next()
             if (entry.value.isExpired()) {
                 if (!entry.value.isParFulfilled()) {
-                    lastEncounterTime = System.currentTimeMillis()
+                    nextEncounterTime = System.currentTimeMillis() + SneakyDispatch.getEncounterCooldown()
                 }
                 iterator.remove()
             }

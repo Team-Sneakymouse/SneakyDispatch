@@ -170,11 +170,11 @@ class SneakyDispatch : JavaPlugin() {
          * Generates a random amount of milliseconds between the lower and upper bound of the encounter-cooldown config.
          * @return The generated millisecond value
          */
-        fun getEncounterCooldown(): Double {
+        fun getEncounterCooldown(): Long {
             return Random.nextDouble(
                 instance.encounterCooldownLowerBoundMillis.toDouble(),
                 instance.encounterCooldownUpperBoundMillis.toDouble()
-            )
+            ).toLong()
         }
     }
 }
