@@ -69,7 +69,7 @@ class Placeholders : PlaceholderExpansion() {
 
                 // Get the maximum squared distance for emergency proximity.
                 val maxDistSq =
-                    SneakyDispatch.getInstance().getConfig().getInt("emergency-radius").toDouble().pow(2).toInt()
+                    SneakyDispatch.getInstance().getConfig().getInt("emergency-radius", 50).toDouble().pow(2).toInt()
 
                 val playerLocation = player.location
                 // Loop through emergencies and check if any are within the allowed radius.

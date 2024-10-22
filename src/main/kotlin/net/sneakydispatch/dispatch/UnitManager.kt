@@ -42,7 +42,7 @@ class UnitManager {
 
     /** Returns the number of paladins who are currently idle. */
     fun getIdlePaladins(): Int {
-        val idleTimeLimit = SneakyDispatch.getInstance().getConfig().getInt("paladin-idle-time").toLong()
+        val idleTimeLimit = SneakyDispatch.getInstance().getConfig().getInt("paladin-idle-time", 20).toLong()
 
         return units.sumOf {
             val (count, time) = it.getIdleTime()
