@@ -114,25 +114,12 @@ data class Unit(var players: MutableList<Player>) {
     /**
      * Returns the highest idle time among the players in the unit.
      *
-     * The method filters players based on the following conditions:
-     * - The player must be online.
-     * - The player must not have the 'neveridle' permission.
-     * - If PlaceholderAPI and SneakyCharacterManager are active, the player must have the 'paladin' tag.
-     *
      * @return A Pair containing the number of players considered and the maximum idle time of all players in this unit,
-     *         or `Double.MAX_VALUE` if no valid idle times are available.
+     *         or `Double.MAX_VALUE` if the unit is unavailable.
      */
     fun getIdleTime(): Pair<Int, Double> {
-        val isPapiActive = SneakyDispatch.isPapiActive()
-
         // Filter out ineligible players and return if no valid players remain
-        if (players.any { player ->
-                !player.isOnline || player.hasPermission("${SneakyDispatch.IDENTIFIER}.neveridle") || (isPapiActive && PlaceholderAPI.setPlaceholders(
-                    player, "%sneakycharacters_character_hastag_paladin%"
-                ) == "false")
-            }) {
-            return Pair(0, Double.MAX_VALUE)
-        }
+        if (!isAvailable()) return Pair(0, Double.MAX_VALUE)
 
         // Find the maximum idle time among the valid players
         val minDispatchTime = players.minOfOrNull { player ->
@@ -141,5 +128,19 @@ data class Unit(var players: MutableList<Player>) {
 
         // Return the player count and the idle time difference
         return Pair(players.size, System.currentTimeMillis() - minDispatchTime)
+    }
+
+    /**
+     * Checks if a player is eligible based on online status, permissions, and external tag checks.
+     *
+     * @param player The player to check.
+     * @return `true` if the player meets all eligibility criteria; `false` otherwise.
+     */
+    fun isAvailable(): Boolean {
+        return !players.any { player ->
+            !player.isOnline || player.hasPermission("${SneakyDispatch.IDENTIFIER}.neveravailable") || (SneakyDispatch.isPapiActive() && (PlaceholderAPI.setPlaceholders(
+                player, "%sneakycharacters_character_hastag_paladin%"
+            ) == "false") || PlaceholderAPI.setPlaceholders(player, "%cmi_user_afk%") == "§6True")
+        }
     }
 }

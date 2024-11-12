@@ -70,7 +70,7 @@ class SneakyDispatch : JavaPlugin() {
 
         // Add permissions for the plugin.
         server.pluginManager.addPermission(Permission("$IDENTIFIER.*"))
-        server.pluginManager.addPermission(Permission("$IDENTIFIER.neveridle"))
+        server.pluginManager.addPermission(Permission("$IDENTIFIER.neveravailable"))
         server.pluginManager.addPermission(Permission("$IDENTIFIER.command.*"))
 
         // Check if PlaceholderAPI is available and activate if present.
