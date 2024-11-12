@@ -51,9 +51,14 @@ class UnitManager {
         }
     }
 
-    /** Sets the dispatch time for a player. */
+    /** Sets the dispatch time for a player to the current system time. */
     fun setDispatchTime(player: Player) {
-        dispatchTimeMap[player] = System.currentTimeMillis()
+        setDispatchTime(player, System.currentTimeMillis())
+    }
+
+    /** Sets the dispatch time for a player. */
+    fun setDispatchTime(player: Player, lastDispatchTime: Long) {
+        dispatchTimeMap[player] = lastDispatchTime
     }
 
     /** Gets the dispatch time for a player. */
@@ -71,6 +76,7 @@ class UnitManagerListener : Listener {
 }
 
 data class Unit(var players: MutableList<Player>) {
+    var priority = 0
 
     /**
      * Removes a player from the unit.
@@ -127,7 +133,7 @@ data class Unit(var players: MutableList<Player>) {
         }?.toDouble() ?: Double.MIN_VALUE
 
         // Return the player count and the idle time difference
-        return Pair(players.size, System.currentTimeMillis() - minDispatchTime)
+        return Pair(players.size, System.currentTimeMillis() - minDispatchTime + priority)
     }
 
     /**
@@ -137,7 +143,7 @@ data class Unit(var players: MutableList<Player>) {
      * @return `true` if the player meets all eligibility criteria; `false` otherwise.
      */
     fun isAvailable(): Boolean {
-        return !players.any { player ->
+        return priority > 0 || !players.any { player ->
             !player.isOnline || player.hasPermission("${SneakyDispatch.IDENTIFIER}.neveravailable") || (SneakyDispatch.isPapiActive() && (PlaceholderAPI.setPlaceholders(
                 player, "%sneakycharacters_character_hastag_paladin%"
             ) == "false") || PlaceholderAPI.setPlaceholders(player, "%cmi_user_afk%") == "§6True")

@@ -18,7 +18,7 @@ class DispatchManager {
     private val emergencies: MutableMap<String, Emergency> = mutableMapOf()
 
     /** The timestamp of the last encounter (in milliseconds). */
-    private var nextEncounterTime: Long = System.currentTimeMillis() + SneakyDispatch.getEncounterCooldown()
+    var nextEncounterTime: Long = System.currentTimeMillis() + SneakyDispatch.getEncounterCooldown()
 
     /** The timestamp until which dispatching is frozen (in milliseconds). */
     var dispatchFrozenUntil: Long = 0

@@ -63,6 +63,7 @@ class SneakyDispatch : JavaPlugin() {
         server.commandMap.register(IDENTIFIER, CommandOnDuty())
         server.commandMap.register(IDENTIFIER, CommandOffDuty())
         server.commandMap.register(IDENTIFIER, CommandSquire())
+        server.commandMap.register(IDENTIFIER, CommandDispatchPriority())
 
         // Register event listeners.
         server.pluginManager.registerEvents(EmergencyInventoryListener(), this)

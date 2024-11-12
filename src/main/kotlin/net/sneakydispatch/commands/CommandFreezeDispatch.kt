@@ -40,7 +40,7 @@ class CommandFreezeDispatch : CommandBase("freezedispatch") {
         }
 
         // Parse the freeze time (in minutes) from the command arguments.
-        val freezeTime: Long = args[0].toLongOrNull() ?: run {
+        val freezeTime = args[0].toLongOrNull() ?: run {
             sender.sendMessage(TextUtility.convertToComponent("&4Invalid minutes value. Please provide a valid number."))
             return false
         }
