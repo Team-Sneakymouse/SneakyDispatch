@@ -30,9 +30,11 @@ class SneakyDispatch : JavaPlugin() {
     /** Flag indicating if PlaceholderAPI (PAPI) is active. */
     var papiActive: Boolean = false
 
-    // Upper and lower bound for the encounter cooldown randomizer
+    // Upper and lower bounds for the cooldown randomizers
     private var encounterCooldownLowerBoundMillis = 0L
     private var encounterCooldownUpperBoundMillis = 0L
+    private var idleTimeLowerBoundMillis = 0L
+    private var idleTimeUpperBoundMillis = 0L
 
     /**
      * Called when the plugin is enabled. Initializes managers, registers commands,
@@ -45,11 +47,18 @@ class SneakyDispatch : JavaPlugin() {
         // Parse the configs that need to be parsed on enable
         // Encounter cooldown randomizer range
         val encounterCooldownString = config.getString("encounter-cooldown") ?: "15-30"
-        val cooldownParts = encounterCooldownString.split("-").mapNotNull { it.toIntOrNull() }
+        val encounterCoodlownParts = encounterCooldownString.split("-").mapNotNull { it.toIntOrNull() }
 
-        encounterCooldownLowerBoundMillis = (cooldownParts.getOrNull(0) ?: 15) * 60000L
+        encounterCooldownLowerBoundMillis = (encounterCoodlownParts.getOrNull(0) ?: 15) * 60000L
         encounterCooldownUpperBoundMillis =
-            (cooldownParts.getOrNull(1)?.times(60000L)) ?: encounterCooldownLowerBoundMillis
+            (encounterCoodlownParts.getOrNull(1)?.times(60000L)) ?: encounterCooldownLowerBoundMillis
+
+        // Encounter cooldown randomizer range
+        val idleTimeString = config.getString("encounter-cooldown") ?: "15-30"
+        val idleTimeParts = idleTimeString.split("-").mapNotNull { it.toIntOrNull() }
+
+        idleTimeLowerBoundMillis = (idleTimeParts.getOrNull(0) ?: 15) * 60000L
+        idleTimeUpperBoundMillis = (idleTimeParts.getOrNull(1)?.times(60000L)) ?: idleTimeLowerBoundMillis
 
         // Initialize the managers.
         emergencyManager = EmergencyManager()
@@ -175,6 +184,16 @@ class SneakyDispatch : JavaPlugin() {
             return Random.nextDouble(
                 instance.encounterCooldownLowerBoundMillis.toDouble(),
                 instance.encounterCooldownUpperBoundMillis.toDouble()
+            ).toLong()
+        }
+
+        /**
+         * Generates a random amount of milliseconds between the lower and upper bound of the encounter-cooldown config.
+         * @return The generated millisecond value
+         */
+        fun getIdleTime(): Long {
+            return Random.nextDouble(
+                instance.idleTimeLowerBoundMillis.toDouble(), instance.idleTimeUpperBoundMillis.toDouble()
             ).toLong()
         }
     }

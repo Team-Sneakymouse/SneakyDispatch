@@ -3,8 +3,8 @@
 #It only triggers if the amount of paladins who haven't been dispatched in {paladin-idle-time} mins is more than the open slots in ongoing emergencies
 #(ignoring paladins who logged in less than {paladin-idle-time} mins ago)
 #This cooldown is also triggered if an emergency expires without meeting its dispatch par, since this implies that they are spread too thin
-#Both values are in mins, and encounter-cooldown supports a random value between a lower and an upper bound, separated by a dash (such as 15-30).
-paladin-idle-time: 20
+#Both values are in mins support a random value between a lower and an upper bound, separated by a dash (such as 15-30).
+paladin-idle-time: 10-20
 encounter-cooldown: 15-30
 
 ##After a paladin goes off duty, if their unit is now this size or lower, then the unit will disband.
