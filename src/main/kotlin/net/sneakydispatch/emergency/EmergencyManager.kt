@@ -169,6 +169,9 @@ data class Emergency(val category: EmergencyCategory, val player: Player) {
     /** The number of players dispatched to handle this emergency. */
     var dispatched: Int = 0
 
+    /** The number of times that this particular emergency was reported. */
+    var reportedAmount: Int = 1
+
     /** The paladins that this event was assigned to. */
     val paladins = mutableListOf<Player>()
 
@@ -253,6 +256,7 @@ data class Emergency(val category: EmergencyCategory, val player: Player) {
 
         // Add the dispatched information to the lore
         lore.add("")
+        lore.add("&eReports: &3$reportedAmount")
         lore.add("${dispatchColorCode}Dispatched: [ $dispatched / ${category.dispatchCap} ]&r")
         lore.add("")
 
@@ -265,14 +269,12 @@ data class Emergency(val category: EmergencyCategory, val player: Player) {
                         PlaceholderAPI.setPlaceholders(
                             paladin,
                             (SneakyDispatch.getInstance().config.getString("tooltip-paladin-name") ?: "[playerName]").replace(
-                                "[playerName]",
-                                paladin.name
+                                "[playerName]", paladin.name
                             )
                         )
                     } else {
                         (SneakyDispatch.getInstance().config.getString("tooltip-paladin-name") ?: "[playerName").replace(
-                            "[playerName]",
-                            paladin.name
+                            "[playerName]", paladin.name
                         )
                     }
                 }"

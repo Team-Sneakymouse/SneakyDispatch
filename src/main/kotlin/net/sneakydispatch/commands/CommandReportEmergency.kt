@@ -7,10 +7,10 @@ import net.sneakydispatch.util.TextUtility
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import kotlin.math.pow
 
 /**
  * Command for reporting an emergency to the dispatch system.
- * Usage: /reportemergency [emergencyCategory] (delayMillis)
  */
 class CommandReportEmergency : CommandBase("reportemergency") {
 
@@ -18,7 +18,7 @@ class CommandReportEmergency : CommandBase("reportemergency") {
         // Set the usage message and description for the command.
         this.usageMessage = buildString {
             append("/").append(this@CommandReportEmergency.name)
-            append(" [emergencyCategory] (delayMillis)")
+            append(" [emergencyCategory] (delayMillis). This command can also increment the report count of nearby emergencies when it is used without supplying a category.")
         }
         this.description = "Report an emergency to the GPO dispatch system."
     }
@@ -56,10 +56,19 @@ class CommandReportEmergency : CommandBase("reportemergency") {
             return false
         }
 
-        // Ensure there are enough arguments to execute the command.
+        // If no remaining arguments are provided, increment the reports count on all nearby emergencies.
         if (remainingArgs.isEmpty()) {
-            sender.sendMessage(TextUtility.convertToComponent("&4Invalid Usage: $usageMessage"))
-            return false
+            val radiusSq = SneakyDispatch.getInstance().config.getInt("emergency-radius").toDouble().pow(2)
+            var incremented = false
+            SneakyDispatch.getDispatchManager().getEmergencies().forEach {
+                if (it.location.distanceSquared(player.location) <= radiusSq) {
+                    it.reportedAmount++
+                    incremented = true
+                }
+            }
+
+            if (!incremented) sender.sendMessage(TextUtility.convertToComponent("&4Invalid Usage: $usageMessage"))
+            return incremented
         }
 
         // Retrieve the emergency category based on the provided argument.
@@ -85,7 +94,8 @@ class CommandReportEmergency : CommandBase("reportemergency") {
 
             // Set the delay for the emergency and schedule its reporting.
             emergency.delay = delay
-            SneakyDispatch.getDispatchManager().nextEncounterTime = System.currentTimeMillis() + SneakyDispatch.getEncounterCooldown()
+            SneakyDispatch.getDispatchManager().nextEncounterTime =
+                System.currentTimeMillis() + SneakyDispatch.getEncounterCooldown()
 
             // Schedule the emergency to be reported after the delay.
             Bukkit.getScheduler().runTaskLater(
