@@ -8,7 +8,7 @@ paladin-idle-time: 10-20
 encounter-cooldown: 15-30
 
 ##After a paladin goes off duty, if their unit is now this size or lower, then the unit will disband.
-unit-disband-size: 1
+unit-disband-size: 0
 
 ##If you are within n blocks of an ongoing emergency, your report will do nothing
 #this also controls the placeholder %sneakydispatch_nearby_emergency%

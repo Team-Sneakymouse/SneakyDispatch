@@ -53,13 +53,13 @@ class Placeholders : PlaceholderExpansion() {
 
         return when (placeholder) {
             "paladins_on_duty" -> {
-                // Retrieves the number of paladins on duty from PlayerUtility.
+                // Retrieves the number of paladins on duty.
                 SneakyDispatch.getUnitManager().getPaladins().size.toString()
             }
 
-            "paladins_idle" -> {
-                // Retrieves the number of idle paladins from PlayerUtility.
-                SneakyDispatch.getUnitManager().getIdlePaladins().toString()
+            "paladins_available" -> {
+                // Retrieves the number of available paladins.
+                SneakyDispatch.getUnitManager().getAvailablePaladins().toString()
             }
 
             "nearby_emergency" -> {
@@ -81,7 +81,7 @@ class Placeholders : PlaceholderExpansion() {
                 "none" // No nearby emergency found.
             }
 
-            "dispatch_frozen_milis" -> {
+            "dispatch_frozen_millis" -> {
                 // Returns the time remaining for which the dispatch system is frozen, in milliseconds.
                 try {
                     (SneakyDispatch.getDispatchManager().dispatchFrozenUntil - System.currentTimeMillis()).coerceAtLeast(

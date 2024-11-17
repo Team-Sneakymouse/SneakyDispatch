@@ -7,11 +7,12 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
+import kotlin.math.max
 
 class UnitManager {
 
     val units: MutableList<Unit> = mutableListOf()
-    private val dispatchTimeMap: MutableMap<Player, Long> = mutableMapOf()
+    private val nextDispatchTimeMap: MutableMap<Player, Long> = mutableMapOf()
 
     /**
      * Adds a new unit if none of the players are already in an existing unit.
@@ -41,29 +42,34 @@ class UnitManager {
         return units.flatMap { it.players }
     }
 
-    /** Returns the number of paladins who are currently idle. */
-    fun getIdlePaladins(): Int {
-        val idleTimeLimit = SneakyDispatch.getInstance().config.getInt("paladin-idle-time", 20).toLong()
-
-        return units.sumOf {
-            val (count, time) = it.getIdleTime()
-            if (time > idleTimeLimit) count else 0
-        }
+    /** Returns the number of paladins who are currently available and off dispatch cooldown. */
+    fun getAvailablePaladins(): Int {
+        return units.filter { it.isAvailable() && it.getTimeUntilNextDispatch() <= 0 }.sumOf { it.players.size }
     }
 
-    /** Sets the dispatch time for a player to the current system time. */
-    fun setDispatchTime(player: Player) {
-        setDispatchTime(player, System.currentTimeMillis())
+    /** Gets the time until next dispatch for a player. */
+    fun getNextDispatchTime(player: Player): Long {
+        return nextDispatchTimeMap.getOrDefault(player, 0L)
     }
 
     /** Sets the dispatch time for a player. */
-    fun setDispatchTime(player: Player, lastDispatchTime: Long) {
-        dispatchTimeMap[player] = lastDispatchTime
+    fun setNextDispatchTime(
+        player: Player, nextDispatchTime: Long = System.currentTimeMillis() + SneakyDispatch.getIdleTime()
+    ) {
+        nextDispatchTimeMap[player] = nextDispatchTime
     }
 
-    /** Gets the dispatch time for a player. */
-    fun getDispatchTime(player: Player): Long {
-        return dispatchTimeMap.getOrDefault(player, System.currentTimeMillis())
+    /**
+     * Retrieves a shuffled and sorted map of units and their respective dispatch cooldown times.
+     *
+     * This method first shuffles the units to ensure that those with identical dispatch cooldowns
+     * are randomly ordered relative to each other. It then sorts the map by dispatch cooldown time
+     * in ascending order, so units with the shortest time until next dispatch appear first.
+     *
+     * @return A `Map` of units and their associated time until next dispatch, sorted in ascending order.
+     */
+    fun getUnitDispatchCooldowns(): Map<Unit, Double> {
+        return units.shuffled().associateWith { it.getTimeUntilNextDispatch() }.toList().sortedBy { it.second }.toMap()
     }
 }
 
@@ -71,7 +77,7 @@ class UnitManagerListener : Listener {
 
     @EventHandler
     fun onPlayerJoin(event: PlayerJoinEvent) {
-        SneakyDispatch.getUnitManager().setDispatchTime(event.player)
+        SneakyDispatch.getUnitManager().setNextDispatchTime(event.player)
     }
 }
 
@@ -118,35 +124,39 @@ data class Unit(var players: MutableList<Player>) {
     }
 
     /**
-     * Returns the highest idle time among the players in the unit.
+     * Calculates the average time until the next dispatch for all players in this unit,
+     * considering their availability.
      *
-     * @return A Pair containing the number of players considered and the maximum idle time of all players in this unit,
+     * @return The average time until the next dispatch for all players in this unit,
      *         or `Double.MAX_VALUE` if the unit is unavailable.
      */
-    fun getIdleTime(): Pair<Int, Double> {
+    fun getTimeUntilNextDispatch(): Double {
         // Filter out ineligible players and return if no valid players remain
-        if (!isAvailable()) return Pair(0, Double.MAX_VALUE)
+        if (!isAvailable()) return Double.MAX_VALUE
 
-        // Find the maximum idle time among the valid players
-        val minDispatchTime = players.minOfOrNull { player ->
-            SneakyDispatch.getUnitManager().getDispatchTime(player)
-        }?.toDouble() ?: Double.MIN_VALUE
+        // Calculate the average idle time among the valid players
+        val averageNextDispatchTime = if (players.isNotEmpty()) {
+            players.map { player ->
+                SneakyDispatch.getUnitManager().getNextDispatchTime(player)
+            }.average()
+        } else {
+            Double.MAX_VALUE
+        }
 
         // Return the player count and the idle time difference
-        return Pair(players.size, System.currentTimeMillis() - minDispatchTime + priority)
+        return max(averageNextDispatchTime - System.currentTimeMillis(), 0.0) - priority
     }
 
     /**
-     * Checks if a player is eligible based on online status, permissions, and external tag checks.
+     * Checks if this unit is eligible based on online status, permissions, and external tag checks.
      *
-     * @param player The player to check.
      * @return `true` if the player meets all eligibility criteria; `false` otherwise.
      */
     fun isAvailable(): Boolean {
         return priority > 0 || !players.any { player ->
             !player.isOnline || player.hasPermission("${SneakyDispatch.IDENTIFIER}.neveravailable") || (SneakyDispatch.isPapiActive() && (PlaceholderAPI.setPlaceholders(
                 player, "%sneakycharacters_character_hastag_paladin%"
-            ) == "false") || PlaceholderAPI.setPlaceholders(player, "%cmi_user_afk%") == "§6True")
+            ) == "false" || PlaceholderAPI.setPlaceholders(player, "%cmi_user_afk%") == "§6True"))
         }
     }
 }

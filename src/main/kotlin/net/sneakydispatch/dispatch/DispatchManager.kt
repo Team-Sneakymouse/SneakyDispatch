@@ -33,7 +33,7 @@ class DispatchManager {
             SneakyDispatch.getInstance(), Runnable {
                 val currentTime = System.currentTimeMillis()
                 if (currentTime >= nextEncounterTime && currentTime >= dispatchFrozenUntil && SneakyDispatch.getUnitManager()
-                        .getIdlePaladins() > getOpenDispatchSlots()
+                        .getAvailablePaladins() > 0
                 ) {
                     createEncounter()
                 }

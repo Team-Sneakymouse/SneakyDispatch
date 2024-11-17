@@ -66,7 +66,7 @@ class CommandDispatchPriority : CommandBase("dispatchpriority") {
         // Set the unit's priority and reset idle time if needed.
         playerUnit.priority = priority
         if (priority > 0) {
-            playerUnit.players.forEach { pl -> unitManager.setDispatchTime(pl, 0) }
+            playerUnit.players.forEach { pl -> unitManager.setNextDispatchTime(pl, 0L) }
         }
 
         sender.sendMessage(TextUtility.convertToComponent("&aUnit priority set to $priority."))
