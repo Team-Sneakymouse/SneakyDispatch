@@ -40,10 +40,10 @@ class UnitManager {
     /** Returns a list of on-duty paladins. */
     fun getPaladins(): List<Player> {
         return units.flatMap { it.players }.filter { player ->
-                player.isOnline && (!SneakyDispatch.isPapiActive() || PlaceholderAPI.setPlaceholders(
-                    player, "%sneakycharacters_character_hastag_paladin%"
-                ) != "false")
-            }
+            player.isOnline && (!SneakyDispatch.isPapiActive() || PlaceholderAPI.setPlaceholders(
+                player, "%sneakycharacters_character_hastag_paladin%"
+            ) != "false")
+        }
     }
 
     /** Returns the number of paladins who are currently available and off dispatch cooldown. */
@@ -120,6 +120,12 @@ data class Unit(var players: MutableList<Player>) {
      * @param player The player to be added.
      */
     fun addPlayer(player: Player) {
+        SneakyDispatch.getUnitManager().units.forEach {
+            if (it.players.contains(player)) {
+                it.removePlayer(player)
+            }
+        }
+
         players.forEach { pl: Player ->
             pl.sendMessage(TextUtility.convertToComponent("&3Another Paladin has joined your unit."))
         }
