@@ -134,10 +134,10 @@ data class Unit(var players: MutableSet<Player>) {
         }
 
         players.forEach { pl: Player ->
-            pl.sendMessage(TextUtility.convertToComponent("&3Another Paladin has joined your unit."))
+            pl.sendMessage(TextUtility.convertToComponent("&eAnother Paladin has joined your unit."))
         }
         players.add(player)
-        player.sendMessage(TextUtility.convertToComponent("&3You are now on duty!"))
+        player.sendMessage(TextUtility.convertToComponent("&eYou are now on duty!"))
     }
 
     /**
