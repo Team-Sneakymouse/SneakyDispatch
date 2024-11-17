@@ -61,7 +61,7 @@ class CommandOnDuty : CommandBase("onduty") {
         if (SneakyDispatch.getUnitManager().addUnit(playersToAdd)) {
             // Give feedback to all the players involved if succeeded
             playersToAdd.forEach { player ->
-                player.sendMessage(TextUtility.convertToComponent("&3You are now on duty!"))
+                player.sendMessage(TextUtility.convertToComponent("&eYou are now on duty!"))
             }
         } else {
             // If the unit couldn't be added, notify the sender

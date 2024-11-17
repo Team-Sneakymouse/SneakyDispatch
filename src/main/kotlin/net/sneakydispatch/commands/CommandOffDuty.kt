@@ -1,5 +1,6 @@
 package net.sneakydispatch.commands
 
+import me.clip.placeholderapi.PlaceholderAPI
 import net.sneakydispatch.SneakyDispatch
 import net.sneakydispatch.util.TextUtility
 import org.bukkit.command.CommandSender
@@ -51,14 +52,31 @@ class CommandOffDuty : CommandBase("offduty") {
         // Remove the player from the unit using the new method
         if (playerUnit.removePlayer(sender)) {
             // Provide feedback to the player
-            sender.sendMessage(TextUtility.convertToComponent("&3You have successfully gone off duty!"))
+            sender.sendMessage(TextUtility.convertToComponent("&eYou have successfully gone off duty!"))
 
             // Notify other players in the unit (if any)
             playerUnit.players.forEach { player ->
-                player.sendMessage(TextUtility.convertToComponent("&3${sender.name} has gone off duty."))
+                player.sendMessage(
+                    TextUtility.convertToComponent(
+                        "&e${
+                            if (SneakyDispatch.isPapiActive()) {
+                                PlaceholderAPI.setPlaceholders(
+                                    player,
+                                    (SneakyDispatch.getInstance().config.getString("paladin-name-display") ?: "[playerName]").replace(
+                                        "[playerName]", player.name
+                                    )
+                                )
+                            } else {
+                                (SneakyDispatch.getInstance().config.getString("paladin-name-display") ?: "[playerName").replace(
+                                    "[playerName]", player.name
+                                )
+                            }
+                        } has gone off duty."
+                    )
+                )
             }
         } else {
-            sender.sendMessage(TextUtility.convertToComponent("&4Error: You were not in the unit."))
+            sender.sendMessage(TextUtility.convertToComponent("&eError: You were not in the unit."))
             return false
         }
 

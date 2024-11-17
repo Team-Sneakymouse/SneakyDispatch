@@ -18,8 +18,8 @@ emergency-radius: 50
 cap-icon-material: "red_wool"
 cap-icon-custom-model-data: 0
 
-##How the names of the paladins designated to an encounter are shown in the item tooltip. Supports placeholders, and "[playerName]" replacement.
-tooltip-paladin-name: "[playerName]"
+##How the name of a paladin is shown in tooltips nad command feedback. Supports placeholders, and "[playerName]" replacement.
+paladin-name-display: "[playerName]"
 
 ##These are text replacements that occur on the emergency description if the emergency has been reported with a delay (that is to say, a scripted report rather than a manual one)
 #These are applied BEFORE placeholder replacement

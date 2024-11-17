@@ -83,9 +83,12 @@ class UnitManagerListener : Listener {
     fun onPlayerJoin(event: PlayerJoinEvent) {
         val player = event.player
         val unitManager = SneakyDispatch.getUnitManager()
+        val unit = unitManager.units.firstOrNull { player.uniqueId in it.playerUUIDs }
 
-        if (unitManager.units.any { player in it.players }) {
-            player.sendMessage(TextUtility.convertToComponent("&eYou are currently still on duty as a Paladin."))
+        if (unit != null) {
+            unit.players.removeIf {it.uniqueId == player.uniqueId}
+            unit.players.add(player)
+            player.sendMessage(TextUtility.convertToComponent("&eYou have re-joined your active Paladin unit."))
         } else {
             unitManager.setNextDispatchTime(player)
         }
@@ -93,6 +96,7 @@ class UnitManagerListener : Listener {
 }
 
 data class Unit(var players: MutableSet<Player>) {
+    var playerUUIDs = players.map { it.uniqueId }.toMutableSet()
     var priority = 0
 
     /**
@@ -104,6 +108,7 @@ data class Unit(var players: MutableSet<Player>) {
     fun removePlayer(player: Player): Boolean {
         return if (players.contains(player)) {
             players.remove(player)
+            playerUUIDs.remove(player.uniqueId)
 
             // Check the configured unit disband size
             val disbandSize = SneakyDispatch.getInstance().config.getInt("unit-disband-size", 1)
@@ -137,6 +142,7 @@ data class Unit(var players: MutableSet<Player>) {
             pl.sendMessage(TextUtility.convertToComponent("&eAnother Paladin has joined your unit."))
         }
         players.add(player)
+        playerUUIDs.add(player.uniqueId)
         player.sendMessage(TextUtility.convertToComponent("&eYou are now on duty!"))
     }
 

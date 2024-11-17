@@ -268,12 +268,12 @@ data class Emergency(val category: EmergencyCategory, val player: Player) {
                     if (SneakyDispatch.isPapiActive()) {
                         PlaceholderAPI.setPlaceholders(
                             paladin,
-                            (SneakyDispatch.getInstance().config.getString("tooltip-paladin-name") ?: "[playerName]").replace(
+                            (SneakyDispatch.getInstance().config.getString("paladin-name-display") ?: "[playerName]").replace(
                                 "[playerName]", paladin.name
                             )
                         )
                     } else {
-                        (SneakyDispatch.getInstance().config.getString("tooltip-paladin-name") ?: "[playerName").replace(
+                        (SneakyDispatch.getInstance().config.getString("paladin-name-display") ?: "[playerName").replace(
                             "[playerName]", paladin.name
                         )
                     }
