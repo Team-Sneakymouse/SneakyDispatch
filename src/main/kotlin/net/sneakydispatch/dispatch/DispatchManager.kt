@@ -42,7 +42,7 @@ class DispatchManager {
     }
 
     /**
-     * Reports a new emergency, adding it to the emergencies map and notifying all available paladins.
+     * Reports a new emergency, adding it to the emergencies map and notifying the assigned paladins.
      *
      * @param emergency The emergency to report.
      */
@@ -57,8 +57,18 @@ class DispatchManager {
 
         emergencies[emergency.uuid] = emergency
 
+        // Assign paladins to the emergency
+        val units = SneakyDispatch.getUnitManager().getUnitsOrdered()
+
+        for (unit in units) {
+            if (unit.players.size <= emergency.getDispatchCap() - emergency.paladins.size + if (emergency.paladins.isNotEmpty()) 0 else 1) {
+                emergency.paladins.addAll(unit.players)
+            }
+        }
+
         // Notify paladins about the reported emergency via commands.
-        for (player in SneakyDispatch.getUnitManager().getPaladins()) {
+        for (player in emergency.paladins) {
+            if (!player.isOnline) continue
             Bukkit.getServer().dispatchCommand(
                 Bukkit.getServer().consoleSender, "cast forcecast ${player.name} paladin-emergency-reported ${
                     emergency.getName().replace(" ", "\u00A0")

@@ -64,16 +64,16 @@ class UnitManager {
     }
 
     /**
-     * Retrieves a shuffled and sorted map of units and their respective dispatch cooldown times.
+     * Retrieves a shuffled and sorted list of units based on their dispatch cooldown times.
      *
-     * This method first shuffles the units to ensure that those with identical dispatch cooldowns
-     * are randomly ordered relative to each other. It then sorts the map by dispatch cooldown time
-     * in ascending order, so units with the shortest time until next dispatch appear first.
+     * The method shuffles the units to introduce randomness for those with identical dispatch
+     * cooldowns and then sorts the list in ascending order based on the time until the next dispatch.
+     * Units with the shortest time until their next dispatch appear first.
      *
-     * @return A `Map` of units and their associated time until next dispatch, sorted in ascending order.
+     * @return A `List<Unit>` sorted by the time until next dispatch in ascending order.
      */
-    fun getUnitDispatchCooldowns(): Map<Unit, Double> {
-        return units.shuffled().associateWith { it.getTimeUntilNextDispatch() }.toList().sortedBy { it.second }.toMap()
+    fun getUnitsOrdered(): List<Unit> {
+        return units.shuffled().sortedBy { it.getTimeUntilNextDispatch() }
     }
 }
 

@@ -169,6 +169,9 @@ data class Emergency(val category: EmergencyCategory, val player: Player) {
     /** The number of players dispatched to handle this emergency. */
     var dispatched: Int = 0
 
+    /** The paladins that this event was assigned to. */
+    val paladins = mutableListOf<Player>();
+
     /** Checks if the emergency has expired based on its duration. */
     fun isExpired(): Boolean {
         return (System.currentTimeMillis() >= startTime + category.durationMillis)
