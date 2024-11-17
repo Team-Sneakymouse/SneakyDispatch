@@ -81,7 +81,14 @@ class UnitManagerListener : Listener {
 
     @EventHandler
     fun onPlayerJoin(event: PlayerJoinEvent) {
-        SneakyDispatch.getUnitManager().setNextDispatchTime(event.player)
+        val player = event.player
+        val unitManager = SneakyDispatch.getUnitManager()
+
+        if (unitManager.units.any { player in it.players }) {
+            player.sendMessage(TextUtility.convertToComponent("&eYou are currently still on duty as a Paladin."))
+        } else {
+            unitManager.setNextDispatchTime(player)
+        }
     }
 }
 
