@@ -48,12 +48,12 @@ class DispatchManager {
      */
     fun report(emergency: Emergency) {
         cleanup()
-        val maxDistSq = SneakyDispatch.getInstance().config.getInt("emergency-radius", 50).toDouble().pow(2).toInt()
+        /*val maxDistSq = SneakyDispatch.getInstance().config.getInt("emergency-radius", 50).toDouble().pow(2).toInt()
 
         // Prevent reporting emergencies that are too close to each other.
         for (em in emergencies.values) {
             if (emergency.location.distanceSquared(em.location) <= maxDistSq) return
-        }
+        }*/
 
         emergencies[emergency.uuid] = emergency
 
