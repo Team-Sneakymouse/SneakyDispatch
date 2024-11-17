@@ -170,7 +170,7 @@ data class Emergency(val category: EmergencyCategory, val player: Player) {
     var dispatched: Int = 0
 
     /** The paladins that this event was assigned to. */
-    val paladins = mutableListOf<Player>();
+    val paladins = mutableListOf<Player>()
 
     /** Checks if the emergency has expired based on its duration. */
     fun isExpired(): Boolean {
@@ -217,8 +217,7 @@ data class Emergency(val category: EmergencyCategory, val player: Player) {
             customModelData = category.iconCustomModelData
             dispatchColorCode = "&b"
         } else {
-            val iconMaterialString =
-                SneakyDispatch.getInstance().config.getString("cap-icon-material") ?: "red_wool"
+            val iconMaterialString = SneakyDispatch.getInstance().config.getString("cap-icon-material") ?: "red_wool"
             var iconMaterial = Material.matchMaterial(iconMaterialString)
             if (iconMaterial == null) {
                 SneakyDispatch.log(
@@ -253,7 +252,32 @@ data class Emergency(val category: EmergencyCategory, val player: Player) {
         }
 
         // Add the dispatched information to the lore
-        lore.add("${dispatchColorCode}Dispatched: [ $dispatched / ${category.dispatchCap} ]")
+        lore.add("")
+        lore.add("${dispatchColorCode}Dispatched: [ $dispatched / ${category.dispatchCap} ]&r")
+        lore.add("")
+
+        // Add the names of the priority players
+        lore.add("&eAssigned to:")
+        for (paladin in paladins) {
+            lore.add(
+                "&e${
+                    if (SneakyDispatch.isPapiActive()) {
+                        PlaceholderAPI.setPlaceholders(
+                            paladin,
+                            (SneakyDispatch.getInstance().config.getString("tooltip-paladin-name") ?: "[playerName]").replace(
+                                "[playerName]",
+                                paladin.name
+                            )
+                        )
+                    } else {
+                        (SneakyDispatch.getInstance().config.getString("tooltip-paladin-name") ?: "[playerName").replace(
+                            "[playerName]",
+                            paladin.name
+                        )
+                    }
+                }"
+            )
+        }
 
         meta.lore(lore.map { TextUtility.convertToComponent(it) })
 
