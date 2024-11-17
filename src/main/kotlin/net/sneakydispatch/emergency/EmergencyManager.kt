@@ -218,7 +218,7 @@ data class Emergency(val category: EmergencyCategory, val player: Player) {
         if (!isCapFulfilled()) {
             itemStack = ItemStack(category.iconMaterial)
             customModelData = category.iconCustomModelData
-            dispatchColorCode = "&b"
+            dispatchColorCode = "&3"
         } else {
             val iconMaterialString = SneakyDispatch.getInstance().config.getString("cap-icon-material") ?: "red_wool"
             var iconMaterial = Material.matchMaterial(iconMaterialString)
@@ -257,14 +257,14 @@ data class Emergency(val category: EmergencyCategory, val player: Player) {
         // Add the dispatched information to the lore
         lore.add("")
         lore.add("&eReports: &3$reportedAmount")
-        lore.add("${dispatchColorCode}Dispatched: [ $dispatched / ${category.dispatchCap} ]&r")
+        lore.add("&eDispatched: ${dispatchColorCode}[ $dispatched / ${category.dispatchCap} ]")
         lore.add("")
 
         // Add the names of the priority players
         lore.add("&eAssigned to:")
         for (paladin in paladins) {
             lore.add(
-                "&e${
+                "&3${
                     if (SneakyDispatch.isPapiActive()) {
                         PlaceholderAPI.setPlaceholders(
                             paladin,
