@@ -38,7 +38,7 @@ class CommandOnDuty : CommandBase("onduty") {
      */
     override fun execute(sender: CommandSender, commandLabel: String, args: Array<out String>?): Boolean {
         // Make a list of players from the sender (if it is a player) as well as all the player names in args
-        val playersToAdd = mutableListOf<Player>()
+        val playersToAdd = mutableSetOf<Player>()
 
         // Check if sender is a player and add them to the list
         if (sender is Player) {
@@ -48,11 +48,11 @@ class CommandOnDuty : CommandBase("onduty") {
         // Add players specified in the args
         args?.forEach { playerName ->
             val player = Bukkit.getPlayer(playerName)
-            if (player != null && !playersToAdd.contains(player)) {
+            if (player != null) {
                 playersToAdd.add(player)
             } else {
                 // If any player name is invalid, send an error message to the sender and return
-                sender.sendMessage(TextUtility.convertToComponent("&4Error: Player '$playerName' is not online or already added."))
+                sender.sendMessage(TextUtility.convertToComponent("&4Error: Player '$playerName' is not online."))
                 return false
             }
         }

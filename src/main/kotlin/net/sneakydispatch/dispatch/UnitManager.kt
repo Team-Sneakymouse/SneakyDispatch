@@ -20,7 +20,7 @@ class UnitManager {
      * @param players The list of players to form a new unit.
      * @return `true` if the unit was successfully added, `false` if any player is already in a unit.
      */
-    fun addUnit(players: MutableList<Player>): Boolean {
+    fun addUnit(players: MutableSet<Player>): Boolean {
         if (players.any { player -> units.any { unit -> unit.players.contains(player) } }) {
             return false
         }
@@ -85,7 +85,7 @@ class UnitManagerListener : Listener {
     }
 }
 
-data class Unit(var players: MutableList<Player>) {
+data class Unit(var players: MutableSet<Player>) {
     var priority = 0
 
     /**
