@@ -39,7 +39,11 @@ class UnitManager {
 
     /** Returns a list of on-duty paladins. */
     fun getPaladins(): List<Player> {
-        return units.flatMap { it.players }
+        return units.flatMap { it.players }.filter { player ->
+                player.isOnline && (!SneakyDispatch.isPapiActive() || PlaceholderAPI.setPlaceholders(
+                    player, "%sneakycharacters_character_hastag_paladin%"
+                ) != "false")
+            }
     }
 
     /** Returns the number of paladins who are currently available and off dispatch cooldown. */
