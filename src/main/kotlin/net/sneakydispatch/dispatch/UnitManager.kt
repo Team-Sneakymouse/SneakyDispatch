@@ -47,7 +47,7 @@ class UnitManager {
     }
 
     /** Returns the number of paladins who are currently available and off dispatch cooldown. */
-    fun getAvailablePaladins(): Int {
+    fun getReadyPaladins(): Int {
         return units.filter { it.isAvailable() && it.getTimeUntilNextDispatch() <= 0 }.sumOf { it.players.size }
     }
 

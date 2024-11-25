@@ -57,9 +57,9 @@ class Placeholders : PlaceholderExpansion() {
                 SneakyDispatch.getUnitManager().getPaladins().size.toString()
             }
 
-            "paladins_available" -> {
+            "paladins_ready" -> {
                 // Retrieves the number of available paladins.
-                SneakyDispatch.getUnitManager().getAvailablePaladins().toString()
+                SneakyDispatch.getUnitManager().getReadyPaladins().toString()
             }
 
             "nearby_emergencies" -> {
