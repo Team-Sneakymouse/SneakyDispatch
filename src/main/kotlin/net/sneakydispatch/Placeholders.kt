@@ -62,23 +62,23 @@ class Placeholders : PlaceholderExpansion() {
                 SneakyDispatch.getUnitManager().getAvailablePaladins().toString()
             }
 
-            "nearby_emergency" -> {
+            "nearby_emergencies" -> {
                 // Cleans up expired emergencies and checks if the player is near any ongoing emergency.
                 SneakyDispatch.getDispatchManager().cleanup()
                 val emergencies = SneakyDispatch.getDispatchManager().getEmergencies()
 
                 // Get the maximum squared distance for emergency proximity.
-                val maxDistSq =
-                    SneakyDispatch.getInstance().config.getInt("emergency-radius", 50).toDouble().pow(2).toInt()
+                val maxDistSq = SneakyDispatch.getInstance().config.getInt("emergency-radius", 50).toDouble().pow(2)
 
                 val playerLocation = player.location
-                // Loop through emergencies and check if any are within the allowed radius.
-                for (emergency in emergencies) {
-                    if (emergency.location.distanceSquared(playerLocation) <= maxDistSq) {
-                        return emergency.getName()
-                    }
-                }
-                "none" // No nearby emergency found.
+
+                // Filter emergencies within the allowed radius and concatenate their names with a pipe.
+                val nearbyEmergencies = emergencies.filter {
+                    it.location.distanceSquared(playerLocation) <= maxDistSq
+                }.joinToString("|") { it.getName() }
+
+                // Return the concatenated names or "none" if no emergencies are nearby.
+                nearbyEmergencies.ifEmpty { "none" }
             }
 
             "dispatch_frozen_millis" -> {
