@@ -46,6 +46,11 @@ class UnitManager {
         }
     }
 
+    /** Returns the number of paladins who are currently available. */
+    fun getAvailablePaladins(): Int {
+        return units.filter { it.isAvailable() }.sumOf { it.players.size }
+    }
+
     /** Returns the number of paladins who are currently available and off dispatch cooldown. */
     fun getReadyPaladins(): Int {
         return units.filter { it.isAvailable() && it.getTimeUntilNextDispatch() <= 0 }.sumOf { it.players.size }
@@ -96,7 +101,7 @@ class UnitManagerListener : Listener {
         val unit = unitManager.units.firstOrNull { player.uniqueId in it.playerUUIDs }
 
         if (unit != null) {
-            unit.players.removeIf {it.uniqueId == player.uniqueId}
+            unit.players.removeIf { it.uniqueId == player.uniqueId }
             unit.players.add(player)
             player.sendMessage(TextUtility.convertToComponent("&eYou have re-joined your active Paladin unit."))
         } else {

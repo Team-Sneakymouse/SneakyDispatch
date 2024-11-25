@@ -58,8 +58,13 @@ class Placeholders : PlaceholderExpansion() {
             }
 
             "paladins_ready" -> {
-                // Retrieves the number of available paladins.
+                // Retrieves the number of available paladins who are also off dispatch cooldown.
                 SneakyDispatch.getUnitManager().getReadyPaladins().toString()
+            }
+
+            "paladins_available" -> {
+                // Retrieves the number of available paladins.
+                SneakyDispatch.getUnitManager().getAvailablePaladins().toString()
             }
 
             "nearby_emergencies" -> {
