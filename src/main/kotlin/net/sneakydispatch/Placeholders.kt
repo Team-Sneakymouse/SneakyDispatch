@@ -94,6 +94,10 @@ class Placeholders : PlaceholderExpansion() {
                 }
             }
 
+            "on_duty" -> {
+                SneakyDispatch.getUnitManager().isInUnit(player).toString()
+            }
+
             else -> {
                 // Returns null for unrecognized placeholders.
                 null

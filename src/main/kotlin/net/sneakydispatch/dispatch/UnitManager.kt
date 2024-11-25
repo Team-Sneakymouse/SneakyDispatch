@@ -21,7 +21,7 @@ class UnitManager {
      * @return `true` if the unit was successfully added, `false` if any player is already in a unit.
      */
     fun addUnit(players: MutableSet<Player>): Boolean {
-        if (players.any { player -> units.any { unit -> unit.players.contains(player) } }) {
+        if (players.any { player -> isInUnit(player) }) {
             return false
         }
         units.add(Unit(players))
@@ -74,6 +74,16 @@ class UnitManager {
      */
     fun getUnitsOrdered(): List<Unit> {
         return units.shuffled().sortedBy { it.getTimeUntilNextDispatch() }
+    }
+
+    /**
+     * Returns whether the specified [Player] is currently in a unit.
+     *
+     * @param player The [Player] to check.
+     * @return 'true' if the specified [Player] is in a unit, or 'false' if they aren't.
+     * */
+    fun isInUnit(player: Player): Boolean {
+        return units.any { player.uniqueId in it.playerUUIDs }
     }
 }
 
