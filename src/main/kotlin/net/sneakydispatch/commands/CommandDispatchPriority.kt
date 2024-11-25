@@ -49,11 +49,8 @@ class CommandDispatchPriority : CommandBase("dispatchpriority") {
 
         // Find the unit to which the player belongs.
         val unitManager = SneakyDispatch.getUnitManager()
-        val playerUnit = unitManager.units.find { unit -> unit.players.contains(sender) }
-
-        // Verify if the player is part of an active unit.
-        if (playerUnit == null) {
-            sender.sendMessage(TextUtility.convertToComponent("&4Error: You are not part of an active paladin unit."))
+        val currentUnit = SneakyDispatch.getUnitManager().getUnit(player) ?: run {
+            sender.sendMessage(TextUtility.convertToComponent("&4Error: You are not in an active unit."))
             return false
         }
 
@@ -64,9 +61,9 @@ class CommandDispatchPriority : CommandBase("dispatchpriority") {
         }
 
         // Set the unit's priority and reset idle time if needed.
-        playerUnit.priority = priority
+        currentUnit.priority = priority
         if (priority > 0) {
-            playerUnit.players.forEach { pl -> unitManager.setNextDispatchTime(pl, 0L) }
+            currentUnit.players.forEach { pl -> unitManager.setNextDispatchTime(pl, 0L) }
         }
 
         sender.sendMessage(TextUtility.convertToComponent("&aUnit priority set to $priority."))

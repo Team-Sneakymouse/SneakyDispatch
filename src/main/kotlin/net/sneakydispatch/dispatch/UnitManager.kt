@@ -86,6 +86,16 @@ class UnitManager {
     fun isInUnit(player: Player): Boolean {
         return units.any { player.uniqueId in it.playerUUIDs }
     }
+
+    /**
+     * Returns the specified [Player]'s [Unit].
+     *
+     * @param player The [Player] to check.
+     * @return A [Unit] that the player is in, or null.
+     * */
+    fun getUnit(player: Player): Unit? {
+        return units.find { player.uniqueId in it.playerUUIDs }
+    }
 }
 
 class UnitManagerListener : Listener {

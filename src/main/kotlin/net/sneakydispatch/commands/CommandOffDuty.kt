@@ -40,22 +40,18 @@ class CommandOffDuty : CommandBase("offduty") {
         }
 
         // Get the player's unit
-        val unitManager = SneakyDispatch.getUnitManager()
-        val playerUnit = unitManager.units.find { unit -> unit.players.contains(sender) }
-
-        // Check if the player is part of a unit
-        if (playerUnit == null) {
-            sender.sendMessage(TextUtility.convertToComponent("&4Error: You are not part of an active paladin unit."))
+        val currentUnit = SneakyDispatch.getUnitManager().getUnit(sender) ?: run {
+            sender.sendMessage(TextUtility.convertToComponent("&4Error: You are not in an active unit."))
             return false
         }
 
         // Remove the player from the unit using the new method
-        if (playerUnit.removePlayer(sender)) {
+        if (currentUnit.removePlayer(sender)) {
             // Provide feedback to the player
             sender.sendMessage(TextUtility.convertToComponent("&eYou have successfully gone off duty!"))
 
             // Notify other players in the unit (if any)
-            playerUnit.players.forEach { player ->
+            currentUnit.players.forEach { player ->
                 player.sendMessage(
                     TextUtility.convertToComponent(
                         "&e${

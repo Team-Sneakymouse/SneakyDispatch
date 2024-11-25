@@ -103,6 +103,10 @@ class Placeholders : PlaceholderExpansion() {
                 SneakyDispatch.getUnitManager().isInUnit(player).toString()
             }
 
+            "unit" -> {
+                SneakyDispatch.getUnitManager().getUnit(player)?.players?.joinToString("|") { it.name } ?: "none"
+            }
+
             else -> {
                 // Returns null for unrecognized placeholders.
                 null

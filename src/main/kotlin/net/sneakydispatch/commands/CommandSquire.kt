@@ -55,8 +55,7 @@ class CommandSquire : CommandBase("squire") {
         }
 
         // Deny if the sender is not in a unit
-        val currentUnit = SneakyDispatch.getUnitManager().units.find { unit -> unit.players.contains(sender) }
-        if (currentUnit == null) {
+        val currentUnit = SneakyDispatch.getUnitManager().getUnit(sender) ?: run {
             sender.sendMessage(TextUtility.convertToComponent("&4Error: You are not in an active unit."))
             return false
         }
