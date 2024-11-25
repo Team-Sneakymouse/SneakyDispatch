@@ -5,7 +5,6 @@ import net.sneakydispatch.emergency.Emergency
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import kotlin.math.floor
-import kotlin.math.pow
 
 /**
  * Manages emergency situations and dispatching players (paladins) to address emergencies.
@@ -32,8 +31,9 @@ class DispatchManager {
         scheduler.runTaskTimer(
             SneakyDispatch.getInstance(), Runnable {
                 val currentTime = System.currentTimeMillis()
-                if (currentTime >= nextEncounterTime && currentTime >= dispatchFrozenUntil && SneakyDispatch.getUnitManager()
-                        .getReadyPaladins() > 0
+                val readyPaladins = SneakyDispatch.getUnitManager().getReadyPaladins()
+                if (currentTime >= nextEncounterTime && currentTime >= dispatchFrozenUntil && (readyPaladins >= 2 || (readyPaladins == 1 && SneakyDispatch.getUnitManager()
+                        .getPaladins().size == 1))
                 ) {
                     createEncounter()
                 }
@@ -47,8 +47,7 @@ class DispatchManager {
      * @param emergency The emergency to report.
      */
     fun report(emergency: Emergency) {
-        cleanup()
-        /*val maxDistSq = SneakyDispatch.getInstance().config.getInt("emergency-radius", 50).toDouble().pow(2).toInt()
+        cleanup()/*val maxDistSq = SneakyDispatch.getInstance().config.getInt("emergency-radius", 50).toDouble().pow(2).toInt()
 
         // Prevent reporting emergencies that are too close to each other.
         for (em in emergencies.values) {
