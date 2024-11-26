@@ -13,8 +13,7 @@ unit-disband-size: 0
 ##The amount of seconds that a paladin can be offline before being removed from their unit
 offline-timeout-seconds: 300
 
-##If you are within n blocks of an ongoing emergency, your report will do nothing
-#this also controls the placeholder %sneakydispatch_nearby_emergency%
+##The block distance at which you are considered to be nearby an ongoing emergency.
 emergency-radius: 50
 
 ##The icon that is shown in the dispatch menu when an emergency has reached its cap
