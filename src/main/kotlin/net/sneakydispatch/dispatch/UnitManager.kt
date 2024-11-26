@@ -7,6 +7,9 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.player.PlayerQuitEvent
+import org.bukkit.scheduler.BukkitTask
+import java.util.*
 import kotlin.math.max
 
 class UnitManager {
@@ -100,18 +103,58 @@ class UnitManager {
 
 class UnitManagerListener : Listener {
 
+    private val offlineTimers = mutableMapOf<UUID, BukkitTask>()
+    private val offlineTimeout: Long = SneakyDispatch.getInstance().config.getLong("offline-timeout-seconds", 300) * 20
+
     @EventHandler
     fun onPlayerJoin(event: PlayerJoinEvent) {
         val player = event.player
         val unitManager = SneakyDispatch.getUnitManager()
-        val unit = unitManager.units.firstOrNull { player.uniqueId in it.playerUUIDs }
+        val unit = unitManager.getUnit(player)
+
+        val wasClockedOut = offlineTimers.remove(player.uniqueId)?.also { it.cancel() } != null
 
         if (unit != null) {
             unit.players.removeIf { it.uniqueId == player.uniqueId }
             unit.players.add(player)
+
             player.sendMessage(TextUtility.convertToComponent("&eYou have re-joined your active Paladin unit."))
         } else {
+            if (wasClockedOut) player.sendMessage(TextUtility.convertToComponent("&4You were clocked out from your paladin unit for being offline for too long."))
             unitManager.setNextDispatchTime(player)
+        }
+    }
+
+    @EventHandler
+    fun onPlayerQuit(event: PlayerQuitEvent) {
+        val player = event.player
+        val unitManager = SneakyDispatch.getUnitManager()
+        val unit = unitManager.getUnit(player)
+
+        if (unit != null) {
+            offlineTimers[player.uniqueId] = SneakyDispatch.getInstance().server.scheduler.runTaskLater(
+                SneakyDispatch.getInstance(), Runnable {
+                    unit.let {
+                        if (it.removePlayer(player)) {
+                            val displayName = SneakyDispatch.getInstance().config.getString(
+                                "paladin-name-display", "[playerName]"
+                            )!!.replace("[playerName]", player.name)
+
+                            unit.players.forEach { player ->
+                                player.sendMessage(
+                                    TextUtility.convertToComponent(
+                                        "&e${
+                                            if (SneakyDispatch.isPapiActive()) PlaceholderAPI.setPlaceholders(
+                                                player, displayName
+                                            ) else displayName
+                                        } was taken off duty for being offline for too long."
+                                    )
+                                )
+                            }
+                        }
+                    }
+                }, offlineTimeout
+            )
         }
     }
 }
