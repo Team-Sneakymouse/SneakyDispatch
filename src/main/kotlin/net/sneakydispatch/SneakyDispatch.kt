@@ -47,14 +47,14 @@ class SneakyDispatch : JavaPlugin() {
         // Parse the configs that need to be parsed on enable
         // Encounter cooldown randomizer range
         val encounterCooldownString = config.getString("encounter-cooldown") ?: "15-30"
-        val encounterCoodlownParts = encounterCooldownString.split("-").mapNotNull { it.toIntOrNull() }
+        val encounterCooldownParts = encounterCooldownString.split("-").mapNotNull { it.toIntOrNull() }
 
-        encounterCooldownLowerBoundMillis = (encounterCoodlownParts.getOrNull(0) ?: 15) * 60000L
+        encounterCooldownLowerBoundMillis = (encounterCooldownParts.getOrNull(0) ?: 15) * 60000L
         encounterCooldownUpperBoundMillis =
-            (encounterCoodlownParts.getOrNull(1)?.times(60000L)) ?: encounterCooldownLowerBoundMillis
+            (encounterCooldownParts.getOrNull(1)?.times(60000L)) ?: encounterCooldownLowerBoundMillis
 
         // Encounter cooldown randomizer range
-        val idleTimeString = config.getString("encounter-cooldown") ?: "15-30"
+        val idleTimeString = config.getString("paladin-idle-time") ?: "10-20"
         val idleTimeParts = idleTimeString.split("-").mapNotNull { it.toIntOrNull() }
 
         idleTimeLowerBoundMillis = (idleTimeParts.getOrNull(0) ?: 15) * 60000L
