@@ -178,23 +178,36 @@ class SneakyDispatch : JavaPlugin() {
 
         /**
          * Generates a random amount of milliseconds between the lower and upper bound of the encounter-cooldown config.
-         * @return The generated millisecond value
+         * If both bounds are equal, returns the lower bound directly to avoid exceptions.
+         *
+         * @return The generated millisecond value.
          */
         fun getEncounterCooldown(): Long {
-            return Random.nextDouble(
-                instance.encounterCooldownLowerBoundMillis.toDouble(),
-                instance.encounterCooldownUpperBoundMillis.toDouble()
-            ).toLong()
+            return if (instance.encounterCooldownLowerBoundMillis == instance.encounterCooldownUpperBoundMillis) {
+                instance.encounterCooldownLowerBoundMillis
+            } else {
+                Random.nextDouble(
+                    instance.encounterCooldownLowerBoundMillis.toDouble(),
+                    instance.encounterCooldownUpperBoundMillis.toDouble()
+                ).toLong()
+            }
         }
 
         /**
          * Generates a random amount of milliseconds between the lower and upper bound of the encounter-cooldown config.
-         * @return The generated millisecond value
+         * If both bounds are 0, returns 0 to avoid exceptions.
+         *
+         * @return The generated millisecond value.
          */
         fun getIdleTime(): Long {
-            return Random.nextDouble(
-                instance.idleTimeLowerBoundMillis.toDouble(), instance.idleTimeUpperBoundMillis.toDouble()
-            ).toLong()
+            return if (instance.idleTimeLowerBoundMillis == instance.idleTimeUpperBoundMillis) {
+                instance.idleTimeLowerBoundMillis
+            } else {
+                Random.nextDouble(
+                    instance.idleTimeLowerBoundMillis.toDouble(),
+                    instance.idleTimeUpperBoundMillis.toDouble()
+                ).toLong()
+            }
         }
     }
 }
