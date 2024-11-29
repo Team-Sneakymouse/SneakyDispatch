@@ -69,6 +69,7 @@ class DispatchManager {
 
         // Notify paladins about the reported emergency via commands.
         for (player in emergency.paladins) {
+            SneakyDispatch.getUnitManager().setNextDispatchTime(player)
             if (!player.isOnline) continue
             Bukkit.getServer().dispatchCommand(
                 Bukkit.getServer().consoleSender, "cast forcecast ${player.name} paladin-emergency-reported ${
