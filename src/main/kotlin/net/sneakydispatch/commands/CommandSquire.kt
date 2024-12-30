@@ -34,7 +34,7 @@ class CommandSquire : CommandBase("squire") {
      *             should be the name of the player to add to the unit.
      * @return `true` if the command was executed successfully, `false` otherwise.
      */
-    override fun execute(sender: CommandSender, commandLabel: String, args: Array<out String>?): Boolean {
+    override fun execute(sender: CommandSender, commandLabel: String, args: Array<out String>): Boolean {
         // Deny if the sender is not a player
         if (sender !is Player) {
             sender.sendMessage(TextUtility.convertToComponent("&4Error: This command can only be used by players."))

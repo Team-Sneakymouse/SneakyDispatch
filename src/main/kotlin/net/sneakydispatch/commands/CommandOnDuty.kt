@@ -36,7 +36,7 @@ class CommandOnDuty : CommandBase("onduty") {
      * @param args An optional array of player names to include in the unit.
      * @return `true` if the command was executed successfully; `false` otherwise.
      */
-    override fun execute(sender: CommandSender, commandLabel: String, args: Array<out String>?): Boolean {
+    override fun execute(sender: CommandSender, commandLabel: String, args: Array<out String>): Boolean {
         // Make a list of players from the sender (if it is a player) as well as all the player names in args
         val playersToAdd = mutableSetOf<Player>()
 
