@@ -123,7 +123,7 @@ data class Emergency(val category: EmergencyCategory, val player: Player) {
 
     /** The description of the emergency, optionally with PlaceholderAPI replacements. */
     private var description: String = if (SneakyDispatch.isPapiActive()) {
-        PlaceholderAPI.setPlaceholders(player, category.description).replace("none", "Dinky Dank")
+        PlaceholderAPI.setPlaceholders(player, category.description).replace("none", "Moonwell Pass")
     } else {
         category.description
     }
@@ -150,13 +150,13 @@ data class Emergency(val category: EmergencyCategory, val player: Player) {
                 }
 
                 description = if (SneakyDispatch.isPapiActive()) {
-                    PlaceholderAPI.setPlaceholders(player, desc).replace("none", "Dinky Dank")
+                    PlaceholderAPI.setPlaceholders(player, desc).replace("none", "Moonwell Pass")
                 } else {
                     desc
                 }
             } else {
                 description = if (SneakyDispatch.isPapiActive()) {
-                    PlaceholderAPI.setPlaceholders(player, category.description).replace("none", "Dinky Dank")
+                    PlaceholderAPI.setPlaceholders(player, category.description).replace("none", "Moonwell Pass")
                 } else {
                     category.description
                 }
