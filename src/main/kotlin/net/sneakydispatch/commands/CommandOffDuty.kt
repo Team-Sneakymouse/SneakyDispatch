@@ -32,7 +32,7 @@ class CommandOffDuty : CommandBase("offduty") {
      * @param args An optional array of arguments, currently unused.
      * @return `true` if the command was executed successfully; `false` otherwise.
      */
-    override fun execute(sender: CommandSender, commandLabel: String, args: Array<out String>?): Boolean {
+    override fun execute(sender: CommandSender, commandLabel: String, args: Array<out String>): Boolean {
         // Check if the sender is a player
         if (sender !is Player) {
             sender.sendMessage(TextUtility.convertToComponent("&4Error: Only players can use this command."))
