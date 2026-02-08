@@ -246,6 +246,10 @@ data class Emergency(val category: EmergencyCategory, val player: Player) {
 
         val lore = mutableListOf<String>()
 
+        // Compute time since the emergency was reported (in minutes).
+        val minutesSinceReport =
+            ((System.currentTimeMillis() - startTime) / 60000).coerceAtLeast(0)
+
         // Split the description into lines of a maximum length
         val descriptionLines = TextUtility.splitIntoLines(description, 30)
 
@@ -257,6 +261,9 @@ data class Emergency(val category: EmergencyCategory, val player: Player) {
         // Add the dispatched information to the lore
         lore.add("")
         lore.add("&eReports: &3$reportedAmount")
+        lore.add(
+            "&eReported: &3$minutesSinceReport minute${if (minutesSinceReport == 1L) "" else "s"} ago"
+        )
         lore.add("&eDispatched: ${dispatchColorCode}[ $dispatched / ${category.dispatchCap} ]")
         lore.add("")
 
