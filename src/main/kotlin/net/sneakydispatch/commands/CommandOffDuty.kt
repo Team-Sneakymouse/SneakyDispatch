@@ -49,6 +49,9 @@ class CommandOffDuty : CommandBase("offduty") {
         if (currentUnit.removePlayer(sender)) {
             // Provide feedback to the player
             sender.sendMessage(TextUtility.convertToComponent("&eYou have successfully gone off duty!"))
+			Bukkit.getServer().dispatchCommand(
+				Bukkit.getServer().consoleSender, "cast forcecast ${player.name} paladin-offduty"
+			)
 
             // Notify other players in the unit (if any)
             currentUnit.players.forEach { player ->
