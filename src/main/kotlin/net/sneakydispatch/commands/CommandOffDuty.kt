@@ -3,6 +3,7 @@ package net.sneakydispatch.commands
 import me.clip.placeholderapi.PlaceholderAPI
 import net.sneakydispatch.SneakyDispatch
 import net.sneakydispatch.util.TextUtility
+import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
@@ -50,7 +51,7 @@ class CommandOffDuty : CommandBase("offduty") {
             // Provide feedback to the player
             sender.sendMessage(TextUtility.convertToComponent("&eYou have successfully gone off duty!"))
 			Bukkit.getServer().dispatchCommand(
-				Bukkit.getServer().consoleSender, "cast forcecast ${player.name} paladin-offduty"
+				Bukkit.getServer().consoleSender, "cast forcecast ${sender.name} paladin-offduty"
 			)
 
             // Notify other players in the unit (if any)
