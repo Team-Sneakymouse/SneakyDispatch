@@ -125,9 +125,6 @@ class UnitManagerListener : Listener {
 			)
         } else {
             if (wasClockedOut) player.sendMessage(TextUtility.convertToComponent("&4You were clocked out from your paladin unit for being offline for too long."))
-			Bukkit.getServer().dispatchCommand(
-				Bukkit.getServer().consoleSender, "cast forcecast ${player.name} paladin-offduty"
-			)
             unitManager.setNextDispatchTime(player)
         }
     }
