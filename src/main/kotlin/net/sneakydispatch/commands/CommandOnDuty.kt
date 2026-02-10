@@ -62,6 +62,9 @@ class CommandOnDuty : CommandBase("onduty") {
             // Give feedback to all the players involved if succeeded
             playersToAdd.forEach { player ->
                 player.sendMessage(TextUtility.convertToComponent("&eYou are now on duty!"))
+				Bukkit.getServer().dispatchCommand(
+                    Bukkit.getServer().consoleSender, "cast forcecast ${player.name} paladin-onduty"
+                )
             }
         } else {
             // If the unit couldn't be added, notify the sender

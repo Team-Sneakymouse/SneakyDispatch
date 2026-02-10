@@ -3,6 +3,7 @@ package net.sneakydispatch.dispatch
 import me.clip.placeholderapi.PlaceholderAPI
 import net.sneakydispatch.SneakyDispatch
 import net.sneakydispatch.util.TextUtility
+import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -119,6 +120,9 @@ class UnitManagerListener : Listener {
             unit.players.add(player)
 
             player.sendMessage(TextUtility.convertToComponent("&eYou have re-joined your active Paladin unit."))
+			Bukkit.getServer().dispatchCommand(
+				Bukkit.getServer().consoleSender, "cast forcecast ${player.name} paladin-onduty"
+			)
         } else {
             if (wasClockedOut) player.sendMessage(TextUtility.convertToComponent("&4You were clocked out from your paladin unit for being offline for too long."))
             unitManager.setNextDispatchTime(player)
