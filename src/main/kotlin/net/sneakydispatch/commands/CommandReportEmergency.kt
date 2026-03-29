@@ -73,7 +73,7 @@ class CommandReportEmergency : CommandBase("reportemergency") {
 
         // Retrieve the emergency category based on the provided argument.
         val emergencyCategory: EmergencyCategory? =
-            SneakyDispatch.getEmergencyManager().getEmergencyCategories()[remainingArgs[0]]
+            SneakyDispatch.getEmergencyManager().getCategory(remainingArgs[0])
 
         if (emergencyCategory == null) {
             sender.sendMessage(

@@ -88,7 +88,19 @@ class EmergencyManager {
     fun getEmergencyCategories(): Map<String, EmergencyCategory> {
         return emergencyCategories
     }
+
+    /**
+     * Retrieves an emergency category by its key, performing a case-insensitive search if an
+     * exact match is not found.
+     * @param key The key of the emergency category to retrieve.
+     * @return The [EmergencyCategory] if found, otherwise null.
+     */
+    fun getCategory(key: String): EmergencyCategory? {
+        return emergencyCategories[key] ?: emergencyCategories.entries.find { it.key.equals(key, ignoreCase = true) }?.value
+    }
 }
+
+
 
 /**
  * Represents an emergency category with its associated properties.
