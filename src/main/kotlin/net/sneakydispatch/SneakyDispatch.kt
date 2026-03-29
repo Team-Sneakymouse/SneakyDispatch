@@ -80,8 +80,9 @@ class SneakyDispatch : JavaPlugin() {
 
         // Add permissions for the plugin.
         server.pluginManager.addPermission(Permission("$IDENTIFIER.*"))
-        server.pluginManager.addPermission(Permission("$IDENTIFIER.neveravailable"))
         server.pluginManager.addPermission(Permission("$IDENTIFIER.command.*"))
+        server.pluginManager.addPermission(Permission(PERMISSION_NEVERAVAILABLE))
+        server.pluginManager.addPermission(Permission(PERMISSION_ONDUTY_OTHERS))
 
         // Check if PlaceholderAPI is available and activate if present.
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
@@ -110,6 +111,10 @@ class SneakyDispatch : JavaPlugin() {
 
         /** The running instance of the plugin. */
         private lateinit var instance: SneakyDispatch
+
+		/** Permission nodes */	
+		const val PERMISSION_NEVERAVAILABLE = "$IDENTIFIER.neveravailable"
+		const val PERMISSION_ONDUTY_OTHERS = "$IDENTIFIER.command.onduty.others"
 
         /**
          * Logs a message using the plugin logger.

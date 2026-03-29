@@ -245,7 +245,7 @@ data class Unit(var players: MutableSet<Player>) {
      */
     fun isAvailable(): Boolean {
         return priority > 0 || !players.any { player ->
-            !player.isOnline || player.hasPermission("${SneakyDispatch.IDENTIFIER}.neveravailable") || (SneakyDispatch.isPapiActive() && (PlaceholderAPI.setPlaceholders(
+            !player.isOnline || player.hasPermission(SneakyDispatch.PERMISSION_NEVERAVAILABLE) || (SneakyDispatch.isPapiActive() && (PlaceholderAPI.setPlaceholders(
                 player, "%sneakycharacters_character_hastag_paladin%"
             ) == "false" || PlaceholderAPI.setPlaceholders(player, "%cmi_user_afk%") == "§6True"))
         }
