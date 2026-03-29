@@ -48,7 +48,12 @@ class CommandOnDuty : CommandBase("onduty") {
         // Add players specified in the args
         args?.forEach { playerName ->
             val player = Bukkit.getPlayer(playerName)
+			val currentUnit = SneakyDispatch.getUnitManager().getUnit(player)
             if (player != null) {
+				if (currentUnit != null) {
+					sender.sendMessage(TextUtility.convertToComponent("&4Error: Player '$playerName' is already in a unit."))
+					return false
+				}
                 playersToAdd.add(player)
             } else {
                 // If any player name is invalid, send an error message to the sender and return
