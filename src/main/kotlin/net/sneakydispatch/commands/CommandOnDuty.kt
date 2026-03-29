@@ -45,11 +45,17 @@ class CommandOnDuty : CommandBase("onduty") {
             playersToAdd.add(sender)
         }
 
+		// Check if the sender has permission to add other players to the unit
+		if (args.isNotEmpty() && sender is Player && !sender.hasPermission(SneakyDispatch.PERMISSION_ONDUTY_OTHERS)) {
+			sender.sendMessage(TextUtility.convertToComponent("&4Error: You do not have permission to add other players to the unit."))
+			return false
+		}
+
         // Add players specified in the args
         args?.forEach { playerName ->
             val player = Bukkit.getPlayer(playerName)
-			val currentUnit = SneakyDispatch.getUnitManager().getUnit(player)
             if (player != null) {
+				val currentUnit = SneakyDispatch.getUnitManager().getUnit(player)
 				if (currentUnit != null) {
 					sender.sendMessage(TextUtility.convertToComponent("&4Error: Player '$playerName' is already in a unit."))
 					return false
