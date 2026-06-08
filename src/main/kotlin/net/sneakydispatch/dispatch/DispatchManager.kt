@@ -59,7 +59,7 @@ class DispatchManager {
         emergencies[emergency.uuid] = emergency
 
         // Assign paladins to the emergency
-        val units = SneakyDispatch.getUnitManager().getUnitsOrdered()
+        val units = SneakyDispatch.getUnitManager().getAvailableUnitsOrdered()
 
         for (unit in units) {
             if (unit.players.size <= emergency.getDispatchCap() - emergency.paladins.size + if (emergency.paladins.isNotEmpty()) 0 else 1) {
