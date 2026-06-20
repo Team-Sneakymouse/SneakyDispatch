@@ -187,6 +187,29 @@ data class Emergency(val category: EmergencyCategory, val player: Player) {
     /** The paladins that this event was assigned to. */
     val paladins = mutableListOf<Player>()
 
+    /** Pre-computed display names for assigned paladins, parsed once at assignment. */
+    val paladinDisplayNames = mutableListOf<String>()
+
+    /**
+     * Assigns paladins to this emergency and caches their display names for the GUI lore.
+     */
+    fun assignPaladins(players: Collection<Player>) {
+        for (player in players) {
+            paladins.add(player)
+            paladinDisplayNames.add(formatPaladinDisplayName(player))
+        }
+    }
+
+    private fun formatPaladinDisplayName(paladin: Player): String {
+        val template = SneakyDispatch.getInstance().config.getString("paladin-name-display") ?: "[playerName]"
+        val withName = template.replace("[playerName]", paladin.name)
+        return if (SneakyDispatch.isPapiActive()) {
+            PlaceholderAPI.setPlaceholders(paladin, withName)
+        } else {
+            withName
+        }
+    }
+
     /** Checks if the emergency has expired based on its duration. */
     fun isExpired(): Boolean {
         return (System.currentTimeMillis() >= startTime + category.durationMillis)
@@ -281,23 +304,8 @@ data class Emergency(val category: EmergencyCategory, val player: Player) {
 
         // Add the names of the priority players
         lore.add("&eAssigned to:")
-        for (paladin in paladins) {
-            lore.add(
-                "&3${
-                    if (SneakyDispatch.isPapiActive()) {
-                        PlaceholderAPI.setPlaceholders(
-                            paladin,
-                            (SneakyDispatch.getInstance().config.getString("paladin-name-display") ?: "[playerName]").replace(
-                                "[playerName]", paladin.name
-                            )
-                        )
-                    } else {
-                        (SneakyDispatch.getInstance().config.getString("paladin-name-display") ?: "[playerName").replace(
-                            "[playerName]", paladin.name
-                        )
-                    }
-                }"
-            )
+        for (displayName in paladinDisplayNames) {
+            lore.add("&3$displayName")
         }
 
         meta.lore(lore.map { TextUtility.convertToComponent(it) })

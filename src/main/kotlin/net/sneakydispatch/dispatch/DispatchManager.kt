@@ -63,7 +63,7 @@ class DispatchManager {
 
         for (unit in units) {
             if (unit.players.size <= emergency.getDispatchCap() - emergency.paladins.size + if (emergency.paladins.isNotEmpty()) 0 else 1) {
-                emergency.paladins.addAll(unit.players)
+                emergency.assignPaladins(unit.players)
             }
         }
 
