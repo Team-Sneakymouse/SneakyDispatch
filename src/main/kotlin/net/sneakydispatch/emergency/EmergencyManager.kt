@@ -272,7 +272,9 @@ data class Emergency(val category: EmergencyCategory, val player: Player) {
         val meta = itemStack.itemMeta
 
         // Set custom model data, display name, and lore.
-        meta.setCustomModelData(customModelData)
+        val cmd = meta.customModelDataComponent
+        cmd.setFloats(listOf(customModelData.toFloat()))
+        meta.setCustomModelDataComponent(cmd)
         meta.displayName(
             TextUtility.convertToComponent(
                 "&a${if (delay > 0) "Local Report: " else ""}${category.name}"
