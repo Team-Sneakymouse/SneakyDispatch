@@ -131,7 +131,7 @@ class DispatchManager {
                 // Notify other paladins about the dispatch.
                 Bukkit.getServer().dispatchCommand(
                     Bukkit.getServer().consoleSender,
-						"cast forcecast ${player.name} paladin-dispatch-other \"${emergency.getName()}\" ${pl.name} ${emergency.dispatched} ${emergency.getDispatchCap()} ${emergency.category.iconMaterial} ${emergency.category.iconCustomModelData} \"${emergency.locationString}\""
+						"cast forcecast ${player.name} paladin-dispatch-other \"${emergency.getName()}\" \"${Emergency.formatPaladinDisplayName(pl)}\" ${emergency.dispatched} ${emergency.getDispatchCap()} ${emergency.category.iconMaterial} ${emergency.category.iconCustomModelData} \"${emergency.locationString}\""
                 )
             }
         }

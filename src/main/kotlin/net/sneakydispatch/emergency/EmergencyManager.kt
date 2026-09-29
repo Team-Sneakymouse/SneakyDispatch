@@ -214,16 +214,6 @@ data class Emergency(val category: EmergencyCategory, val player: Player) {
         }
     }
 
-    private fun formatPaladinDisplayName(paladin: Player): String {
-        val template = SneakyDispatch.getInstance().config.getString("paladin-name-display") ?: "[playerName]"
-        val withName = template.replace("[playerName]", paladin.name)
-        return if (SneakyDispatch.isPapiActive()) {
-            PlaceholderAPI.setPlaceholders(paladin, withName)
-        } else {
-            withName
-        }
-    }
-
     /** Checks if the emergency has expired based on its duration. */
     fun isExpired(): Boolean {
         return (System.currentTimeMillis() >= startTime + category.durationMillis)
@@ -335,4 +325,16 @@ data class Emergency(val category: EmergencyCategory, val player: Player) {
         itemStack.itemMeta = meta
         return itemStack
     }
+
+	companion object {
+		fun formatPaladinDisplayName(paladin: Player): String {
+			val template = SneakyDispatch.getInstance().config.getString("paladin-name-display") ?: "[playerName]"
+			val withName = template.replace("[playerName]", paladin.name)
+			return if (SneakyDispatch.isPapiActive()) {
+				PlaceholderAPI.setPlaceholders(paladin, withName)
+			} else {
+				withName
+			}
+		}
+	}
 }
