@@ -17,6 +17,9 @@ cap-icon-custom-model-data: 0
 ##How the name of a paladin is shown in tooltips nad command feedback. Supports placeholders, and "[playerName]" replacement.
 paladin-name-display: "%sneakycharacters_character_name_noformat%"
 
+##Resolved once when an emergency is reported (PAPI if enabled). Use [locationString] in emergency descriptions.
+location-string: "%dipp_district_name%"
+
 ##These are text replacements that occur on the emergency description if the emergency has been reported with a delay (that is to say, a scripted report rather than a manual one)
 #These are applied BEFORE placeholder replacement
 #These must be supplied as a string list, and one of the replacements will be chosen at random
@@ -91,11 +94,11 @@ delayed-tooltip-text-replacements:
 #This is visible to the players. Without proper permissions, it will be enforced.
 ##The dispatch-par represents the minimal amount of paladins that we want to see at a scene
 #This is not visible to players. It is used behind the scenes to judge whether the paladins are spread too thin
-##The descriptions support placeholder replacement. They use the reporting player for replacements, and are only parsed at the moment of reporting
+##The descriptions support placeholder replacement and [locationString]. They use the reporting player for replacements, and are only parsed at the moment of reporting
 emergencies:
     misc:
         name: "Call for Help"
-        description: "%sneakycharacters_character_name% is in need of aid in %dipp_district_name%!"
+        description: "%sneakycharacters_character_name% is in need of aid in [locationString]!"
         icon-material: "jigsaw"
         icon-custom-model-data: 1313
         dispatch-cap: 2
@@ -103,7 +106,7 @@ emergencies:
         duration-milis: 300000
     backup:
         name: "Call for Backup"
-        description: "%sneakycharacters_character_name% has called for backup in %dipp_district_name%!"
+        description: "%sneakycharacters_character_name% has called for backup in [locationString]!"
         icon-material: "jigsaw"
         icon-custom-model-data: 1339
         dispatch-cap: 999
@@ -111,7 +114,7 @@ emergencies:
         duration-milis: 600000
     crime:
         name: "Crime"
-        description: "Lawbreakers are afoot in %dipp_district_name%! Stop them!"
+        description: "Lawbreakers are afoot in [locationString]! Stop them!"
         icon-material: "jigsaw"
         icon-custom-model-data: 1197
         dispatch-cap: 2
@@ -119,7 +122,7 @@ emergencies:
         duration-milis: 300000
     fire:
         name: "Fire"
-        description: "%sneakycharacters_character_name% has reported a fire breaking out in %dipp_district_name%!"
+        description: "%sneakycharacters_character_name% has reported a fire breaking out in [locationString]!"
         icon-material: "jigsaw"
         icon-custom-model-data: 1033
         dispatch-cap: 999
@@ -127,7 +130,7 @@ emergencies:
         duration-milis: 900000
     attack:
         name: "Monster Attack"
-        description: "%sneakycharacters_character_name% has reported a Monster Attack in %dipp_district_name%! Suit up, Paladin!"
+        description: "%sneakycharacters_character_name% has reported a Monster Attack in [locationString]! Suit up, Paladin!"
         icon-material: "jigsaw"
         icon-custom-model-data: 1335
         dispatch-cap: 999
@@ -135,7 +138,7 @@ emergencies:
         duration-milis: 900000
     hazard:
         name: "Hazardous Situation"
-        description: "%sneakycharacters_character_name% has reported a hazardous situation in %dipp_district_name%! Protect the people!"
+        description: "%sneakycharacters_character_name% has reported a hazardous situation in [locationString]! Protect the people!"
         icon-material: "jigsaw"
         icon-custom-model-data: 1449
         dispatch-cap: 2
@@ -143,7 +146,7 @@ emergencies:
         duration-milis: 300000
     wildlife:
         name: "Wildlife Nuisance"
-        description: "%sneakycharacters_character_name% has reported that wild animals are disturbing our way of life in %dipp_district_name%!"
+        description: "%sneakycharacters_character_name% has reported that wild animals are disturbing our way of life in [locationString]!"
         icon-material: "jigsaw"
         icon-custom-model-data: 1148
         dispatch-cap: 2
@@ -151,7 +154,7 @@ emergencies:
         duration-milis: 300000
     mukburning:
         name: "Muk Burning"
-        description: "%sneakycharacters_character_name% has reported that peasants are burning Muk in %dipp_district_name%!"
+        description: "%sneakycharacters_character_name% has reported that peasants are burning Muk in [locationString]!"
         icon-material: "jigsaw"
         icon-custom-model-data: 1362
         dispatch-cap: 2
@@ -159,7 +162,7 @@ emergencies:
         duration-milis: 300000
     dynamite:
         name: "Dynamite Contrband"
-        description: "&e%sneakycharacters_character_name% &7has reported that peasants are throwing &4Dynamite &7in &6%dipp_district_name%!"
+        description: "&e%sneakycharacters_character_name% &7has reported that peasants are throwing &4Dynamite &7in &6[locationString]!"
         icon-material: "jigsaw"
         icon-custom-model-data: 1033
         dispatch-cap: 2
@@ -167,7 +170,7 @@ emergencies:
         duration-milis: 300000
     necromancy:
         name: "Necromancy"
-        description: "%sneakycharacters_character_name% has reported that peasants are ressurecting the dead in %dipp_district_name%!"
+        description: "%sneakycharacters_character_name% has reported that peasants are ressurecting the dead in [locationString]!"
         icon-material: "jigsaw"
         icon-custom-model-data: 1034
         dispatch-cap: 2
@@ -175,7 +178,7 @@ emergencies:
         duration-milis: 300000
     darkarts:
         name: "Dark Arts"
-        description: "%sneakycharacters_character_name% has reported that peasants have been seen performing dark rituals in %dipp_district_name%!"
+        description: "%sneakycharacters_character_name% has reported that peasants have been seen performing dark rituals in [locationString]!"
         icon-material: "jigsaw"
         icon-custom-model-data: 1035
         dispatch-cap: 2
@@ -183,7 +186,7 @@ emergencies:
         duration-milis: 300000
     pickpocket:
         name: "Pickpocketing"
-        description: "%sneakycharacters_character_name% has reported that peasants have been seen with sticky fingers in %dipp_district_name%!"
+        description: "%sneakycharacters_character_name% has reported that peasants have been seen with sticky fingers in [locationString]!"
         icon-material: "jigsaw"
         icon-custom-model-data: 1036
         dispatch-cap: 2
@@ -191,7 +194,7 @@ emergencies:
         duration-milis: 300000
     dragondust:
         name: "Dragon Dust"
-        description: "%sneakycharacters_character_name% has reported a high crime of peasants consuming dragon dust in %dipp_district_name%!"
+        description: "%sneakycharacters_character_name% has reported a high crime of peasants consuming dragon dust in [locationString]!"
         icon-material: "jigsaw"
         icon-custom-model-data: 1037
         dispatch-cap: 3
@@ -199,7 +202,7 @@ emergencies:
         duration-milis: 300000
     egging:
         name: "Egging"
-        description: "%sneakycharacters_character_name% has reported eggs being thrown in %dipp_district_name%!"
+        description: "%sneakycharacters_character_name% has reported eggs being thrown in [locationString]!"
         icon-material: "jigsaw"
         icon-custom-model-data: 1038
         dispatch-cap: 2
@@ -207,7 +210,7 @@ emergencies:
         duration-milis: 300000
     swammie:
         name: "Swammers"
-        description: "%sneakycharacters_character_name% has reported people doing swams in %dipp_district_name%!"
+        description: "%sneakycharacters_character_name% has reported people doing swams in [locationString]!"
         icon-material: "jigsaw"
         icon-custom-model-data: 1190
         dispatch-cap: 2
@@ -215,7 +218,7 @@ emergencies:
         duration-milis: 300000
     counterfeit:
         name: "Counterfeits"
-        description: "%sneakycharacters_character_name% has reported someone making fake money in %dipp_district_name%!"
+        description: "%sneakycharacters_character_name% has reported someone making fake money in [locationString]!"
         icon-material: "jigsaw"
         icon-custom-model-data: 1190
         dispatch-cap: 2
@@ -223,7 +226,7 @@ emergencies:
         duration-milis: 300000
     burglery:
         name: "Burglery"
-        description: "%sneakycharacters_character_name% has reported a burglery in %dipp_district_name%!"
+        description: "%sneakycharacters_character_name% has reported a burglery in [locationString]!"
         icon-material: "jigsaw"
         icon-custom-model-data: 1244
         dispatch-cap: 2
@@ -231,7 +234,7 @@ emergencies:
         duration-milis: 300000
     drugdeal:
         name: "Drug Deal"
-        description: "%sneakycharacters_character_name% has reported a drug deal going down in %dipp_district_name%!"
+        description: "%sneakycharacters_character_name% has reported a drug deal going down in [locationString]!"
         icon-material: "jigsaw"
         icon-custom-model-data: 1245
         dispatch-cap: 2
@@ -239,7 +242,7 @@ emergencies:
         duration-milis: 300000
     bricking:
         name: "Bricking"
-        description: "%sneakycharacters_character_name% has reported windows being broken in %dipp_district_name%!"
+        description: "%sneakycharacters_character_name% has reported windows being broken in [locationString]!"
         icon-material: "jigsaw"
         icon-custom-model-data: 1246
         dispatch-cap: 2
@@ -247,7 +250,7 @@ emergencies:
         duration-milis: 300000
     manastealing:
         name: "Mana Stealing"
-        description: "%sneakycharacters_character_name% has reported mana being stolen in %dipp_district_name%!"
+        description: "%sneakycharacters_character_name% has reported mana being stolen in [locationString]!"
         icon-material: "jigsaw"
         icon-custom-model-data: 1248
         dispatch-cap: 2
@@ -255,7 +258,7 @@ emergencies:
         duration-milis: 300000
     shoplifting:
         name: "Shoplifting"
-        description: "%sneakycharacters_character_name% has reported a shoplifting in %dipp_district_name%!"
+        description: "%sneakycharacters_character_name% has reported a shoplifting in [locationString]!"
         icon-material: "jigsaw"
         icon-custom-model-data: 1255
         dispatch-cap: 2

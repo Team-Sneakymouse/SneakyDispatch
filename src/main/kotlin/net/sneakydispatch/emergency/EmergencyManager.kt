@@ -133,47 +133,61 @@ data class Emergency(val category: EmergencyCategory, val player: Player) {
     val uuid: String = UUID.randomUUID().toString()
     val location: Location = player.location
 
-    /** The description of the emergency, optionally with PlaceholderAPI replacements. */
-    private var description: String = if (SneakyDispatch.isPapiActive()) {
-        PlaceholderAPI.setPlaceholders(player, category.description).replace("none", "Moonwell Pass")
-    } else {
-        category.description
+    /**
+     * Location text resolved once at creation from the global `location-string` config.
+     * Injected into descriptions via `[locationString]`.
+     */
+    val locationString: String = run {
+        val template = SneakyDispatch.getInstance().config.getString("location-string")
+            ?: "%dipp_district_name%"
+        if (SneakyDispatch.isPapiActive()) {
+            PlaceholderAPI.setPlaceholders(player, template).replace("none", "Moonwell Pass")
+        } else {
+            template
+        }
     }
+
+    /** The description of the emergency, optionally with PlaceholderAPI replacements. */
+    private var description: String = buildDescription(0)
 
     /** Delay before the emergency becomes active. */
     var delay: Long = 0
         set(value) {
             startTime -= delay - value
             field = value
+            description = buildDescription(value)
+        }
 
-            if (value > 0) {
-                var desc = category.description
+    /**
+     * Builds the emergency description from the category template.
+     * Applies delayed text replacements when [delayMillis] > 0, injects [locationString],
+     * then runs PlaceholderAPI if enabled.
+     */
+    private fun buildDescription(delayMillis: Long): String {
+        var desc = category.description
 
-                val config = SneakyDispatch.getInstance().config
-                val replacements = config.getConfigurationSection("delayed-tooltip-text-replacements")
-                if (replacements != null) {
-                    for (key in replacements.getKeys(false)) {
-                        val replacementList = replacements.getStringList(key)
-                        if (replacementList.isNotEmpty()) {
-                            val replacement = replacementList.random()
-                            desc = desc.replace(key, replacement)
-                        }
+        if (delayMillis > 0) {
+            val config = SneakyDispatch.getInstance().config
+            val replacements = config.getConfigurationSection("delayed-tooltip-text-replacements")
+            if (replacements != null) {
+                for (key in replacements.getKeys(false)) {
+                    val replacementList = replacements.getStringList(key)
+                    if (replacementList.isNotEmpty()) {
+                        val replacement = replacementList.random()
+                        desc = desc.replace(key, replacement)
                     }
-                }
-
-                description = if (SneakyDispatch.isPapiActive()) {
-                    PlaceholderAPI.setPlaceholders(player, desc).replace("none", "Moonwell Pass")
-                } else {
-                    desc
-                }
-            } else {
-                description = if (SneakyDispatch.isPapiActive()) {
-                    PlaceholderAPI.setPlaceholders(player, category.description).replace("none", "Moonwell Pass")
-                } else {
-                    category.description
                 }
             }
         }
+
+        desc = desc.replace("[locationString]", locationString)
+
+        return if (SneakyDispatch.isPapiActive()) {
+            PlaceholderAPI.setPlaceholders(player, desc).replace("none", "Moonwell Pass")
+        } else {
+            desc
+        }
+    }
 
     /** The start time of the emergency. */
     private var startTime: Long = System.currentTimeMillis() + delay
