@@ -1,19 +1,13 @@
-##The amount of minutes between encounters
-#The encounter conditions is checked every minute
+##The amount of minutes between mechanical dispatches
+#The mechanical dispatch is checked every minute
 #It only triggers if the amount of paladins who haven't been dispatched in {paladin-idle-time} mins is more than the open slots in ongoing emergencies
 #(ignoring paladins who logged in less than {paladin-idle-time} mins ago)
 #This cooldown is also triggered if an emergency expires without meeting its dispatch par, since this implies that they are spread too thin
-#Both values are in mins support a random value between a lower and an upper bound, separated by a dash (such as 15-30).
-paladin-idle-time: 10-20
-encounter-cooldown: 15-30
+paladin-idle-time: 20
+mechanical-dispatch-cooldown: 20
 
-##After a paladin goes off duty, if their unit is now this size or lower, then the unit will disband.
-unit-disband-size: 0
-
-##The amount of seconds that a paladin can be offline before being removed from their unit
-offline-timeout-seconds: 300
-
-##The block distance at which you are considered to be nearby an ongoing emergency.
+##If you are within n blocks of an ongoing emergency, your report will do nothing
+#this also controls the placeholder %sneakydispatch_nearby_emergency%
 emergency-radius: 50
 
 ##The icon that is shown in the dispatch menu when an emergency has reached its cap
@@ -21,7 +15,7 @@ cap-icon-material: "red_wool"
 cap-icon-custom-model-data: 0
 
 ##How the name of a paladin is shown in tooltips nad command feedback. Supports placeholders, and "[playerName]" replacement.
-paladin-name-display: "[playerName]"
+paladin-name-display: "%sneakycharacters_character_name_noformat%"
 
 ##These are text replacements that occur on the emergency description if the emergency has been reported with a delay (that is to say, a scripted report rather than a manual one)
 #These are applied BEFORE placeholder replacement
@@ -34,34 +28,67 @@ delayed-tooltip-text-replacements:
   citizen:
     - local
   "%sneakycharacters_character_name%":
-    - a local fisherman
-    - a local farmer
-    - a local miner
-    - a local store clerk
-    - a local dwarf
-    - a local baker
-    - a local sorcerer
-    - a local blacksmith
-    - a local lumberjack
-    - a local ranger
-    - a local scoundrel
-    - a local beggar
-    - a local artisan
-    - a local brewer
-    - a local chef
-    - a local cobbler
-    - a local dancer
-    - a local gardener
-    - a local musician
-    - a local painter
-    - a local poet
-    - a local sculptor
-    - a local storyteller
-    - a local tailor
-    - a local weaver
+    - A fisherman
+    - A farmer
+    - A dwarven miner
+    - A store clerk
+    - A dwarf
+    - A baker
+    - A sorcerer
+    - A blacksmith
+    - A lumberjack
+    - An old ranger
+    - A scoundrel
+    - An old beggar
+    - A artisan
+    - A brewer
+    - A chef
+    - A cobbler
+    - A dancer
+    - A gardener
+    - A musician
+    - A painter
+    - A poet
+    - A sculptor
+    - A tailor
+    - A weaver
+    - An ugly peasant
+    - A kobold
+    - A mysterious peasant
+    - Someone named Jimmy
+    - An elf
+    - A butcher
+    - A goat herder
+    - A stablehand
+    - A scholar
+    - A priest
+    - A sailor
+    - A hunter
+    - A trapper
+    - A gravedigger
+    - A herbalist
+    - An alchemist
+    - A muk trader
+    - A merchant
+    - A bard
+    - A fortune teller
+    - An offduty paladin
+    - A monk
+    - A druid
+    - A mercenary
+    - A gambler
+    - A rat catcher
+    - A mage
+    - A peasant minding their own business
+    - Another criminal
+    - Doug
+    - An off duty Paladin
+    - A known liar
+    - An untrustworthy peasant
+
 
 ##The dispatch-cap represents the maximum amount of paladins that we want to see at a scene
-#This is visible to the players. This will not be enforced, but it is used to determine the current open dispatch slots by the pacing controller.
+#This is visible to the players. Without proper permissions, it will be enforced.
 ##The dispatch-par represents the minimal amount of paladins that we want to see at a scene
 #This is not visible to players. It is used behind the scenes to judge whether the paladins are spread too thin
 ##The descriptions support placeholder replacement. They use the reporting player for replacements, and are only parsed at the moment of reporting
@@ -69,56 +96,168 @@ emergencies:
     misc:
         name: "Call for Help"
         description: "%sneakycharacters_character_name% is in need of aid in %dipp_district_name%!"
-        icon-material: "music_disc_cat"
-        icon-custom-model-data: 1
+        icon-material: "jigsaw"
+        icon-custom-model-data: 1313
         dispatch-cap: 2
         dispatch-par: 1
-        duration-millis: 600000
+        duration-milis: 300000
     backup:
         name: "Call for Backup"
         description: "%sneakycharacters_character_name% has called for backup in %dipp_district_name%!"
-        icon-material: "music_disc_cat"
-        icon-custom-model-data: 1
+        icon-material: "jigsaw"
+        icon-custom-model-data: 1339
         dispatch-cap: 999
         dispatch-par: 0
-        duration-millis: 600000
+        duration-milis: 600000
     crime:
         name: "Crime"
         description: "Lawbreakers are afoot in %dipp_district_name%! Stop them!"
-        icon-material: "music_disc_cat"
-        icon-custom-model-data: 2
+        icon-material: "jigsaw"
+        icon-custom-model-data: 1197
         dispatch-cap: 2
         dispatch-par: 2
-        duration-millis: 600000
+        duration-milis: 300000
     fire:
-        name: "Fire Fighting"
+        name: "Fire"
         description: "%sneakycharacters_character_name% has reported a fire breaking out in %dipp_district_name%!"
-        icon-material: "music_disc_cat"
-        icon-custom-model-data: 3
+        icon-material: "jigsaw"
+        icon-custom-model-data: 1033
         dispatch-cap: 999
         dispatch-par: 4
-        duration-millis: 600000
+        duration-milis: 900000
     attack:
         name: "Monster Attack"
         description: "%sneakycharacters_character_name% has reported a Monster Attack in %dipp_district_name%! Suit up, Paladin!"
-        icon-material: "music_disc_cat"
-        icon-custom-model-data: 4
+        icon-material: "jigsaw"
+        icon-custom-model-data: 1335
         dispatch-cap: 999
         dispatch-par: 4
-        duration-millis: 600000
+        duration-milis: 900000
     hazard:
         name: "Hazardous Situation"
         description: "%sneakycharacters_character_name% has reported a hazardous situation in %dipp_district_name%! Protect the people!"
-        icon-material: "music_disc_cat"
-        icon-custom-model-data: 5
+        icon-material: "jigsaw"
+        icon-custom-model-data: 1449
         dispatch-cap: 2
         dispatch-par: 1
-        duration-millis: 600000
+        duration-milis: 300000
     wildlife:
-        name: "Wildlife Control"
+        name: "Wildlife Nuisance"
         description: "%sneakycharacters_character_name% has reported that wild animals are disturbing our way of life in %dipp_district_name%!"
-        icon-material: "music_disc_cat"
-        icon-custom-model-data: 6
+        icon-material: "jigsaw"
+        icon-custom-model-data: 1148
         dispatch-cap: 2
         dispatch-par: 1
-        duration-millis: 600000
+        duration-milis: 300000
+    mukburning:
+        name: "Muk Burning"
+        description: "%sneakycharacters_character_name% has reported that peasants are burning Muk in %dipp_district_name%!"
+        icon-material: "jigsaw"
+        icon-custom-model-data: 1362
+        dispatch-cap: 2
+        dispatch-par: 1
+        duration-milis: 300000
+    dynamite:
+        name: "Dynamite Contrband"
+        description: "&e%sneakycharacters_character_name% &7has reported that peasants are throwing &4Dynamite &7in &6%dipp_district_name%!"
+        icon-material: "jigsaw"
+        icon-custom-model-data: 1033
+        dispatch-cap: 2
+        dispatch-par: 1
+        duration-milis: 300000
+    necromancy:
+        name: "Necromancy"
+        description: "%sneakycharacters_character_name% has reported that peasants are ressurecting the dead in %dipp_district_name%!"
+        icon-material: "jigsaw"
+        icon-custom-model-data: 1034
+        dispatch-cap: 2
+        dispatch-par: 1
+        duration-milis: 300000
+    darkarts:
+        name: "Dark Arts"
+        description: "%sneakycharacters_character_name% has reported that peasants have been seen performing dark rituals in %dipp_district_name%!"
+        icon-material: "jigsaw"
+        icon-custom-model-data: 1035
+        dispatch-cap: 2
+        dispatch-par: 1
+        duration-milis: 300000
+    pickpocket:
+        name: "Pickpocketing"
+        description: "%sneakycharacters_character_name% has reported that peasants have been seen with sticky fingers in %dipp_district_name%!"
+        icon-material: "jigsaw"
+        icon-custom-model-data: 1036
+        dispatch-cap: 2
+        dispatch-par: 1
+        duration-milis: 300000
+    dragondust:
+        name: "Dragon Dust"
+        description: "%sneakycharacters_character_name% has reported a high crime of peasants consuming dragon dust in %dipp_district_name%!"
+        icon-material: "jigsaw"
+        icon-custom-model-data: 1037
+        dispatch-cap: 3
+        dispatch-par: 1
+        duration-milis: 300000
+    egging:
+        name: "Egging"
+        description: "%sneakycharacters_character_name% has reported eggs being thrown in %dipp_district_name%!"
+        icon-material: "jigsaw"
+        icon-custom-model-data: 1038
+        dispatch-cap: 2
+        dispatch-par: 1
+        duration-milis: 300000
+    swammie:
+        name: "Swammers"
+        description: "%sneakycharacters_character_name% has reported people doing swams in %dipp_district_name%!"
+        icon-material: "jigsaw"
+        icon-custom-model-data: 1190
+        dispatch-cap: 2
+        dispatch-par: 1
+        duration-milis: 300000
+    counterfeit:
+        name: "Counterfeits"
+        description: "%sneakycharacters_character_name% has reported someone making fake money in %dipp_district_name%!"
+        icon-material: "jigsaw"
+        icon-custom-model-data: 1190
+        dispatch-cap: 2
+        dispatch-par: 1
+        duration-milis: 300000
+    burglery:
+        name: "Burglery"
+        description: "%sneakycharacters_character_name% has reported a burglery in %dipp_district_name%!"
+        icon-material: "jigsaw"
+        icon-custom-model-data: 1244
+        dispatch-cap: 2
+        dispatch-par: 1
+        duration-milis: 300000
+    drugdeal:
+        name: "Drug Deal"
+        description: "%sneakycharacters_character_name% has reported a drug deal going down in %dipp_district_name%!"
+        icon-material: "jigsaw"
+        icon-custom-model-data: 1245
+        dispatch-cap: 2
+        dispatch-par: 1
+        duration-milis: 300000
+    bricking:
+        name: "Bricking"
+        description: "%sneakycharacters_character_name% has reported windows being broken in %dipp_district_name%!"
+        icon-material: "jigsaw"
+        icon-custom-model-data: 1246
+        dispatch-cap: 2
+        dispatch-par: 1
+        duration-milis: 300000
+    manastealing:
+        name: "Mana Stealing"
+        description: "%sneakycharacters_character_name% has reported mana being stolen in %dipp_district_name%!"
+        icon-material: "jigsaw"
+        icon-custom-model-data: 1248
+        dispatch-cap: 2
+        dispatch-par: 1
+        duration-milis: 300000
+    shoplifting:
+        name: "Shoplifting"
+        description: "%sneakycharacters_character_name% has reported a shoplifting in %dipp_district_name%!"
+        icon-material: "jigsaw"
+        icon-custom-model-data: 1255
+        dispatch-cap: 2
+        dispatch-par: 1
+        duration-milis: 300000
