@@ -72,9 +72,7 @@ class DispatchManager {
             SneakyDispatch.getUnitManager().setNextDispatchTime(player)
             if (!player.isOnline) continue
             Bukkit.getServer().dispatchCommand(
-                Bukkit.getServer().consoleSender, "cast forcecast ${player.name} paladin-emergency-reported ${
-                    emergency.getName().replace(" ", "\u00A0")
-                } ${emergency.category.iconMaterial} ${emergency.category.iconCustomModelData}"
+                Bukkit.getServer().consoleSender, "cast forcecast ${player.name} paladin-emergency-reported \"${emergency.getName()}\" ${emergency.category.iconMaterial} ${emergency.category.iconCustomModelData}"
             )
         }
     }
