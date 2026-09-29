@@ -125,16 +125,13 @@ class DispatchManager {
                 // Dispatch the player to the emergency location.
                 Bukkit.getServer().dispatchCommand(
                     Bukkit.getServer().consoleSender,
-                    "cast forcecast ${player.name} paladin-dispatch-self ${floor(emergency.location.x)} ${
-                        floor(emergency.location.y)
-                    } ${floor(emergency.location.z)}"
+                    "cast forcecast ${player.name} paladin-dispatch-self ${floor(emergency.location.x)} ${floor(emergency.location.y)} ${floor(emergency.location.z)}"
                 )
             } else {
                 // Notify other paladins about the dispatch.
                 Bukkit.getServer().dispatchCommand(
-                    Bukkit.getServer().consoleSender, "cast forcecast ${player.name} paladin-dispatch-other ${
-                        emergency.getName().replace(" ", "\u00A0")
-                    } ${pl.name} ${emergency.dispatched} ${emergency.getDispatchCap()} ${emergency.category.iconMaterial} ${emergency.category.iconCustomModelData}"
+                    Bukkit.getServer().consoleSender,
+						"cast forcecast ${player.name} paladin-dispatch-other \"${emergency.getName()}\" ${pl.name} ${emergency.dispatched} ${emergency.getDispatchCap()} ${emergency.category.iconMaterial} ${emergency.category.iconCustomModelData}"
                 )
             }
         }
