@@ -91,6 +91,7 @@ publishing {
 				name.set("SneakyDispatch")
 				description.set("Paper plugin for dispatching Paladins on the LoM2 server")
 				url.set("https://github.com/Team-Sneakymouse/SneakyDispatch")
+				properties.put("sneakyrp.deployment.type", "paper-plugin")
 				scm {
 					url.set("https://github.com/Team-Sneakymouse/SneakyDispatch")
 					connection.set("scm:git:https://github.com/Team-Sneakymouse/SneakyDispatch.git")
