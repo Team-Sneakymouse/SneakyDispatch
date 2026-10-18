@@ -2,7 +2,6 @@ package net.sneakydispatch
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion
 import org.bukkit.entity.Player
-import org.jetbrains.annotations.NotNull
 import kotlin.math.pow
 
 /**
@@ -14,7 +13,7 @@ class Placeholders : PlaceholderExpansion() {
      * Gets the identifier for this expansion, which is the plugin's identifier.
      * @return The identifier as a [String].
      */
-    override fun getIdentifier(): @NotNull String {
+    override fun getIdentifier(): String {
         return SneakyDispatch.IDENTIFIER
     }
 
@@ -22,7 +21,7 @@ class Placeholders : PlaceholderExpansion() {
      * Gets the author of this expansion.
      * @return The author(s) as a [String].
      */
-    override fun getAuthor(): @NotNull String {
+    override fun getAuthor(): String {
         return SneakyDispatch.AUTHORS
     }
 
@@ -30,7 +29,7 @@ class Placeholders : PlaceholderExpansion() {
      * Gets the version of this expansion.
      * @return The version as a [String].
      */
-    override fun getVersion(): @NotNull String {
+    override fun getVersion(): String {
         return SneakyDispatch.VERSION
     }
 

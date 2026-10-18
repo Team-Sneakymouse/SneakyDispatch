@@ -31,12 +31,14 @@ repositories {
 	}
 	mavenCentral()
 	maven("https://repo.papermc.io/repository/maven-public/")
+	maven("https://maven.sneakyrp.com/releases")
 }
 
 dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib:2.3.0")
 	compileOnly("io.papermc.paper:paper-api:26.2.build.+")
 	compileOnly("me.clip:placeholderapi:2.11.5")
+	compileOnly("io.github.team-sneakymouse:sneakyutils:2026.10.18-4b5831b0b997")
 }
 
 tasks.processResources {

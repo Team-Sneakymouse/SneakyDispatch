@@ -2,7 +2,7 @@ package net.sneakydispatch.emergency
 
 import me.clip.placeholderapi.PlaceholderAPI
 import net.sneakydispatch.SneakyDispatch
-import net.sneakydispatch.util.TextUtility
+import com.sneakyutils.util.TextUtility
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.NamespacedKey

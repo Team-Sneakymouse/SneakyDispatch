@@ -3,7 +3,7 @@ package net.sneakydispatch.commands
 import net.sneakydispatch.SneakyDispatch
 import net.sneakydispatch.emergency.Emergency
 import net.sneakydispatch.emergency.EmergencyCategory
-import net.sneakydispatch.util.TextUtility
+import com.sneakyutils.util.TextUtility
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player

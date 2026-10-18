@@ -1,7 +1,7 @@
 package net.sneakydispatch.dispatch
 
 import net.sneakydispatch.SneakyDispatch
-import net.sneakydispatch.util.TextUtility
+import com.sneakyutils.util.TextUtility
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
