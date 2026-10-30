@@ -6,6 +6,7 @@ import kotlin.math.pow
 
 /**
  * A class that handles custom placeholders for the SneakyDispatch plugin, integrating with PlaceholderAPI.
+ * Duty state is read through these by other plugins (e.g. SneakySecrets); keep placeholder names and values stable.
  */
 class Placeholders : PlaceholderExpansion() {
 
