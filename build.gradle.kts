@@ -60,6 +60,7 @@ tasks.jar {
 
 sourceSets {
 	main {
+		// Non-standard resources dir (src/resources); keep in sync if files move.
 		java.srcDir("src/main/kotlin")
 		resources.srcDir(file("src/resources"))
 	}
