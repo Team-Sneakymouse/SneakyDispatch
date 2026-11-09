@@ -53,8 +53,8 @@ class Placeholders : PlaceholderExpansion() {
 
         return when (placeholder) {
             "paladins_on_duty" -> {
-                // Retrieves the number of paladins on duty.
-                SneakyDispatch.getUnitManager().getPaladins().size.toString()
+                // Number of unit members currently playing a paladin character.
+                SneakyDispatch.getUnitManager().getOnDutyPaladins().size.toString()
             }
 
             "paladins_available" -> {
@@ -100,11 +100,14 @@ class Placeholders : PlaceholderExpansion() {
             }
 
             "on_duty" -> {
-                SneakyDispatch.getUnitManager().isInUnit(player).toString()
+                // False while on a non-paladin character, even though unit membership is kept.
+                SneakyDispatch.getUnitManager().isOnDuty(player).toString()
             }
 
             "unit" -> {
-                SneakyDispatch.getUnitManager().getUnit(player)?.players?.joinToString("|") { it.name } ?: "none"
+                val unitManager = SneakyDispatch.getUnitManager()
+                if (!unitManager.isOnDuty(player)) "none"
+                else unitManager.getUnit(player)?.players?.joinToString("|") { it.name } ?: "none"
             }
 
             else -> {
