@@ -2,6 +2,7 @@ package net.sneakydispatch.dispatch
 
 import me.clip.placeholderapi.PlaceholderAPI
 import net.sneakydispatch.SneakyDispatch
+import com.sneakyutils.util.PlaceholderUtil
 import com.sneakyutils.util.TextUtility
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -89,6 +90,25 @@ class UnitManager {
      * */
     fun isInUnit(player: Player): Boolean {
         return units.any { player.uniqueId in it.playerUUIDs }
+    }
+
+    /**
+     * Public duty state: in a unit AND currently playing a paladin character.
+     * Unit membership is untouched; switching back to a paladin restores duty.
+     */
+    fun isOnDuty(player: Player): Boolean {
+        return isInUnit(player) && isOnPaladinCharacter(player)
+    }
+
+    /** On-duty paladins who are currently playing a paladin character. */
+    fun getOnDutyPaladins(): List<Player> {
+        return getPaladins().filter { isOnPaladinCharacter(it) }
+    }
+
+    /** SCM paladin tag via PAPI; false when PAPI or SCM is unavailable. Server thread only. */
+    fun isOnPaladinCharacter(player: Player): Boolean {
+        return PlaceholderUtil.setPlaceholders(player, "%sneakycharacters_character_hastag_paladin%")
+            .equals("true", ignoreCase = true)
     }
 
     /**
