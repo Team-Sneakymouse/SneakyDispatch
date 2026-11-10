@@ -42,6 +42,12 @@ object SquireBadge {
         }
     }
 
+    /**
+     * Whether the badge makes the player count as on duty (UnitManager.isOnDuty, %sneakydispatch_on_duty%):
+     * squire-badge.counts-as-on-duty (default true) and carrying one.
+     */
+    fun onDuty(player: Player): Boolean = cfg().getBoolean("squire-badge.counts-as-on-duty", true) && has(player)
+
     /** Badge holders who aren't paladins on a unit and aren't AFK. */
     private fun squires(): List<Player> {
         val units = SneakyDispatch.getUnitManager()

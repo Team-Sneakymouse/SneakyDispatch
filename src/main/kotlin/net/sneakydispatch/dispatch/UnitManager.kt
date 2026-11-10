@@ -1,5 +1,6 @@
 package net.sneakydispatch.dispatch
 
+import net.sneakydispatch.squire.SquireBadge
 import me.clip.placeholderapi.PlaceholderAPI
 import net.sneakydispatch.SneakyDispatch
 import com.sneakyutils.util.PlaceholderUtil
@@ -93,10 +94,16 @@ class UnitManager {
     }
 
     /**
-     * Public duty state: in a unit AND currently playing a paladin character.
-     * Unit membership is untouched; switching back to a paladin restores duty.
+     * Public duty state: in a unit AND currently playing a paladin character, or carrying a Paladin Squire Badge
+     * (Rob, 2026-11-10: badge holders count as on duty everywhere %sneakydispatch_on_duty% is read; turn off with
+     * squire-badge.counts-as-on-duty). Unit membership is untouched; switching back to a paladin restores duty.
      */
     fun isOnDuty(player: Player): Boolean {
+        return isPaladinOnDuty(player) || SquireBadge.onDuty(player)
+    }
+
+    /** On duty as a paladin in a unit, not counting squire badges (%sneakydispatch_paladin_on_duty%). */
+    fun isPaladinOnDuty(player: Player): Boolean {
         return isInUnit(player) && isOnPaladinCharacter(player)
     }
 
