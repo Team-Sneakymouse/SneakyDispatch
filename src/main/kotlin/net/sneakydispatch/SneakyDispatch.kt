@@ -78,6 +78,7 @@ class SneakyDispatch : JavaPlugin() {
         // Register event listeners.
         server.pluginManager.registerEvents(EmergencyInventoryListener(), this)
         server.pluginManager.registerEvents(UnitManagerListener(), this)
+        server.pluginManager.registerEvents(net.sneakydispatch.squire.SquireHitListener(), this)
 
         // Add permissions for the plugin.
         server.pluginManager.addPermission(Permission("$IDENTIFIER.*"))
