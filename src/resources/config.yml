@@ -264,7 +264,7 @@ emergencies:
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
-##Paladin Squire Badge (licenses/LICENSES.md #8): anyone carrying a SneakyRacials license of this type who isn't in a
+##Paladin Squire Badge (licenses/LICENSES.md #8): anyone carrying a SneakyWishes license of this type who isn't in a
 #paladin unit hears about every emergency report and gets a [Respond] button in chat (/squirerespond), which sends them
 #there like a dispatched paladin. The badge voids when a wanted poster goes up on its holder (SneakyWantedPosters).
 #Commands run from the console: %player%, %name% (the emergency, quoted), %material%, %cmd%, %x% %y% %z%, %location% (quoted).

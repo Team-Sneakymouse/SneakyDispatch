@@ -1,6 +1,6 @@
 package net.sneakydispatch.squire
 
-import com.sneakymouse.sneakyracials.SneakyRacialsApi
+import com.sneakymouse.sneakywishes.SneakyWishesApi
 import com.sneakyutils.util.TextUtility
 import me.clip.placeholderapi.PlaceholderAPI
 import net.kyori.adventure.text.Component
@@ -13,7 +13,7 @@ import org.bukkit.entity.Player
 import kotlin.math.floor
 
 /**
- * The Paladin Squire Badge (licenses/LICENSES.md #8): a SneakyRacials license of type `squire-badge.license-type`
+ * The Paladin Squire Badge (licenses/LICENSES.md #8): a SneakyWishes license of type `squire-badge.license-type`
  * (default `squire`). Anyone carrying one who isn't in a paladin unit hears about every emergency report and can click
  * [Respond] in chat (`/squirerespond <id>`), which paths them to it like a dispatched paladin. The badge voids when a
  * wanted poster goes up on its holder (SneakyWantedPosters does that).
@@ -32,9 +32,9 @@ object SquireBadge {
 
     fun type(): String = cfg().getString("squire-badge.license-type", "squire") ?: "squire"
 
-    /** Whether the player carries a squire badge (false if SneakyRacials is off). */
+    /** Whether the player carries a squire badge (false if SneakyWishes is off). */
     fun has(player: Player): Boolean {
-        if (!enabled() || !Bukkit.getPluginManager().isPluginEnabled("SneakyRacials")) return false
+        if (!enabled() || !Bukkit.getPluginManager().isPluginEnabled("SneakyWishes")) return false
         return try {
             Racials.has(player, type())
         } catch (e: LinkageError) {
@@ -121,8 +121,8 @@ object SquireBadge {
 
     private fun msg(key: String, def: String): String = cfg().getString("squire-badge.messages.$key", def) ?: def
 
-    /** SneakyRacials' classes are only touched here, after the plugin check. */
+    /** SneakyWishes' classes are only touched here, after the plugin check. */
     private object Racials {
-        fun has(p: Player, type: String): Boolean = SneakyRacialsApi.hasLicense(p, type)
+        fun has(p: Player, type: String): Boolean = SneakyWishesApi.hasLicense(p, type)
     }
 }
