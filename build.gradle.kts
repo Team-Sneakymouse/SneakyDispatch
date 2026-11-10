@@ -38,7 +38,7 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib:2.3.0")
 	compileOnly("io.papermc.paper:paper-api:26.2.build.+")
 	compileOnly("me.clip:placeholderapi:2.11.5")
-	compileOnly("io.github.team-sneakymouse:sneakyutils:2026.11.09-aa63618e063b")
+	compileOnly("io.github.team-sneakymouse:sneakyutils:2026.11.10-7e1262ebd376")
 }
 
 tasks.processResources {

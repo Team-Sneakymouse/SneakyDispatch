@@ -1,6 +1,7 @@
 package net.sneakydispatch.dispatch
 
 import net.sneakydispatch.SneakyDispatch
+import com.sneakyutils.util.DisplayOnlyInventoryHolder
 import com.sneakyutils.util.TextUtility
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -10,7 +11,6 @@ import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryInteractEvent
 import org.bukkit.inventory.Inventory
-import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 
@@ -18,8 +18,9 @@ import org.bukkit.persistence.PersistentDataType
  * Custom inventory holder for managing the emergency dispatch GUI.
  * This class creates and populates the inventory with emergency information,
  * allowing players to interact with the inventory to dispatch themselves to emergencies.
+ * Display-only: GUI icons, so SneakyItems skips scanning this inventory on open.
  */
-class EmergencyInventoryHolder : InventoryHolder {
+class EmergencyInventoryHolder : DisplayOnlyInventoryHolder {
 
     /** The inventory instance associated with this holder. */
     private lateinit var inventory: Inventory
