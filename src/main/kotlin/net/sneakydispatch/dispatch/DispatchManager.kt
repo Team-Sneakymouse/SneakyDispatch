@@ -2,6 +2,7 @@ package net.sneakydispatch.dispatch
 
 import net.sneakydispatch.SneakyDispatch
 import net.sneakydispatch.emergency.Emergency
+import net.sneakydispatch.squire.SquireBadge
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import kotlin.math.floor
@@ -75,6 +76,9 @@ class DispatchManager {
                 Bukkit.getServer().consoleSender, "cast forcecast ${player.name} paladin-emergency-reported \"${emergency.getName()}\" ${emergency.category.iconMaterial} ${emergency.category.iconCustomModelData}"
             )
         }
+
+        // Paladin Squire Badge holders hear about it too (licenses/LICENSES.md #8).
+        SquireBadge.reported(emergency)
     }
 
     /**

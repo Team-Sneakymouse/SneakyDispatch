@@ -15,3 +15,7 @@ dependencies:
     PlaceholderAPI:
       load: BEFORE
       required: false
+    SneakyRacials:
+      load: BEFORE
+      required: false
+      join-classpath: true

@@ -39,6 +39,8 @@ dependencies {
 	compileOnly("io.papermc.paper:paper-api:26.2.build.+")
 	compileOnly("me.clip:placeholderapi:2.11.5")
 	compileOnly("io.github.team-sneakymouse:sneakyutils:2026.11.10-7e1262ebd376")
+	// soft: Paladin Squire Badge license (SneakyRacialsApi.hasLicense)
+	compileOnly("io.github.team-sneakymouse:sneakyracials:2026.11.10-6525e7773cc1") { isTransitive = false }
 }
 
 tasks.processResources {
