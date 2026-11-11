@@ -16,7 +16,8 @@ import kotlin.math.floor
  * The Paladin Squire Badge (licenses/LICENSES.md #8): a SneakyWishes license of type `squire-badge.license-type`
  * (default `squire`). Anyone carrying one who isn't in a paladin unit hears about every emergency report and can click
  * [Respond] in chat (`/squirerespond <id>`), which paths them to it like a dispatched paladin. The badge voids when a
- * wanted poster goes up on its holder (SneakyWantedPosters does that).
+ * wanted poster goes up on its holder (SneakyWantedPosters does that), or on the 6th strike for hitting players
+ * (SquireHitListener, one strike per 30 s at most).
  *
  * Config (all optional, defaults below): `squire-badge.enabled`, `.license-type`, `.reported-commands`,
  * `.dispatch-commands`, `.messages.*`. Commands run from the console; %player%, %name% (emergency, quoted with "),
@@ -41,6 +42,12 @@ object SquireBadge {
             false
         }
     }
+
+    /**
+     * Whether the badge makes the player count as on duty (UnitManager.isOnDuty, %sneakydispatch_on_duty%):
+     * squire-badge.counts-as-on-duty (default true) and carrying one.
+     */
+    fun onDuty(player: Player): Boolean = cfg().getBoolean("squire-badge.counts-as-on-duty", true) && has(player)
 
     /** Badge holders who aren't paladins on a unit and aren't AFK. */
     private fun squires(): List<Player> {

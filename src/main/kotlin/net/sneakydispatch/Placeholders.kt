@@ -1,5 +1,6 @@
 package net.sneakydispatch
 
+import net.sneakydispatch.squire.SquireBadge
 import me.clip.placeholderapi.expansion.PlaceholderExpansion
 import org.bukkit.entity.Player
 import kotlin.math.pow
@@ -100,8 +101,18 @@ class Placeholders : PlaceholderExpansion() {
             }
 
             "on_duty" -> {
-                // False while on a non-paladin character, even though unit membership is kept.
+                // False while on a non-paladin character, even though unit membership is kept; true with a squire badge.
                 SneakyDispatch.getUnitManager().isOnDuty(player).toString()
+            }
+
+            "paladin_on_duty" -> {
+                // On duty as a paladin in a unit; squire badges don't count.
+                SneakyDispatch.getUnitManager().isPaladinOnDuty(player).toString()
+            }
+
+            "squire" -> {
+                // Carrying a Paladin Squire Badge.
+                SquireBadge.has(player).toString()
             }
 
             "unit" -> {
