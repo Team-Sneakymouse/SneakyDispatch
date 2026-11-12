@@ -18,7 +18,7 @@ cap-icon-custom-model-data: 0
 paladin-name-display: "%sneakycharacters_character_name_noformat%"
 
 ##Resolved once when an emergency is reported (PAPI if enabled). Use [locationString] in emergency descriptions.
-location-string: "%dipp_district_name%"
+location-string: "%sneakyplots_district_name%"
 
 ##These are text replacements that occur on the emergency description if the emergency has been reported with a delay (that is to say, a scripted report rather than a manual one)
 #These are applied BEFORE placeholder replacement
