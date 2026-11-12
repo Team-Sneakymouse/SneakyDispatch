@@ -100,7 +100,7 @@ emergencies:
         name: "Call for Help"
         description: "%sneakycharacters_character_name% is in need of aid in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 1313
+        icon-custom-model-data: 14207
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -108,7 +108,7 @@ emergencies:
         name: "Call for Backup"
         description: "%sneakycharacters_character_name% has called for backup in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 1339
+        icon-custom-model-data: 14208
         dispatch-cap: 999
         dispatch-par: 0
         duration-milis: 600000
@@ -116,7 +116,7 @@ emergencies:
         name: "Crime"
         description: "Lawbreakers are afoot in [locationString]! Stop them!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 1197
+        icon-custom-model-data: 14209
         dispatch-cap: 2
         dispatch-par: 2
         duration-milis: 300000
@@ -124,7 +124,7 @@ emergencies:
         name: "Fire"
         description: "%sneakycharacters_character_name% has reported a fire breaking out in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 1033
+        icon-custom-model-data: 14210
         dispatch-cap: 999
         dispatch-par: 4
         duration-milis: 900000
@@ -132,7 +132,7 @@ emergencies:
         name: "Monster Attack"
         description: "%sneakycharacters_character_name% has reported a Monster Attack in [locationString]! Suit up, Paladin!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 1335
+        icon-custom-model-data: 14211
         dispatch-cap: 999
         dispatch-par: 4
         duration-milis: 900000
@@ -140,7 +140,7 @@ emergencies:
         name: "Hazardous Situation"
         description: "%sneakycharacters_character_name% has reported a hazardous situation in [locationString]! Protect the people!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 1449
+        icon-custom-model-data: 14212
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -148,7 +148,7 @@ emergencies:
         name: "Wildlife Nuisance"
         description: "%sneakycharacters_character_name% has reported that wild animals are disturbing our way of life in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 1148
+        icon-custom-model-data: 14213
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -156,7 +156,7 @@ emergencies:
         name: "Muk Burning"
         description: "%sneakycharacters_character_name% has reported that peasants are burning Muk in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 1362
+        icon-custom-model-data: 14214
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -164,7 +164,7 @@ emergencies:
         name: "Dynamite Contrband"
         description: "&e%sneakycharacters_character_name% &7has reported that peasants are throwing &4Dynamite &7in &6[locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 1033
+        icon-custom-model-data: 14215
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -172,7 +172,7 @@ emergencies:
         name: "Necromancy"
         description: "%sneakycharacters_character_name% has reported that peasants are ressurecting the dead in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 1034
+        icon-custom-model-data: 14216
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -180,7 +180,7 @@ emergencies:
         name: "Dark Arts"
         description: "%sneakycharacters_character_name% has reported that peasants have been seen performing dark rituals in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 1035
+        icon-custom-model-data: 14217
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -188,7 +188,7 @@ emergencies:
         name: "Pickpocketing"
         description: "%sneakycharacters_character_name% has reported that peasants have been seen with sticky fingers in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 1036
+        icon-custom-model-data: 14218
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -196,7 +196,7 @@ emergencies:
         name: "Dragon Dust"
         description: "%sneakycharacters_character_name% has reported a high crime of peasants consuming dragon dust in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 1037
+        icon-custom-model-data: 14219
         dispatch-cap: 3
         dispatch-par: 1
         duration-milis: 300000
@@ -204,7 +204,7 @@ emergencies:
         name: "Egging"
         description: "%sneakycharacters_character_name% has reported eggs being thrown in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 1038
+        icon-custom-model-data: 14220
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -212,7 +212,7 @@ emergencies:
         name: "Swammers"
         description: "%sneakycharacters_character_name% has reported people doing swams in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 1190
+        icon-custom-model-data: 14221
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -220,7 +220,7 @@ emergencies:
         name: "Counterfeits"
         description: "%sneakycharacters_character_name% has reported someone making fake money in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 1190
+        icon-custom-model-data: 14222
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -228,7 +228,7 @@ emergencies:
         name: "Burglery"
         description: "%sneakycharacters_character_name% has reported a burglery in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 1244
+        icon-custom-model-data: 14223
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -236,7 +236,7 @@ emergencies:
         name: "Drug Deal"
         description: "%sneakycharacters_character_name% has reported a drug deal going down in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 1245
+        icon-custom-model-data: 14224
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -244,7 +244,7 @@ emergencies:
         name: "Bricking"
         description: "%sneakycharacters_character_name% has reported windows being broken in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 1246
+        icon-custom-model-data: 14225
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -252,7 +252,7 @@ emergencies:
         name: "Mana Stealing"
         description: "%sneakycharacters_character_name% has reported mana being stolen in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 1248
+        icon-custom-model-data: 14226
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -260,7 +260,87 @@ emergencies:
         name: "Shoplifting"
         description: "%sneakycharacters_character_name% has reported a shoplifting in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 1255
+        icon-custom-model-data: 14227
+        dispatch-cap: 2
+        dispatch-par: 1
+        duration-milis: 300000
+    graffiti:
+        name: "Graffiti"
+        description: "%sneakycharacters_character_name% has reported graffiti in [locationString]!"
+        icon-material: "jigsaw"
+        icon-custom-model-data: 14228
+        dispatch-cap: 2
+        dispatch-par: 1
+        duration-milis: 300000
+    vending:
+        name: "Vending Machine Shaking"
+        description: "%sneakycharacters_character_name% has reported someone shaking a vending machine in [locationString]!"
+        icon-material: "jigsaw"
+        icon-custom-model-data: 14229
+        dispatch-cap: 2
+        dispatch-par: 1
+        duration-milis: 300000
+    toiletpaper:
+        name: "Toilet Papering"
+        description: "%sneakycharacters_character_name% has reported a house being toilet papered in [locationString]!"
+        icon-material: "jigsaw"
+        icon-custom-model-data: 14230
+        dispatch-cap: 2
+        dispatch-par: 1
+        duration-milis: 300000
+    wantedposter:
+        name: "Wanted Poster Torn Down"
+        description: "%sneakycharacters_character_name% has reported someone tearing down a wanted poster in [locationString]!"
+        icon-material: "jigsaw"
+        icon-custom-model-data: 14231
+        dispatch-cap: 2
+        dispatch-par: 1
+        duration-milis: 300000
+    cctv:
+        name: "Security Camera Smashed"
+        description: "%sneakycharacters_character_name% has reported someone smashing a security camera in [locationString]!"
+        icon-material: "jigsaw"
+        icon-custom-model-data: 14232
+        dispatch-cap: 2
+        dispatch-par: 1
+        duration-milis: 300000
+    hacking:
+        name: "Computer Hacked"
+        description: "%sneakycharacters_character_name% has reported someone hacking a computer in [locationString]!"
+        icon-material: "jigsaw"
+        icon-custom-model-data: 14233
+        dispatch-cap: 2
+        dispatch-par: 1
+        duration-milis: 300000
+    servercrash:
+        name: "Server Taken Down"
+        description: "%sneakycharacters_character_name% has reported someone crashing a server in [locationString]!"
+        icon-material: "jigsaw"
+        icon-custom-model-data: 14234
+        dispatch-cap: 2
+        dispatch-par: 1
+        duration-milis: 300000
+    lockpicking:
+        name: "Lockpicking"
+        description: "%sneakycharacters_character_name% has reported someone picking a lock in [locationString]!"
+        icon-material: "jigsaw"
+        icon-custom-model-data: 14235
+        dispatch-cap: 2
+        dispatch-par: 1
+        duration-milis: 300000
+    stinkbomb:
+        name: "Stink Bomb"
+        description: "%sneakycharacters_character_name% has reported a stink bomb going off in [locationString]!"
+        icon-material: "jigsaw"
+        icon-custom-model-data: 14236
+        dispatch-cap: 2
+        dispatch-par: 1
+        duration-milis: 300000
+    bribery:
+        name: "Bribery"
+        description: "%sneakycharacters_character_name% has reported someone trying to bribe a witness in [locationString]!"
+        icon-material: "jigsaw"
+        icon-custom-model-data: 14237
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
