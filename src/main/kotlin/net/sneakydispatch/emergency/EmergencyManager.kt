@@ -139,7 +139,7 @@ data class Emergency(val category: EmergencyCategory, val player: Player) {
      */
     val locationString: String = run {
         val template = SneakyDispatch.getInstance().config.getString("location-string")
-            ?: "%dipp_district_name%"
+            ?: "%sneakyplots_district_name%"
         if (SneakyDispatch.isPapiActive()) {
             PlaceholderAPI.setPlaceholders(player, template).replace("none", "Moonwell Pass")
         } else {
