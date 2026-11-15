@@ -348,12 +348,13 @@ emergencies:
 ##Paladin Squire Badge (licenses/LICENSES.md #8): anyone carrying a SneakyWishes license of this type who isn't in a
 #paladin unit hears about every emergency report and gets a [Respond] button in chat (/squirerespond), which sends them
 #there like a dispatched paladin. The badge voids when a wanted poster goes up on its holder (SneakyWantedPosters).
-#Commands run from the console: %player%, %name% (the emergency, quoted), %material%, %cmd%, %x% %y% %z%, %location% (quoted).
+#Commands run from the console: %player%, %name% (the emergency, quoted), %material%, %item-model% (icon item model,
+#quoted; "" for none), %cmd% (legacy integer custom model data), %x% %y% %z%, %location% (quoted).
 squire-badge:
   enabled: true
   license-type: squire
   reported-commands:
-    - "cast forcecast %player% squire-emergency-reported %name% %material% %cmd%"
+    - "cast forcecast %player% squire-emergency-reported %name% %material% %item-model%"
   dispatch-commands:
     - "cast forcecast %player% squire-dispatch-self %x% %y% %z% %location%"
   messages:

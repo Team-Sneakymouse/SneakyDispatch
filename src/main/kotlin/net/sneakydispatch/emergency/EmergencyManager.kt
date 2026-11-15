@@ -143,7 +143,13 @@ data class EmergencyCategory(
     val dispatchCap: Int,
     val dispatchPar: Int,
     val durationMillis: Int
-)
+) {
+    /**
+     * [iconItemModel] as a quoted MagicSpells cast argument (`"ns:key"`, or `""` for none). Quoted so an empty value
+     * still occupies its argument slot instead of shifting the arguments after it.
+     */
+    val iconItemModelArg: String get() = "\"${iconItemModel?.toString() ?: ""}\""
+}
 
 /**
  * Represents an individual emergency associated with a player.
