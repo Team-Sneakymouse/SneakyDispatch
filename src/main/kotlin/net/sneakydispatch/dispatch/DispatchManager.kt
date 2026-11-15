@@ -73,7 +73,7 @@ class DispatchManager {
             SneakyDispatch.getUnitManager().setNextDispatchTime(player)
             if (!player.isOnline) continue
             Bukkit.getServer().dispatchCommand(
-                Bukkit.getServer().consoleSender, "cast forcecast ${player.name} paladin-emergency-reported \"${emergency.getName()}\" ${emergency.category.iconMaterial} ${emergency.category.iconCustomModelData}"
+                Bukkit.getServer().consoleSender, "cast forcecast ${player.name} paladin-emergency-reported \"${emergency.getName()}\" ${emergency.category.iconMaterial} ${emergency.category.iconItemModelArg}"
             )
         }
 
@@ -133,7 +133,7 @@ class DispatchManager {
                 // Notify other paladins about the dispatch.
                 Bukkit.getServer().dispatchCommand(
                     Bukkit.getServer().consoleSender,
-						"cast forcecast ${player.name} paladin-dispatch-other \"${emergency.getName()}\" \"${Emergency.formatPaladinDisplayName(pl)}\" ${emergency.dispatched} ${emergency.getDispatchCap()} ${emergency.category.iconMaterial} ${emergency.category.iconCustomModelData} \"${emergency.locationString}\""
+						"cast forcecast ${player.name} paladin-dispatch-other \"${emergency.getName()}\" \"${Emergency.formatPaladinDisplayName(pl)}\" ${emergency.dispatched} ${emergency.getDispatchCap()} ${emergency.category.iconMaterial} ${emergency.category.iconItemModelArg} \"${emergency.locationString}\""
                 )
             }
         }

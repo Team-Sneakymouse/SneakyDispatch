@@ -21,7 +21,8 @@ import kotlin.math.floor
  *
  * Config (all optional, defaults below): `squire-badge.enabled`, `.license-type`, `.reported-commands`,
  * `.dispatch-commands`, `.messages.*`. Commands run from the console; %player%, %name% (emergency, quoted with "),
- * %material%, %cmd%, %x% %y% %z%, %location%.
+ * %material%, %item-model% (icon item model, quoted; "" for none), %cmd% (legacy int custom model data), %x% %y% %z%,
+ * %location%.
  */
 object SquireBadge {
 
@@ -66,7 +67,7 @@ object SquireBadge {
         val list = squires()
         if (list.isEmpty()) return
         val reportedCommands = cfg().getStringList("squire-badge.reported-commands").ifEmpty {
-            listOf("cast forcecast %player% squire-emergency-reported %name% %material% %cmd%")
+            listOf("cast forcecast %player% squire-emergency-reported %name% %material% %item-model%")
         }
         for (p in list) {
             run(reportedCommands, p, emergency)
@@ -110,7 +111,7 @@ object SquireBadge {
             if (!paladin.isOnline) continue
             Bukkit.getServer().dispatchCommand(
                 Bukkit.getServer().consoleSender,
-                "cast forcecast ${paladin.name} paladin-dispatch-other \"${emergency.getName()}\" \"$name\" ${emergency.dispatched} ${emergency.getDispatchCap()} ${emergency.category.iconMaterial} ${emergency.category.iconCustomModelData} \"${emergency.locationString}\""
+                "cast forcecast ${paladin.name} paladin-dispatch-other \"${emergency.getName()}\" \"$name\" ${emergency.dispatched} ${emergency.getDispatchCap()} ${emergency.category.iconMaterial} ${emergency.category.iconItemModelArg} \"${emergency.locationString}\""
             )
         }
     }
@@ -119,7 +120,8 @@ object SquireBadge {
         for (c in commands) {
             if (c.isBlank()) continue
             val cmd = c.replace("%player%", p.name).replace("%name%", "\"${e.getName()}\"")
-                .replace("%material%", e.category.iconMaterial.toString()).replace("%cmd%", e.category.iconCustomModelData.toString())
+                .replace("%material%", e.category.iconMaterial.toString()).replace("%item-model%", e.category.iconItemModelArg)
+                .replace("%cmd%", e.category.iconCustomModelData.toString())
                 .replace("%x%", floor(e.location.x).toString()).replace("%y%", floor(e.location.y).toString())
                 .replace("%z%", floor(e.location.z).toString()).replace("%location%", "\"${e.locationString}\"")
             Bukkit.getServer().dispatchCommand(Bukkit.getServer().consoleSender, cmd)
