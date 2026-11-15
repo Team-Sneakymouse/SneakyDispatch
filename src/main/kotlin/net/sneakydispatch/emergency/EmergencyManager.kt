@@ -61,6 +61,10 @@ class EmergencyManager {
                     iconMaterial = Material.MUSIC_DISC_CAT
                 }
 
+                val iconItemModel = parseItemModel(
+                    emergencySection.getString("$key.icon-item-model"), "emergencies.$key.icon-item-model"
+                )
+                // Legacy fallback for unconverted configs; ignored when an item model is set.
                 val iconCustomModelData = emergencySection.getInt("$key.icon-custom-model-data")
                 val dispatchCap = emergencySection.getInt("$key.dispatch-cap")
                 val dispatchPar = emergencySection.getInt("$key.dispatch-par")
@@ -70,6 +74,7 @@ class EmergencyManager {
                     name,
                     description,
                     iconMaterial,
+                    iconItemModel,
                     iconCustomModelData,
                     if (dispatchCap > 0) dispatchCap else 1,
                     dispatchPar,
@@ -98,6 +103,21 @@ class EmergencyManager {
     fun getCategory(key: String): EmergencyCategory? {
         return emergencyCategories[key] ?: emergencyCategories.entries.find { it.key.equals(key, ignoreCase = true) }?.value
     }
+
+    companion object {
+        /**
+         * Parses a configured item model id (e.g. `lom:icons/dispatch_misc`).
+         * @return The [NamespacedKey], or null when unset, blank or invalid (no model is applied).
+         */
+        fun parseItemModel(configured: String?, path: String): NamespacedKey? {
+            if (configured.isNullOrBlank()) return null
+            val key = NamespacedKey.fromString(configured.trim())
+            if (key == null) {
+                SneakyDispatch.log("Invalid item model '$configured' at $path. Using no model.")
+            }
+            return key
+        }
+    }
 }
 
 
@@ -108,7 +128,8 @@ class EmergencyManager {
  * @param name The name of the emergency category.
  * @param description The description of the emergency category.
  * @param iconMaterial The material used for the emergency's icon.
- * @param iconCustomModelData The custom model data for the icon.
+ * @param iconItemModel The item model for the icon, or null for the plain material.
+ * @param iconCustomModelData Legacy integer custom model data for the icon; only used when [iconItemModel] is null (0 = none).
  * @param dispatchCap The maximum number of responders that can be dispatched to this emergency.
  * @param dispatchPar The recommended number of responders for this emergency.
  * @param durationMillis The duration of the emergency in milliseconds.
@@ -117,6 +138,7 @@ data class EmergencyCategory(
     val name: String,
     val description: String,
     val iconMaterial: Material,
+    val iconItemModel: NamespacedKey?,
     val iconCustomModelData: Int,
     val dispatchCap: Int,
     val dispatchPar: Int,
@@ -251,11 +273,13 @@ data class Emergency(val category: EmergencyCategory, val player: Player) {
      */
     fun getIconItem(): ItemStack {
         val itemStack: ItemStack
+        val itemModel: NamespacedKey?
         val customModelData: Int
         val dispatchColorCode: String
 
         if (!isCapFulfilled()) {
             itemStack = ItemStack(category.iconMaterial)
+            itemModel = category.iconItemModel
             customModelData = category.iconCustomModelData
             dispatchColorCode = "&3"
         } else {
@@ -269,16 +293,22 @@ data class Emergency(val category: EmergencyCategory, val player: Player) {
             }
 
             itemStack = ItemStack(iconMaterial)
-            customModelData = SneakyDispatch.getInstance().config.getInt("cap-icon-custom-model-data")
+            val config = SneakyDispatch.getInstance().config
+            itemModel = EmergencyManager.parseItemModel(config.getString("cap-icon-item-model"), "cap-icon-item-model")
+            customModelData = config.getInt("cap-icon-custom-model-data")
             dispatchColorCode = "&4"
         }
 
         val meta = itemStack.itemMeta
 
-        // Set custom model data, display name, and lore.
-        val cmd = meta.customModelDataComponent
-        cmd.setFloats(listOf(customModelData.toFloat()))
-        meta.setCustomModelDataComponent(cmd)
+        // Set the icon look (item model; legacy integer custom model data only as fallback), display name, and lore.
+        if (itemModel != null) {
+            meta.setItemModel(itemModel)
+        } else if (customModelData != 0) {
+            val cmd = meta.customModelDataComponent
+            cmd.setFloats(listOf(customModelData.toFloat()))
+            meta.setCustomModelDataComponent(cmd)
+        }
         meta.displayName(
             TextUtility.convertToComponent(
                 "&a${if (delay > 0) "Local Report: " else ""}${category.name}"

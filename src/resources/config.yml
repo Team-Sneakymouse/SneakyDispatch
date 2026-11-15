@@ -12,7 +12,8 @@ emergency-radius: 50
 
 ##The icon that is shown in the dispatch menu when an emergency has reached its cap
 cap-icon-material: "red_wool"
-cap-icon-custom-model-data: 0
+#Optional item model for the cap icon, e.g. "lom:icons/some_model". Unset = plain material.
+#cap-icon-item-model: ""
 
 ##How the name of a paladin is shown in tooltips nad command feedback. Supports placeholders, and "[playerName]" replacement.
 paladin-name-display: "%sneakycharacters_character_name_noformat%"
@@ -100,7 +101,7 @@ emergencies:
         name: "Call for Help"
         description: "%sneakycharacters_character_name% is in need of aid in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 14207
+        icon-item-model: "lom:icons/dispatch_misc"
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -108,7 +109,7 @@ emergencies:
         name: "Call for Backup"
         description: "%sneakycharacters_character_name% has called for backup in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 14208
+        icon-item-model: "lom:icons/dispatch_backup"
         dispatch-cap: 999
         dispatch-par: 0
         duration-milis: 600000
@@ -116,7 +117,7 @@ emergencies:
         name: "Crime"
         description: "Lawbreakers are afoot in [locationString]! Stop them!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 14209
+        icon-item-model: "lom:icons/dispatch_crime"
         dispatch-cap: 2
         dispatch-par: 2
         duration-milis: 300000
@@ -124,7 +125,7 @@ emergencies:
         name: "Fire"
         description: "%sneakycharacters_character_name% has reported a fire breaking out in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 14210
+        icon-item-model: "lom:icons/dispatch_fire"
         dispatch-cap: 999
         dispatch-par: 4
         duration-milis: 900000
@@ -132,7 +133,7 @@ emergencies:
         name: "Monster Attack"
         description: "%sneakycharacters_character_name% has reported a Monster Attack in [locationString]! Suit up, Paladin!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 14211
+        icon-item-model: "lom:icons/dispatch_attack"
         dispatch-cap: 999
         dispatch-par: 4
         duration-milis: 900000
@@ -140,7 +141,7 @@ emergencies:
         name: "Hazardous Situation"
         description: "%sneakycharacters_character_name% has reported a hazardous situation in [locationString]! Protect the people!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 14212
+        icon-item-model: "lom:icons/dispatch_hazard"
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -148,7 +149,7 @@ emergencies:
         name: "Wildlife Nuisance"
         description: "%sneakycharacters_character_name% has reported that wild animals are disturbing our way of life in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 14213
+        icon-item-model: "lom:icons/dispatch_wildlife"
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -156,7 +157,7 @@ emergencies:
         name: "Muk Burning"
         description: "%sneakycharacters_character_name% has reported that peasants are burning Muk in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 14214
+        icon-item-model: "lom:icons/dispatch_mukburning"
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -164,7 +165,7 @@ emergencies:
         name: "Dynamite Contrband"
         description: "&e%sneakycharacters_character_name% &7has reported that peasants are throwing &4Dynamite &7in &6[locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 14215
+        icon-item-model: "lom:icons/dispatch_dynamite"
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -172,7 +173,7 @@ emergencies:
         name: "Necromancy"
         description: "%sneakycharacters_character_name% has reported that peasants are ressurecting the dead in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 14216
+        icon-item-model: "lom:icons/dispatch_necromancy"
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -180,7 +181,7 @@ emergencies:
         name: "Dark Arts"
         description: "%sneakycharacters_character_name% has reported that peasants have been seen performing dark rituals in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 14217
+        icon-item-model: "lom:icons/dispatch_darkarts"
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -188,7 +189,7 @@ emergencies:
         name: "Pickpocketing"
         description: "%sneakycharacters_character_name% has reported that peasants have been seen with sticky fingers in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 14218
+        icon-item-model: "lom:icons/dispatch_pickpocket"
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -196,7 +197,7 @@ emergencies:
         name: "Dragon Dust"
         description: "%sneakycharacters_character_name% has reported a high crime of peasants consuming dragon dust in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 14219
+        icon-item-model: "lom:icons/dispatch_dragondust"
         dispatch-cap: 3
         dispatch-par: 1
         duration-milis: 300000
@@ -204,7 +205,7 @@ emergencies:
         name: "Egging"
         description: "%sneakycharacters_character_name% has reported eggs being thrown in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 14220
+        icon-item-model: "lom:icons/dispatch_egging"
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -212,7 +213,7 @@ emergencies:
         name: "Swammers"
         description: "%sneakycharacters_character_name% has reported people doing swams in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 14221
+        icon-item-model: "lom:icons/dispatch_swammie"
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -220,7 +221,7 @@ emergencies:
         name: "Counterfeits"
         description: "%sneakycharacters_character_name% has reported someone making fake money in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 14222
+        icon-item-model: "lom:icons/dispatch_counterfeit"
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -228,7 +229,7 @@ emergencies:
         name: "Burglery"
         description: "%sneakycharacters_character_name% has reported a burglery in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 14223
+        icon-item-model: "lom:icons/dispatch_burglery"
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -236,7 +237,7 @@ emergencies:
         name: "Drug Deal"
         description: "%sneakycharacters_character_name% has reported a drug deal going down in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 14224
+        icon-item-model: "lom:icons/dispatch_drugdeal"
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -244,7 +245,7 @@ emergencies:
         name: "Bricking"
         description: "%sneakycharacters_character_name% has reported windows being broken in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 14225
+        icon-item-model: "lom:icons/dispatch_bricking"
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -252,7 +253,7 @@ emergencies:
         name: "Mana Stealing"
         description: "%sneakycharacters_character_name% has reported mana being stolen in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 14226
+        icon-item-model: "lom:icons/dispatch_manastealing"
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -260,7 +261,7 @@ emergencies:
         name: "Shoplifting"
         description: "%sneakycharacters_character_name% has reported a shoplifting in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 14227
+        icon-item-model: "lom:icons/dispatch_shoplifting"
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -268,7 +269,7 @@ emergencies:
         name: "Graffiti"
         description: "%sneakycharacters_character_name% has reported graffiti in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 14228
+        icon-item-model: "lom:icons/dispatch_graffiti"
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -276,7 +277,7 @@ emergencies:
         name: "Vending Machine Shaking"
         description: "%sneakycharacters_character_name% has reported someone shaking a vending machine in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 14229
+        icon-item-model: "lom:icons/dispatch_vending"
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -284,7 +285,7 @@ emergencies:
         name: "Toilet Papering"
         description: "%sneakycharacters_character_name% has reported a house being toilet papered in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 14230
+        icon-item-model: "lom:icons/dispatch_toiletpaper"
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -292,7 +293,7 @@ emergencies:
         name: "Wanted Poster Torn Down"
         description: "%sneakycharacters_character_name% has reported someone tearing down a wanted poster in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 14231
+        icon-item-model: "lom:icons/dispatch_wantedposter"
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -300,7 +301,7 @@ emergencies:
         name: "Security Camera Smashed"
         description: "%sneakycharacters_character_name% has reported someone smashing a security camera in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 14232
+        icon-item-model: "lom:icons/dispatch_cctv"
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -308,7 +309,7 @@ emergencies:
         name: "Computer Hacked"
         description: "%sneakycharacters_character_name% has reported someone hacking a computer in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 14233
+        icon-item-model: "lom:icons/dispatch_hacking"
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -316,7 +317,7 @@ emergencies:
         name: "Server Taken Down"
         description: "%sneakycharacters_character_name% has reported someone crashing a server in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 14234
+        icon-item-model: "lom:icons/dispatch_servercrash"
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -324,7 +325,7 @@ emergencies:
         name: "Lockpicking"
         description: "%sneakycharacters_character_name% has reported someone picking a lock in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 14235
+        icon-item-model: "lom:icons/dispatch_lockpicking"
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -332,7 +333,7 @@ emergencies:
         name: "Stink Bomb"
         description: "%sneakycharacters_character_name% has reported a stink bomb going off in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 14236
+        icon-item-model: "lom:icons/dispatch_stinkbomb"
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
@@ -340,7 +341,7 @@ emergencies:
         name: "Bribery"
         description: "%sneakycharacters_character_name% has reported someone trying to bribe a witness in [locationString]!"
         icon-material: "jigsaw"
-        icon-custom-model-data: 14237
+        icon-item-model: "lom:icons/dispatch_bribery"
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
