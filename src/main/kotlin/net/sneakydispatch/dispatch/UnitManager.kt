@@ -15,6 +15,9 @@ import org.bukkit.scheduler.BukkitTask
 import java.util.*
 import kotlin.math.max
 
+/** The `paladin` character variable (SneakyVariables), whole number: "1" on a paladin character, "0" otherwise. */
+internal const val PALADIN_PLACEHOLDER = "%sneakyvariables_paladin,0%"
+
 class UnitManager {
 
     val units: MutableList<Unit> = mutableListOf()
@@ -112,10 +115,12 @@ class UnitManager {
         return getPaladins().filter { isOnPaladinCharacter(it) }
     }
 
-    /** SCM paladin tag via PAPI; false when PAPI or SCM is unavailable. Server thread only. */
+    /**
+     * The SneakyVariables character variable `paladin` is 1, via PAPI; false when PAPI or SneakyVariables is unavailable.
+     * Server thread only.
+     */
     fun isOnPaladinCharacter(player: Player): Boolean {
-        return PlaceholderUtil.setPlaceholders(player, "%sneakycharacters_character_hastag_paladin%")
-            .equals("true", ignoreCase = true)
+        return PlaceholderUtil.setPlaceholders(player, PALADIN_PLACEHOLDER) == "1"
     }
 
     /**
@@ -273,8 +278,8 @@ data class Unit(var players: MutableSet<Player>) {
     fun isAvailable(): Boolean {
         return priority > 0 || !players.any { player ->
             !player.isOnline || player.hasPermission(SneakyDispatch.PERMISSION_NEVERAVAILABLE) || (SneakyDispatch.isPapiActive() && (PlaceholderAPI.setPlaceholders(
-                player, "%sneakycharacters_character_hastag_paladin%"
-            ) == "false" || PlaceholderAPI.setPlaceholders(player, "%cmi_user_afk%") == "§6True"))
+                player, PALADIN_PLACEHOLDER
+            ) == "0" || PlaceholderAPI.setPlaceholders(player, "%cmi_user_afk%") == "§6True"))
         }
     }
 }
