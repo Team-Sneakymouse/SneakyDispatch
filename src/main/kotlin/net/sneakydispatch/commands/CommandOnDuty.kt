@@ -68,22 +68,25 @@ class CommandOnDuty : CommandBase("onduty") {
             }
         }
 
-        // Run the addUnit command
-        if (SneakyDispatch.getUnitManager().addUnit(playersToAdd)) {
-            // Give feedback to all the players involved if succeeded
-            playersToAdd.forEach { player ->
-                player.sendMessage(TextUtility.convertToComponent("&eYou are now on duty!"))
-				Bukkit.getServer().dispatchCommand(
-                    Bukkit.getServer().consoleSender, "cast forcecast ${player.name} paladin-onduty"
-                )
+        // Run the addUnit command. One duty batch: DutyChangedEvent listeners run only after the messages and casts.
+        val unitManager = SneakyDispatch.getUnitManager()
+        return SneakyDispatch.getDutyTracker().batch {
+            if (unitManager.addUnit(playersToAdd)) {
+                // Give feedback to all the players involved if succeeded (only those the casts haven't taken out again)
+                playersToAdd.toList().forEach { player ->
+                    if (!unitManager.isInUnit(player)) return@forEach
+                    player.sendMessage(TextUtility.convertToComponent("&eYou are now on duty!"))
+                    Bukkit.getServer().dispatchCommand(
+                        Bukkit.getServer().consoleSender, "cast forcecast ${player.name} paladin-onduty"
+                    )
+                }
+                true
+            } else {
+                // If the unit couldn't be added, notify the sender
+                sender.sendMessage(TextUtility.convertToComponent("&4Error: One or more players are already in a unit."))
+                false
             }
-        } else {
-            // If the unit couldn't be added, notify the sender
-            sender.sendMessage(TextUtility.convertToComponent("&4Error: One or more players are already in a unit."))
-            return false
         }
-
-        return true
     }
 
     /**

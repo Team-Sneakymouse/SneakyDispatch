@@ -38,9 +38,13 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib:2.3.0")
 	compileOnly("io.papermc.paper:paper-api:26.2.build.+")
 	compileOnly("me.clip:placeholderapi:2.11.5")
-	compileOnly("io.github.team-sneakymouse:sneakyutils:2026.11.10-7e1262ebd376")
+	compileOnly("io.github.team-sneakymouse:sneakyutils:2026.11.16-c8f173b2863e")
 	// soft: Paladin Squire Badge license (SneakyWishesApi.hasLicense)
 	compileOnly("io.github.team-sneakymouse:sneakywishes:2026.11.10-78665e140963") { isTransitive = false }
+	// soft: duty tracking (DutyChangedEvent) hears character switches and carried squire badges
+	compileOnly("io.github.team-sneakymouse:sneakycharactermanager-paper:2026.11.17-432349ef058e") { isTransitive = false }
+	compileOnly("io.github.team-sneakymouse:sneakyitems:2026.11.16-9e4ec79882d2") { isTransitive = false }
+	compileOnly("io.github.team-sneakymouse:sneakyvariables:2026.11.17-986d278ae7a9") { isTransitive = false }
 }
 
 tasks.processResources {

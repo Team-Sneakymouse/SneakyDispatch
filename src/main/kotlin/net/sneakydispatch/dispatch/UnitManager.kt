@@ -33,7 +33,8 @@ class UnitManager {
         if (players.any { player -> isInUnit(player) }) {
             return false
         }
-        units.add(Unit(players))
+        units.add(Unit(players.toMutableSet())) // its own set: the caller's is not the unit's membership
+        SneakyDispatch.getDutyTracker().update(players)
         return true
     }
 
@@ -44,6 +45,7 @@ class UnitManager {
      */
     fun removeUnit(unit: Unit) {
         units.remove(unit)
+        SneakyDispatch.getDutyTracker().update(unit.playerUUIDs.mapNotNull { Bukkit.getPlayer(it) })
     }
 
     /** Returns a list of on-duty paladins. */
@@ -206,6 +208,12 @@ data class Unit(var players: MutableSet<Player>) {
      * @return `true` if the player was successfully removed; `false` if the player was not in the unit.
      */
     fun removePlayer(player: Player): Boolean {
+        // One batch: the departing player and, on disband, the remaining members are all recomputed before any
+        // DutyChangedEvent goes out.
+        return SneakyDispatch.getDutyTracker().batch { removePlayerNow(player) }
+    }
+
+    private fun removePlayerNow(player: Player): Boolean {
         return if (players.contains(player)) {
             players.remove(player)
             playerUUIDs.remove(player.uniqueId)
@@ -220,6 +228,7 @@ data class Unit(var players: MutableSet<Player>) {
                 }
                 SneakyDispatch.getUnitManager().removeUnit(this) // Remove this unit from the manager
             }
+            SneakyDispatch.getDutyTracker().update(player)
             true // Player removed successfully
         } else {
             false // Player was not in the unit
@@ -232,6 +241,11 @@ data class Unit(var players: MutableSet<Player>) {
      * @param player The player to be added.
      */
     fun addPlayer(player: Player) {
+        SneakyDispatch.getDutyTracker().batch { addPlayerNow(player) }
+    }
+
+    private fun addPlayerNow(player: Player) {
+        // One batch: moving from another unit into this one is not seen as off duty then on duty.
         SneakyDispatch.getUnitManager().units.forEach {
             if (it.players.contains(player)) {
                 it.removePlayer(player)
@@ -244,6 +258,7 @@ data class Unit(var players: MutableSet<Player>) {
         players.add(player)
         playerUUIDs.add(player.uniqueId)
         player.sendMessage(TextUtility.convertToComponent("&eYou are now on duty!"))
+        SneakyDispatch.getDutyTracker().update(player)
     }
 
     /**

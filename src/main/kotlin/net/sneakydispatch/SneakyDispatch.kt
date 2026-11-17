@@ -2,9 +2,11 @@ package net.sneakydispatch
 
 import net.sneakydispatch.commands.*
 import net.sneakydispatch.dispatch.DispatchManager
+import net.sneakydispatch.dispatch.DutyTracker
 import net.sneakydispatch.dispatch.EmergencyInventoryListener
 import net.sneakydispatch.dispatch.UnitManager
 import net.sneakydispatch.dispatch.UnitManagerListener
+import net.sneakydispatch.dispatch.registerDutyListeners
 import net.sneakydispatch.emergency.EmergencyManager
 import org.bukkit.Bukkit
 import org.bukkit.permissions.Permission
@@ -26,6 +28,9 @@ class SneakyDispatch : JavaPlugin() {
 
     /** Manages units of paladins. */
     lateinit var unitManager: UnitManager
+
+    /** Fires DutyChangedEvent when a player's public duty changes. */
+    lateinit var dutyTracker: DutyTracker
 
     /** Flag indicating if PlaceholderAPI (PAPI) is active. */
     var papiActive: Boolean = false
@@ -64,6 +69,7 @@ class SneakyDispatch : JavaPlugin() {
         emergencyManager = EmergencyManager()
         dispatchManager = DispatchManager()
         unitManager = UnitManager()
+        dutyTracker = DutyTracker()
 
         // Register commands.
         server.commandMap.register(IDENTIFIER, CommandReportEmergency())
@@ -79,6 +85,7 @@ class SneakyDispatch : JavaPlugin() {
         server.pluginManager.registerEvents(EmergencyInventoryListener(), this)
         server.pluginManager.registerEvents(UnitManagerListener(), this)
         server.pluginManager.registerEvents(net.sneakydispatch.squire.SquireHitListener(), this)
+        registerDutyListeners(this, dutyTracker)
 
         // Add permissions for the plugin.
         server.pluginManager.addPermission(Permission("$IDENTIFIER.*"))
@@ -91,6 +98,13 @@ class SneakyDispatch : JavaPlugin() {
             papiActive = true
             Placeholders().register()
         }
+
+        // Players already online (a plugin reload) are tracked silently: no event storm.
+        dutyTracker.start()
+    }
+
+    override fun onDisable() {
+        if (::dutyTracker.isInitialized) dutyTracker.stop()
     }
 
     /**
@@ -181,6 +195,11 @@ class SneakyDispatch : JavaPlugin() {
          */
         fun getUnitManager(): UnitManager {
             return instance.unitManager
+        }
+
+        /** The duty tracker (DutyChangedEvent). */
+        fun getDutyTracker(): DutyTracker {
+            return instance.dutyTracker
         }
 
         /**

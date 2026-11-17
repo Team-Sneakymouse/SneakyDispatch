@@ -19,3 +19,16 @@ dependencies:
       load: BEFORE
       required: false
       join-classpath: true
+    # Classpath only, for duty tracking (LoadCharacterEvent, CarriedItemChangeEvent, VariableChangeEvent); no load ordering.
+    SneakyCharacterManager:
+      load: OMIT
+      required: false
+      join-classpath: true
+    SneakyItems:
+      load: OMIT
+      required: false
+      join-classpath: true
+    SneakyVariables:
+      load: OMIT
+      required: false
+      join-classpath: true
