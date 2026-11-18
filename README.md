@@ -19,16 +19,16 @@ SneakyDispatch fires SneakyUtils' `com.sneakyutils.signals.DutyChangedEvent(play
   counts as on duty (`squire-badge.counts-as-on-duty`). Going on duty carries the new role; going off duty carries the
   role the player had. Switching between `paladin` and `squire` while staying on duty fires nothing.
 - **Fires on:** forming a unit (`/onduty`), joining one (`/squire`), leaving one (`/offduty`, offline timeout, unit
-  disband for the remaining members), a character switch (SneakyCharacterManager's `LoadCharacterEvent`, checked the
-  tick after), the `paladin` character variable changing (SneakyVariables' `VariableChangeEvent`; a character value
+  disband for the remaining members), a character switch (SneakyCharacterManager's `LoadCharacterEvent`, and its
+  `CharacterLoadedEvent` for loads and both bodies of a swap; checked the tick after, once per tick), the `paladin` character variable changing (SneakyVariables' `VariableChangeEvent`; a character value
   counts for whoever wears that character), picking up or dropping a squire badge (SneakyItems'
   `CarriedItemChangeEvent`), a squire badge being voided (SneakyWishes' `LicenseVoidEvent`), and joining the server on
   duty (a join counts as coming from off duty).
 - **Character loading:** a character's first load in SneakyVariables fires no `VariableChangeEvent`, so after a
-  switch, while that character's variables aren't loaded yet, the player alone is checked every 2 ticks until they are
+  switch or a swap, while that character's variables aren't loaded yet, the player alone is checked every 2 ticks until they are
   (then recomputed once), for up to 10 seconds; a quit or another switch cancels the wait.
 - **Recheck:** inputs with no event of their own (a switched-to character whose variables took longer than 10 seconds
-  to load; a `paladin` change without SneakyVariables hooked; an SCM character swap; a taped badge; squire-badge config reloaded) are caught by a check
+  to load; a `paladin` change without SneakyVariables hooked; an SCM character swap on an SCM older than `CharacterLoadedEvent`; a taped badge; squire-badge config reloaded) are caught by a check
   every 5 seconds over unit members,
   players on duty and badge carriers only, so the event can arrive up to 5 seconds late for those. Changes nothing
   announces at all (`/wishes reload` remapping the squire license to an item someone already carries; badge pickups

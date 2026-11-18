@@ -8,6 +8,7 @@ import com.sneakyvariables.api.Scope
 import com.sneakyvariables.api.SneakyVariables
 import com.sneakyvariables.api.VariableChangeEvent
 import net.sneakycharactermanager.paper.handlers.character.Character
+import net.sneakycharactermanager.paper.handlers.character.CharacterLoadedEvent
 import net.sneakycharactermanager.paper.handlers.character.LoadCharacterEvent
 import net.sneakydispatch.SneakyDispatch
 import net.sneakydispatch.squire.SquireBadge
@@ -43,6 +44,17 @@ class DutyCharacterListener(private val tracker: DutyTracker) : Listener {
     /** The online body wearing the character with this id (owner or not), or null. */
     fun wearer(characterId: String): Player? =
         Character.getAll().firstOrNull { it.characterUUID == characterId }?.player?.takeIf { it.isOnline }
+}
+
+/**
+ * Character worn: SCM fires CharacterLoadedEvent after a load and for each body of a swap (a swap fires no
+ * LoadCharacterEvent). Same path as a load; a load whose LoadCharacterEvent already started it this tick is left alone.
+ * Its own class, so an SCM without this event still gets the LoadCharacterEvent listener.
+ */
+class DutyCharacterLoadedListener(private val tracker: DutyTracker) : Listener {
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    fun onLoaded(event: CharacterLoadedEvent) = tracker.characterLoading(event.player)
 }
 
 /**
@@ -133,6 +145,12 @@ internal fun registerDutyListeners(plugin: SneakyDispatch, tracker: DutyTracker)
         }
     }
     val characters = optional("SneakyCharacterManager") { DutyCharacterListener(tracker) } as DutyCharacterListener?
+    // The event class is resolved first, so an SCM without it reaches optional's LinkageError fallback (Paper's
+    // registerEvents would only log the missing class).
+    if (characters != null) optional("SneakyCharacterManager") {
+        CharacterLoadedEvent::class.java.name
+        DutyCharacterLoadedListener(tracker)
+    }
     // Without it, the tracker rechecks a rotating slice of online players for badge pickups.
     tracker.badgeItems = optional("SneakyItems") { DutyCarriedItemListener(tracker) } as DutyTracker.BadgeItems?
     optional("SneakyWishes") { DutyLicenseListener(tracker) }
