@@ -10,6 +10,7 @@ import net.sneakydispatch.SneakyDispatch
 import net.sneakydispatch.emergency.Emergency
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import java.util.Locale
 import kotlin.math.floor
 
 /**
@@ -32,7 +33,8 @@ object SquireBadge {
 
     fun enabled(): Boolean = cfg().getBoolean("squire-badge.enabled", true)
 
-    fun type(): String = cfg().getString("squire-badge.license-type", "squire") ?: "squire"
+    /** Lowercased with Locale.ROOT, as SneakyWishes stores type ids, so it compares equal to their canonical ids. */
+    fun type(): String = (cfg().getString("squire-badge.license-type", "squire") ?: "squire").lowercase(Locale.ROOT)
 
     /** Whether the player carries a squire badge (false if SneakyWishes is off). */
     fun has(player: Player): Boolean {

@@ -46,6 +46,11 @@ class CommandOffDuty : CommandBase("offduty") {
             return false
         }
 
+        // One duty batch: DutyChangedEvent listeners run only after the messages and the cast.
+        return SneakyDispatch.getDutyTracker().batch { leave(sender, currentUnit) }
+    }
+
+    private fun leave(sender: Player, currentUnit: net.sneakydispatch.dispatch.Unit): Boolean {
         // Remove the player from the unit using the new method
         if (currentUnit.removePlayer(sender)) {
             // Provide feedback to the player
@@ -54,26 +59,13 @@ class CommandOffDuty : CommandBase("offduty") {
 				Bukkit.getServer().consoleSender, "cast forcecast ${sender.name} paladin-offduty"
 			)
 
-            // Notify other players in the unit (if any)
-            currentUnit.players.forEach { player ->
-                player.sendMessage(
-                    TextUtility.convertToComponent(
-                        "&e${
-                            if (SneakyDispatch.isPapiActive()) {
-                                PlaceholderAPI.setPlaceholders(
-                                    player,
-                                    (SneakyDispatch.getInstance().config.getString("paladin-name-display") ?: "[playerName]").replace(
-                                        "[playerName]", player.name
-                                    )
-                                )
-                            } else {
-                                (SneakyDispatch.getInstance().config.getString("paladin-name-display") ?: "[playerName").replace(
-                                    "[playerName]", player.name
-                                )
-                            }
-                        } has gone off duty."
-                    )
-                )
+            // Notify the players still in this unit (if it wasn't disbanded), from a copy; the name is the leaver's
+            val template = (SneakyDispatch.getInstance().config.getString("paladin-name-display") ?: "[playerName]")
+                .replace("[playerName]", sender.name)
+            val leaverName = if (SneakyDispatch.isPapiActive()) PlaceholderAPI.setPlaceholders(sender, template) else template
+            val unitManager = SneakyDispatch.getUnitManager()
+            currentUnit.players.toList().filter { unitManager.getUnit(it) === currentUnit }.forEach { player ->
+                player.sendMessage(TextUtility.convertToComponent("&e$leaverName has gone off duty."))
             }
         } else {
             sender.sendMessage(TextUtility.convertToComponent("&eError: You were not in the unit."))
