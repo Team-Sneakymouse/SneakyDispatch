@@ -55,7 +55,10 @@ class DutyTracker {
     private val dirty = LinkedHashSet<UUID>()
 
     /** Players with a next-tick recompute queued; true when their badge candidacy is to be reconciled too. */
-    private val nextTick = HashMap<UUID, Boolean>()
+    private val nextTick = LinkedHashMap<UUID, Boolean>()
+
+    /** The one task that recomputes everyone in [nextTick] together, while one is scheduled. */
+    private var nextTickTask: BukkitTask? = null
 
     /** Tracked players' session ids (one per join), so queued transitions die with the session. */
     private val sessions = HashMap<UUID, Long>()
@@ -82,6 +85,9 @@ class DutyTracker {
 
     /** Players waiting for their switched-to character's variables to load (see [characterLoading]). */
     private val loadWaits = HashMap<UUID, BukkitTask>()
+
+    /** The server tick of each player's latest [characterLoading], so a load's two events start it once. */
+    private val loadTicks = HashMap<UUID, Int>()
     private var badgeType = ""
     private var rotationCursor = 0
 
@@ -104,9 +110,12 @@ class DutyTracker {
         task = null
         loadWaits.values.forEach { it.cancel() }
         loadWaits.clear()
+        loadTicks.clear()
         roles.clear()
         dirty.clear()
         nextTick.clear()
+        nextTickTask?.cancel()
+        nextTickTask = null
         sessions.clear()
         badgeHolders.clear()
         pending.clear()
@@ -146,17 +155,24 @@ class DutyTracker {
         }
     }
 
-    /** Recomputes on the next tick, once however often it is asked (SCM's LoadCharacterEvent fires before the load). */
+    /**
+     * Recomputes on the next tick, once however often it is asked (SCM's LoadCharacterEvent fires before the load),
+     * together with everyone else queued for that tick.
+     */
     fun updateNextTick(player: Player) = schedule(player, false)
 
     /**
-     * A character is being put on the player (SCM's LoadCharacterEvent, which fires before the load): recompute the
-     * next tick, and when SneakyVariables is hooked and that character's variables aren't loaded yet, check only this
-     * player every [LOAD_WAIT_PERIOD] ticks until they are, then recompute once. Gives up after [LOAD_WAIT_TRIES]
-     * checks (~10 s; the 5 s recheck still covers unit members); a quit or another load cancels the wait.
+     * A character is being put on the player (SCM's LoadCharacterEvent, which fires before the load) or has been
+     * (CharacterLoadedEvent, after a load or for each body of a swap): recompute the next tick, and when SneakyVariables
+     * is hooked and that character's variables aren't loaded yet, check only this player every [LOAD_WAIT_PERIOD] ticks
+     * until they are, then recompute once. Gives up after [LOAD_WAIT_TRIES] checks (~10 s; the 5 s recheck still covers
+     * unit members); a quit or a load in a later tick restarts or cancels the wait. Both events of one load in the same
+     * tick start it once: the next-tick recompute and the wait's first check both run after that tick.
      */
     fun characterLoading(player: Player) {
         val id = player.uniqueId
+        val tick = Bukkit.getCurrentTick()
+        if (loadTicks.put(id, tick) == tick) return
         loadWaits.remove(id)?.cancel()
         updateNextTick(player)
         val loaded = characterLoaded ?: return
@@ -194,13 +210,28 @@ class DutyTracker {
             return
         }
         nextTick[id] = reconcile
+        if (nextTickTask != null) return
         val plugin = SneakyDispatch.getInstance()
-        plugin.server.scheduler.runTask(plugin, Runnable {
-            val badge = nextTick.remove(id) ?: return@Runnable
-            val p = Bukkit.getPlayer(id) ?: return@Runnable
+        nextTickTask = plugin.server.scheduler.runTask(plugin, Runnable { flushNextTick() })
+    }
+
+    /**
+     * Everyone queued for the next tick, recomputed in one [update]: both bodies of a swap are stored before either's
+     * DutyChangedEvent goes out. Badge reconciliation queued with them is done first. Whatever a listener queues during
+     * delivery goes in the following tick's batch.
+     */
+    private fun flushNextTick() {
+        nextTickTask = null
+        if (nextTick.isEmpty()) return
+        val queued = nextTick.toList()
+        nextTick.clear()
+        val players = ArrayList<Player>(queued.size)
+        for ((id, badge) in queued) {
+            val p = Bukkit.getPlayer(id) ?: continue
             if (badge && id in roles) seedBadge(p)
-            update(p)
-        })
+            players.add(p)
+        }
+        if (players.isNotEmpty()) update(players)
     }
 
     /** Join: starts from off duty, so a player who comes in on duty fires on duty. */
@@ -217,6 +248,7 @@ class DutyTracker {
         roles.remove(id)
         sessions.remove(id) // drops this session's queued transitions (checked at delivery)
         loadWaits.remove(id)?.cancel()
+        loadTicks.remove(id)
         dirty.remove(id)
         badgeHolders.remove(id)
     }
@@ -271,7 +303,7 @@ class DutyTracker {
     /**
      * Some inputs fire no event: the `paladin` variable of a character that is still loading in SneakyVariables when
      * the next-tick character check runs (its first load fires no VariableChangeEvent), any `paladin` change when
-     * SneakyVariables isn't hooked, an SCM character swap or take-off, a squire badge taped back together, squire-badge config
+     * SneakyVariables isn't hooked, an SCM character take-off (or a swap, on an SCM without CharacterLoadedEvent), a squire badge taped back together, squire-badge config
      * edited and reloaded. Every [RECHECK_TICKS] this recomputes only the players those can affect: unit members,
      * players tracked as on duty, and squire badge carriers (ripped ones too, so a taped badge is seen). A changed
      * `squire-badge.license-type` reseeds the carriers. Some badge changes have no event at all (SneakyWishes fires
