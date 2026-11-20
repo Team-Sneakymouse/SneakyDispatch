@@ -345,6 +345,16 @@ emergencies:
         dispatch-cap: 2
         dispatch-par: 1
         duration-milis: 300000
+    # SneakyDisasters reports this when a disaster (earthquake, flood, tornado and the rest) has done its worst (its config.yml
+    # response.dispatch-category), as one of the players in the stricken district. Stays up 20 minutes.
+    disaster:
+        name: "Disaster"
+        description: "%sneakycharacters_character_name% reports that disaster has struck [locationString]! People are trapped and the streets are in ruins. Every Paladin to the relief crate!"
+        icon-material: "jigsaw"
+        icon-item-model: "lom:icons/dispatch_hazard"
+        dispatch-cap: 999
+        dispatch-par: 4
+        duration-millis: 1200000
 ##Paladin Squire Badge (licenses/LICENSES.md #8): anyone carrying a SneakyWishes license of this type who isn't in a
 #paladin unit hears about every emergency report and gets a [Respond] button in chat (/squirerespond), which sends them
 #there like a dispatched paladin. The badge voids when a wanted poster goes up on its holder (SneakyWantedPosters).
