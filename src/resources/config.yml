@@ -18,6 +18,12 @@ cap-icon-material: "red_wool"
 ##How the name of a paladin is shown in tooltips nad command feedback. Supports placeholders, and "[playerName]" replacement.
 paladin-name-display: "%sneakycharacters_character_name_noformat%"
 
+##Name prefix of paladins on duty whose character has a badge number (SneakyVariables character variable badge_number,
+#1-999), set with SneakyCharacterManager's character name prefix (as /charprefix) and cleared when they go off duty.
+#[badge] is the number padded to three digits (4 -> 004). Keep the single quotes: \uE004 is formatted when shown.
+#"" turns it off.
+badge-prefix: '<font:lom:badges>\uE[badge]</font> &6'
+
 ##Resolved once when an emergency is reported (PAPI if enabled). Use [locationString] in emergency descriptions.
 location-string: "%sneakyplots_district_name%"
 

@@ -58,7 +58,8 @@ class DutyCharacterLoadedListener(private val tracker: DutyTracker) : Listener {
 }
 
 /**
- * The `paladin` variable changed (SneakyVariables; `/chartag` is gone, this is what marks a paladin character).
+ * The `paladin` or `badge_number` variable changed (SneakyVariables; `/chartag` is gone, `paladin` is what marks a
+ * paladin character, `badge_number` feeds [BadgePrefix]).
  * A CHARACTER value affects whoever wears that character, a PLAYER value that player. When the wearer can't be found
  * (SneakyCharacterManager not hooked) or the value is global, every online unit member is recomputed instead: only
  * unit members can be paladins on duty, so that is the whole set it can affect.
@@ -70,7 +71,8 @@ class DutyVariableListener(
 
     @EventHandler(priority = EventPriority.MONITOR)
     fun onChange(event: VariableChangeEvent) {
-        if (!event.name.equals(PALADIN_VARIABLE, ignoreCase = true)) return
+        if (!event.name.equals(PALADIN_VARIABLE, ignoreCase = true) &&
+            !event.name.equals(BadgePrefix.BADGE_VARIABLE, ignoreCase = true)) return
         val owner = event.owner
         val target: Player? = when (owner.scope()) {
             Scope.PLAYER -> runCatching { Bukkit.getPlayer(java.util.UUID.fromString(owner.id())) }.getOrNull()
@@ -158,4 +160,13 @@ internal fun registerDutyListeners(plugin: SneakyDispatch, tracker: DutyTracker)
         DutyVariableListener(tracker, characters?.let { c -> java.util.function.Function<String, Player?> { c.wearer(it) } })
     } as DutyVariableListener?
     if (variables != null) tracker.characterLoaded = java.util.function.Predicate { variables.characterLoaded(it) }
+    // The badge prefix needs both; an SCM without CharacterNamePrefix leaves it off.
+    if (characters != null && variables != null) {
+        try {
+            net.sneakycharactermanager.paper.api.character.CharacterNamePrefix::class.java.name
+            tracker.paladinWatcher = BadgePrefix(plugin.config.getString("badge-prefix") ?: "")
+        } catch (e: LinkageError) {
+            plugin.logger.warning("Badge prefix: SneakyCharacterManager has no CharacterNamePrefix API (${e.message}); not applied.")
+        }
+    }
 }

@@ -33,6 +33,12 @@ class DutyTracker {
         fun carriesBadgeItem(player: Player): Boolean
     }
 
+    /** Told after each recompute whether the player is on duty as a paladin, and when they quit ([BadgePrefix]). */
+    interface PaladinWatcher {
+        fun recomputed(player: Player, paladin: Boolean)
+        fun quit(player: Player)
+    }
+
     private class Transition(val player: Player, val session: Long, val onDuty: Boolean, val role: String)
 
     companion object {
@@ -82,6 +88,9 @@ class DutyTracker {
      * character's first load fires no VariableChangeEvent, so after a switch the `paladin` value can arrive silently.
      */
     var characterLoaded: java.util.function.Predicate<Player>? = null
+
+    /** Set when SneakyCharacterManager and SneakyVariables are hooked: the badge-number name prefix. */
+    var paladinWatcher: PaladinWatcher? = null
 
     /** Players waiting for their switched-to character's variables to load (see [characterLoading]). */
     private val loadWaits = HashMap<UUID, BukkitTask>()
@@ -251,6 +260,7 @@ class DutyTracker {
         loadTicks.remove(id)
         dirty.remove(id)
         badgeHolders.remove(id)
+        paladinWatcher?.quit(player)
     }
 
     private fun seedBadge(player: Player) {
@@ -279,6 +289,16 @@ class DutyTracker {
         val old = roles[id]
         val now = role(player)
         roles[id] = now // stored before firing, so a listener that changes duty again is compared against this
+        paladinWatcher?.let { watcher ->
+            try {
+                watcher.recomputed(player, now == ROLE_PALADIN)
+            } catch (e: RuntimeException) {
+                SneakyDispatch.getInstance().logger.warning("Badge prefix for ${player.name} failed: $e")
+            } catch (e: LinkageError) {
+                SneakyDispatch.getInstance().logger.warning("Badge prefix disabled: ${e.message}")
+                paladinWatcher = null
+            }
+        }
         when {
             old == null && now != null -> pending.addLast(Transition(player, session, true, now))
             old != null && now == null -> pending.addLast(Transition(player, session, false, old))

@@ -42,7 +42,7 @@ dependencies {
 	// soft: Paladin Squire Badge license (SneakyWishesApi.hasLicense)
 	compileOnly("io.github.team-sneakymouse:sneakywishes:2026.11.10-78665e140963") { isTransitive = false }
 	// soft: duty tracking (DutyChangedEvent) hears character switches and carried squire badges
-	compileOnly("io.github.team-sneakymouse:sneakycharactermanager-paper:2026.11.18-d59092464afe") { isTransitive = false }
+	compileOnly("io.github.team-sneakymouse:sneakycharactermanager-paper:2026.11.21-12e5dc640782") { isTransitive = false }
 	compileOnly("io.github.team-sneakymouse:sneakyitems:2026.11.18-96c4561272da") { isTransitive = false }
 	compileOnly("io.github.team-sneakymouse:sneakyvariables:2026.11.17-986d278ae7a9") { isTransitive = false }
 }

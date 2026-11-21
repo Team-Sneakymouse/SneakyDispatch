@@ -9,6 +9,26 @@ Duty placeholders are read by other plugins and MagicSpells scripts.
 - `%sneakydispatch_paladins_on_duty%` — number of unit members currently on a paladin character.
 - `%sneakydispatch_paladins_available%`, `%sneakydispatch_paladins_ready%` — counts used by dispatch scheduling.
 
+## Character variables
+
+SneakyDispatch defines two SneakyVariables character variables on enable (and drops its definitions on disable), so
+SneakyVariables is a required dependency:
+
+- `paladin` (number, 0-1): 1 on a paladin character. Duty reads it (see above).
+- `badge_number` (number, 0-999): the paladin's badge number.
+
+MagicSpells YAML may define them too while it moves off them; both are character numbers, so the definitions overlap.
+They are set with `/ms variable modify paladin <player> =1` and `/ms variable modify badge_number <player> =<n>`.
+
+## Badge prefix
+
+While a player is on duty as a paladin (role `paladin` below) and their character's `badge_number` is 1-999, their
+SneakyCharacterManager character name prefix (what `/charprefix` sets) is `badge-prefix` from `config.yml`, with
+`[badge]` replaced by the number padded to three digits: badge 4 gives `<font:lom:badges>\uE004</font> &6`. When they
+stop being on duty as a paladin, the prefix is cleared, unless someone else changed it since. It is reapplied on
+everything that recomputes duty (below), including a `badge_number` change and a character load, since SCM does not
+save the prefix. Needs SneakyCharacterManager with the `CharacterNamePrefix` API. `badge-prefix: ""` turns it off.
+
 ## Duty event
 
 SneakyDispatch fires SneakyUtils' `com.sneakyutils.signals.DutyChangedEvent(player, onDuty, role)` when a player's
