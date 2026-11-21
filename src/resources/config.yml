@@ -365,8 +365,8 @@ emergencies:
 #paladin-onduty, paladin-emergency-reported, paladin-dispatch-self, paladin-dispatch-other). Every key is optional:
 #  message: a chat line            toast: a toast with the emergency's icon (keep its text to a few variants: each
 #  sounds: only that player hears    distinct text is saved as a hidden advancement)
-#  commands: run as that player (findlocation is the server's waypoint)
-#Placeholders: %player%, %emergency%, %location% (the district), %paladin% (who was dispatched; dispatched-other),
+#  waypoint: a path style (paladin) pointing them at the emergency (SneakyUtils waypoints.commands: findlocation)
+#Placeholders in message/toast: %player%, %emergency%, %location% (the district), %paladin% (who was dispatched; dispatched-other),
 #%dispatched%, %cap%, %world%, %x% %y% %z% (the emergency's block). The paladin steps only play to unit members on a
 #paladin character; on-duty plays on /onduty and on rejoining a unit.
 effects:
@@ -380,9 +380,7 @@ effects:
       - {sound: "lom:sfx.paladincall", volume: 0.5, pitch: 1.1}
   dispatched-self:
     message: "&eDispatching you to &3%location%&e."
-    commands:
-      - "findlocation_path paladin"
-      - "findlocation %world% %x% %y% %z% 0 0"
+    waypoint: paladin
     sounds:
       - {sound: "lom:sfx.gpostinger1", volume: 0.3, pitch: 1.0}
       - {sound: "lom:sfx.paladincall", volume: 0.2, pitch: 1.0}
@@ -396,9 +394,7 @@ effects:
       - {sound: "lom:sfx.paladincall", volume: 0.5, pitch: 1.1}
   squire-dispatched-self:
     message: "&eHeading to &3%location%&e."
-    commands:
-      - "findlocation_path paladin"
-      - "findlocation %world% %x% %y% %z% 0 0"
+    waypoint: paladin
     sounds:
       - {sound: "lom:sfx.gpostinger1", volume: 0.3, pitch: 1.0}
 

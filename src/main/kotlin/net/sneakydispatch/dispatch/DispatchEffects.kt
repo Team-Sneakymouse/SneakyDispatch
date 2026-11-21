@@ -2,6 +2,7 @@ package net.sneakydispatch.dispatch
 
 import com.sneakyutils.util.TextUtility
 import com.sneakyutils.util.Toasts
+import com.sneakyutils.util.Waypoints
 import net.sneakydispatch.SneakyDispatch
 import net.sneakydispatch.emergency.Emergency
 import org.bukkit.SoundCategory
@@ -11,8 +12,9 @@ import org.bukkit.entity.Player
  * What a player sees and hears at each dispatch step, from `effects.<step>` in config.yml. These were the MagicSpells
  * spells SneakyDispatch force-cast (`paladin-onduty`, `paladin-emergency-reported`, `paladin-dispatch-self`,
  * `paladin-dispatch-other`); squires get their own steps. A step can have a chat `message`, a `toast` with the
- * emergency's icon, `sounds` only that player hears, and `commands` run as that player (the server's `findlocation`
- * waypoint). The text and commands get the `%placeholder%` values passed in. Server thread only.
+ * emergency's icon, `sounds` only that player hears, and a `waypoint` (a path style such as `paladin`) pointing them
+ * at the emergency through SneakyUtils' [Waypoints]. The text gets the `%placeholder%` values passed in. Server thread
+ * only.
  */
 object DispatchEffects {
 
@@ -35,7 +37,7 @@ object DispatchEffects {
         "z" to emergency.location.blockZ.toString(),
     )
 
-    /** Plays [step] to [player]; [emergency] supplies the toast icon. Unknown or empty steps do nothing. */
+    /** Plays [step] to [player]; [emergency] supplies the toast icon and the waypoint. Unknown or empty steps do nothing. */
     fun play(step: String, player: Player, vars: Map<String, String>, emergency: Emergency? = null) {
         if (!player.isOnline) return
         val section = SneakyDispatch.getInstance().config.getConfigurationSection("effects.$step") ?: return
@@ -59,8 +61,13 @@ object DispatchEffects {
             val pitch = (sound["pitch"] as? Number)?.toFloat() ?: 1f
             player.playSound(player.location, key, SoundCategory.MASTER, volume, pitch)
         }
-        for (command in section.getStringList("commands")) {
-            if (command.isNotBlank()) player.performCommand(fill(command))
+        val waypoint = section.getString("waypoint")
+        if (emergency != null && !waypoint.isNullOrBlank()) {
+            try {
+                Waypoints.guide(player, emergency.location, waypoint)
+            } catch (e: LinkageError) {
+                SneakyDispatch.getInstance().logger.warning("Waypoints need a newer SneakyUtils: ${e.message}")
+            }
         }
     }
 }

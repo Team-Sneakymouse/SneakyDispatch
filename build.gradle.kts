@@ -38,7 +38,7 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib:2.3.0")
 	compileOnly("io.papermc.paper:paper-api:26.2.build.+")
 	compileOnly("me.clip:placeholderapi:2.11.5")
-	compileOnly("io.github.team-sneakymouse:sneakyutils:2026.11.21-316231d3a6e7")
+	compileOnly("io.github.team-sneakymouse:sneakyutils:2026.11.21-586b68579798")
 	// soft: Paladin Squire Badge license (SneakyWishesApi.hasLicense)
 	compileOnly("io.github.team-sneakymouse:sneakywishes:2026.11.10-78665e140963") { isTransitive = false }
 	// soft: duty tracking (DutyChangedEvent) hears character switches and carried squire badges

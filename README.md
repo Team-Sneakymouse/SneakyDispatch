@@ -32,9 +32,9 @@ save the prefix. Needs SneakyCharacterManager with the `CharacterNamePrefix` API
 ## Effects
 
 What players see and hear at each dispatch step is `effects.<step>` in `config.yml`: a chat `message`, a `toast` with
-the emergency's icon (SneakyUtils `Toasts`), `sounds` only that player hears, and `commands` run as that player (the
-server's `findlocation` waypoint). These replace the MagicSpells spells SneakyDispatch used to force-cast; it casts no
-spells now.
+the emergency's icon (SneakyUtils `Toasts`), `sounds` only that player hears, and a `waypoint` path style that points
+them at the emergency (SneakyUtils `Waypoints`, whose `waypoints.commands` config runs the server's `findlocation`).
+These replace the MagicSpells spells SneakyDispatch used to force-cast; it casts no spells now.
 
 | Step | When | Was |
 | --- | --- | --- |
