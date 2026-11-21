@@ -1,6 +1,7 @@
 package net.sneakydispatch.commands
 
 import net.sneakydispatch.SneakyDispatch
+import net.sneakydispatch.dispatch.DispatchEffects
 import com.sneakyutils.util.TextUtility
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
@@ -76,9 +77,7 @@ class CommandOnDuty : CommandBase("onduty") {
                 playersToAdd.toList().forEach { player ->
                     if (!unitManager.isInUnit(player)) return@forEach
                     player.sendMessage(TextUtility.convertToComponent("&eYou are now on duty!"))
-                    Bukkit.getServer().dispatchCommand(
-                        Bukkit.getServer().consoleSender, "cast forcecast ${player.name} paladin-onduty"
-                    )
+                    if (unitManager.isPaladinOnDuty(player)) DispatchEffects.play(DispatchEffects.ON_DUTY, player, emptyMap())
                 }
                 true
             } else {

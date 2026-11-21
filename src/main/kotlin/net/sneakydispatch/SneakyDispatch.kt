@@ -1,5 +1,8 @@
 package net.sneakydispatch
 
+import com.sneakyvariables.api.Scope
+import com.sneakyvariables.api.SneakyVariables
+import com.sneakyvariables.api.VariableDefinition
 import net.sneakydispatch.commands.*
 import net.sneakydispatch.dispatch.DispatchManager
 import net.sneakydispatch.dispatch.DutyTracker
@@ -65,6 +68,8 @@ class SneakyDispatch : JavaPlugin() {
         idleTimeLowerBoundMillis = (idleTimeParts.getOrNull(0) ?: 15) * 60000L
         idleTimeUpperBoundMillis = (idleTimeParts.getOrNull(1)?.times(60000L)) ?: idleTimeLowerBoundMillis
 
+        defineVariables()
+
         // Initialize the managers.
         emergencyManager = EmergencyManager()
         dispatchManager = DispatchManager()
@@ -105,6 +110,19 @@ class SneakyDispatch : JavaPlugin() {
 
     override fun onDisable() {
         if (::dutyTracker.isInitialized) dutyTracker.stop()
+        if (SneakyVariables.isAvailable()) SneakyVariables.api().undefineAll(this)
+    }
+
+    /**
+     * The character variables this plugin owns: `paladin` (1 on a paladin character) and `badge_number` (0-999, shown
+     * by [net.sneakydispatch.dispatch.BadgePrefix]). Same scope and kind as the stored values and as any other
+     * definer (MagicSpells YAML, until it drops them), so the definitions can overlap.
+     */
+    private fun defineVariables() {
+        val variables = SneakyVariables.api()
+        variables.undefineAll(this)
+        variables.define(this, VariableDefinition.number("paladin", Scope.CHARACTER).min(0.0).max(1.0).build())
+        variables.define(this, VariableDefinition.number("badge_number", Scope.CHARACTER).min(0.0).max(999.0).build())
     }
 
     /**

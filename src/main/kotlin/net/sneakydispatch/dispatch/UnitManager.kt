@@ -154,9 +154,7 @@ class UnitManagerListener : Listener {
             unit.players.add(player)
 
             player.sendMessage(TextUtility.convertToComponent("&eYou have re-joined your active Paladin unit."))
-			Bukkit.getServer().dispatchCommand(
-				Bukkit.getServer().consoleSender, "cast forcecast ${player.name} paladin-onduty"
-			)
+            if (unitManager.isPaladinOnDuty(player)) DispatchEffects.play(DispatchEffects.ON_DUTY, player, emptyMap())
         } else {
             if (wasClockedOut) player.sendMessage(TextUtility.convertToComponent("&4You were clocked out from your paladin unit for being offline for too long."))
             unitManager.setNextDispatchTime(player)

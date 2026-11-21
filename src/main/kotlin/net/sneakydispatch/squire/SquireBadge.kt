@@ -7,6 +7,7 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.event.HoverEvent
 import net.sneakydispatch.SneakyDispatch
+import net.sneakydispatch.dispatch.DispatchEffects
 import net.sneakydispatch.emergency.Emergency
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -20,10 +21,13 @@ import kotlin.math.floor
  * wanted poster goes up on its holder (SneakyWantedPosters does that), or on the 6th strike for hitting players
  * (SquireHitListener, one strike per 30 s at most).
  *
+ * What squires see and hear is `effects.squire-reported` / `effects.squire-dispatched-self` ([DispatchEffects]); the
+ * paladins hear a squire is coming through `effects.dispatched-other`.
+ *
  * Config (all optional, defaults below): `squire-badge.enabled`, `.license-type`, `.reported-commands`,
- * `.dispatch-commands`, `.messages.*`. Commands run from the console; %player%, %name% (emergency, quoted with "),
- * %material%, %item-model% (icon item model, quoted; "" for none), %cmd% (legacy int custom model data), %x% %y% %z%,
- * %location%.
+ * `.dispatch-commands` (extra commands, none by default), `.messages.*`. Commands run from the console; %player%,
+ * %name% (emergency, quoted with "), %material%, %item-model% (icon item model, quoted; "" for none), %cmd% (legacy int
+ * custom model data), %x% %y% %z%, %location%.
  */
 object SquireBadge {
 
@@ -68,10 +72,10 @@ object SquireBadge {
         if (!enabled()) return
         val list = squires()
         if (list.isEmpty()) return
-        val reportedCommands = cfg().getStringList("squire-badge.reported-commands").ifEmpty {
-            listOf("cast forcecast %player% squire-emergency-reported %name% %material% %item-model%")
-        }
+        val reportedCommands = cfg().getStringList("squire-badge.reported-commands")
+        val vars = DispatchEffects.vars(emergency)
         for (p in list) {
+            DispatchEffects.play(DispatchEffects.SQUIRE_REPORTED, p, vars, emergency)
             run(reportedCommands, p, emergency)
             val line = TextUtility.convertToComponent(
                 msg("reported", "&6[Squire] &eA &4%name% &ewas reported in &3%location%&e. ").replace("%name%", emergency.getName())
@@ -103,18 +107,15 @@ object SquireBadge {
             return
         }
         responded.keys.retainAll(dm.getEmergencies().map { it.uuid }.toSet())
-        val dispatchCommands = cfg().getStringList("squire-badge.dispatch-commands").ifEmpty {
-            listOf("cast forcecast %player% squire-dispatch-self %x% %y% %z% %location%")
-        }
-        run(dispatchCommands, player, emergency)
+        val vars = DispatchEffects.vars(emergency)
+        DispatchEffects.play(DispatchEffects.SQUIRE_DISPATCHED_SELF, player, vars, emergency)
+        run(cfg().getStringList("squire-badge.dispatch-commands"), player, emergency)
         // The paladins hear about it like another paladin's dispatch; a squire doesn't take a paladin's slot.
-        val name = "Squire " + Emergency.formatPaladinDisplayName(player)
-        for (paladin in SneakyDispatch.getUnitManager().getPaladins()) {
-            if (!paladin.isOnline) continue
-            Bukkit.getServer().dispatchCommand(
-                Bukkit.getServer().consoleSender,
-                "cast forcecast ${paladin.name} paladin-dispatch-other \"${emergency.getName()}\" \"$name\" ${emergency.dispatched} ${emergency.getDispatchCap()} ${emergency.category.iconMaterial} ${emergency.category.iconItemModelArg} \"${emergency.locationString}\""
-            )
+        val other = vars + ("paladin" to "Squire " + Emergency.formatPaladinDisplayName(player))
+        val units = SneakyDispatch.getUnitManager()
+        for (paladin in units.getPaladins()) {
+            if (!paladin.isOnline || !units.isPaladinOnDuty(paladin)) continue
+            DispatchEffects.play(DispatchEffects.DISPATCHED_OTHER, paladin, other, emergency)
         }
     }
 

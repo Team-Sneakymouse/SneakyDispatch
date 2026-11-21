@@ -19,7 +19,7 @@ dependencies:
       load: BEFORE
       required: false
       join-classpath: true
-    # Classpath only, for duty tracking (LoadCharacterEvent, CarriedItemChangeEvent, VariableChangeEvent); no load ordering.
+    # Classpath only, for duty tracking (LoadCharacterEvent, CarriedItemChangeEvent) and the badge prefix; no load ordering.
     SneakyCharacterManager:
       load: OMIT
       required: false
@@ -28,7 +28,8 @@ dependencies:
       load: OMIT
       required: false
       join-classpath: true
+    # Defines the paladin and badge_number character variables on enable.
     SneakyVariables:
-      load: OMIT
-      required: false
+      load: BEFORE
+      required: true
       join-classpath: true
