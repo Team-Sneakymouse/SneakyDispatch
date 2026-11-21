@@ -3,9 +3,7 @@ package net.sneakydispatch.dispatch
 import net.sneakydispatch.SneakyDispatch
 import net.sneakydispatch.emergency.Emergency
 import net.sneakydispatch.squire.SquireBadge
-import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import kotlin.math.floor
 
 /**
  * Manages emergency situations and dispatching players (paladins) to address emergencies.
@@ -22,25 +20,6 @@ class DispatchManager {
 
     /** The timestamp until which dispatching is frozen (in milliseconds). */
     var dispatchFrozenUntil: Long = 0
-
-    /**
-     * Initializes the DispatchManager and sets up a repeating task to trigger encounters
-     * if certain conditions are met (cooldown, dispatch freeze, and idle paladins).
-     */
-    init {
-        val scheduler = Bukkit.getScheduler()
-        scheduler.runTaskTimer(
-            SneakyDispatch.getInstance(), Runnable {
-                val currentTime = System.currentTimeMillis()
-                val readyPaladins = SneakyDispatch.getUnitManager().getReadyPaladins()
-                if (currentTime >= nextEncounterTime && currentTime >= dispatchFrozenUntil && (readyPaladins >= 2 || (readyPaladins == 1 && SneakyDispatch.getUnitManager()
-                        .getPaladins().size == 1))
-                ) {
-                    createEncounter()
-                }
-            }, 0L, 20 * 60L
-        )
-    }
 
     /**
      * Reports a new emergency, adding it to the emergencies map and notifying the assigned paladins.
@@ -60,21 +39,19 @@ class DispatchManager {
         emergencies[emergency.uuid] = emergency
 
         // Assign paladins to the emergency
-        val units = SneakyDispatch.getUnitManager().getAvailableUnitsOrdered()
-
-        for (unit in units) {
+        for (unit in SneakyDispatch.getUnitManager().getAvailableUnitsOrdered()) {
             if (unit.players.size <= emergency.getDispatchCap() - emergency.paladins.size + if (emergency.paladins.isNotEmpty()) 0 else 1) {
                 emergency.assignPaladins(unit.players)
             }
         }
 
-        // Notify paladins about the reported emergency via commands.
+        // Notify the assigned paladins who are on a paladin character.
+        val units = SneakyDispatch.getUnitManager()
+        val vars = DispatchEffects.vars(emergency)
         for (player in emergency.paladins) {
-            SneakyDispatch.getUnitManager().setNextDispatchTime(player)
-            if (!player.isOnline) continue
-            Bukkit.getServer().dispatchCommand(
-                Bukkit.getServer().consoleSender, "cast forcecast ${player.name} paladin-emergency-reported \"${emergency.getName()}\" ${emergency.category.iconMaterial} ${emergency.category.iconItemModelArg}"
-            )
+            units.setNextDispatchTime(player)
+            if (!player.isOnline || !units.isPaladinOnDuty(player)) continue
+            DispatchEffects.play(DispatchEffects.EMERGENCY_REPORTED, player, vars, emergency)
         }
 
         // Paladin Squire Badge holders hear about it too (licenses/LICENSES.md #8).
@@ -121,21 +98,14 @@ class DispatchManager {
 
         emergency.incrementDispatched()
 
-        // Send commands to all paladins to inform them of the dispatch.
-        for (player in SneakyDispatch.getUnitManager().getPaladins()) {
-            if (player == pl) {
-                // Dispatch the player to the emergency location.
-                Bukkit.getServer().dispatchCommand(
-                    Bukkit.getServer().consoleSender,
-                    	"cast forcecast ${player.name} paladin-dispatch-self ${floor(emergency.location.x)} ${floor(emergency.location.y)} ${floor(emergency.location.z)} \"${emergency.locationString}\""
-                )
-            } else {
-                // Notify other paladins about the dispatch.
-                Bukkit.getServer().dispatchCommand(
-                    Bukkit.getServer().consoleSender,
-						"cast forcecast ${player.name} paladin-dispatch-other \"${emergency.getName()}\" \"${Emergency.formatPaladinDisplayName(pl)}\" ${emergency.dispatched} ${emergency.getDispatchCap()} ${emergency.category.iconMaterial} ${emergency.category.iconItemModelArg} \"${emergency.locationString}\""
-                )
-            }
+        // The dispatched paladin is sent there; the other paladins on a paladin character hear about it.
+        val units = SneakyDispatch.getUnitManager()
+        val vars = DispatchEffects.vars(emergency)
+        val other = vars + ("paladin" to Emergency.formatPaladinDisplayName(pl))
+        for (player in units.getPaladins()) {
+            if (!player.isOnline || !units.isPaladinOnDuty(player)) continue
+            if (player == pl) DispatchEffects.play(DispatchEffects.DISPATCHED_SELF, player, vars, emergency)
+            else DispatchEffects.play(DispatchEffects.DISPATCHED_OTHER, player, other, emergency)
         }
     }
 
@@ -154,19 +124,5 @@ class DispatchManager {
         }
 
         return openSlots
-    }
-
-    /**
-     * Creates an encounter by forcing a random online player to cast a spell related
-     * to emergency dispatching. This is called when certain conditions are met (cooldown, frozen dispatch).
-     */
-    private fun createEncounter() {
-        for (player in Bukkit.getOnlinePlayers()) {
-            // Force a random player to perform the encounter
-            Bukkit.getServer().dispatchCommand(
-                Bukkit.getServer().consoleSender, "cast forcecast ${player.name} paladin-encounter-main"
-            )
-            break
-        }
     }
 }

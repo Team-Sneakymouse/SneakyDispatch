@@ -3,7 +3,6 @@ package net.sneakydispatch.commands
 import me.clip.placeholderapi.PlaceholderAPI
 import net.sneakydispatch.SneakyDispatch
 import com.sneakyutils.util.TextUtility
-import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
@@ -55,9 +54,7 @@ class CommandOffDuty : CommandBase("offduty") {
         if (currentUnit.removePlayer(sender)) {
             // Provide feedback to the player
             sender.sendMessage(TextUtility.convertToComponent("&eYou have successfully gone off duty!"))
-			Bukkit.getServer().dispatchCommand(
-				Bukkit.getServer().consoleSender, "cast forcecast ${sender.name} paladin-offduty"
-			)
+            // The badge prefix comes off with the duty recompute at the end of the batch (BadgePrefix).
 
             // Notify the players still in this unit (if it wasn't disbanded), from a copy; the name is the leaver's
             val template = (SneakyDispatch.getInstance().config.getString("paladin-name-display") ?: "[playerName]")

@@ -29,6 +29,26 @@ stop being on duty as a paladin, the prefix is cleared, unless someone else chan
 everything that recomputes duty (below), including a `badge_number` change and a character load, since SCM does not
 save the prefix. Needs SneakyCharacterManager with the `CharacterNamePrefix` API. `badge-prefix: ""` turns it off.
 
+## Effects
+
+What players see and hear at each dispatch step is `effects.<step>` in `config.yml`: a chat `message`, a `toast` with
+the emergency's icon (SneakyUtils `Toasts`), `sounds` only that player hears, and `commands` run as that player (the
+server's `findlocation` waypoint). These replace the MagicSpells spells SneakyDispatch used to force-cast; it casts no
+spells now.
+
+| Step | When | Was |
+| --- | --- | --- |
+| `on-duty` | `/onduty`, rejoining a unit (on a paladin character) | `paladin-onduty` |
+| `emergency-reported` | an emergency is reported, to the paladins assigned to it | `paladin-emergency-reported` |
+| `dispatched-self` | you dispatch yourself: chat line, waypoint, sounds | `paladin-dispatch-self` |
+| `dispatched-other` | another paladin, or a squire, heads to an emergency | `paladin-dispatch-other` |
+| `squire-reported` | a squire hears of an emergency (besides `squire-badge.messages.reported`) | `squire-emergency-reported` (never existed) |
+| `squire-dispatched-self` | a squire clicks [Respond] | `squire-dispatch-self` (never existed) |
+
+The paladin steps only play to unit members on a paladin character, as the spells' `onduty` modifier did. Going off
+duty only clears the badge prefix (above), which was all `paladin-offduty` did. The once-a-minute
+`paladin-encounter-main` cast is gone: that spell had been emptied, as encounters spawn from a passive.
+
 ## Duty event
 
 SneakyDispatch fires SneakyUtils' `com.sneakyutils.signals.DutyChangedEvent(player, onDuty, role)` when a player's
